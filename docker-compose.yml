@@ -2,12 +2,15 @@ version: '3'
 
 services:
   website:
-    build:
-      command: >
-        gunicorn -b 0.0.0.0:4242  --access-logfile - --reload "sniffr.app:create_app()"
-      environment:
-        PYTHONUNBUFFERED: true
-      volumes:
-        - '.:/sniffr'
-      ports:
-        - '4242:4242'
+    build: .
+    command: >
+      gunicorn -b 0.0.0.0:8000
+      --access-logfile -
+      --reload
+      "sniffr.app:create_app()"
+    environment:
+      PYTHONUNBUFFERED: 'true'
+    volumes:
+      - '.:/sniffr'
+    ports:
+      - '8000:8000'
