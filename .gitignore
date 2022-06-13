@@ -129,3 +129,5 @@ dmypy.json
 .pyre/
 scratchpad.ipynb
 postgres.py
+
+migrations/

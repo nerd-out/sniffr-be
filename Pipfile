@@ -9,6 +9,7 @@ python-dotenv = "*"
 gunicorn = "*"
 sqlalchemy = "*"
 psycopg2-binary = "*"
+flask-migrate = "*"
 
 [dev-packages]
 ipykernel = "*"
