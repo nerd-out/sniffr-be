@@ -1,0 +1,1 @@
+web: gunicorn "sniffr.app:create_app()"
