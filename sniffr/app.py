@@ -9,6 +9,9 @@ def create_app():
 
     app = Flask(__name__)
 
+    # PostGres Connection
+    
+
     @app.route("/")
     def our_first_route():
         return "<h3>Welcome to Sniffr's Backend! Feel free to take a whiff!</h3>"
