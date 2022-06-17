@@ -34,7 +34,7 @@ Pygments==2.12.0
 pyparsing==3.0.9
 python-dateutil==2.8.2
 python-dotenv==0.20.0
-pywin32==304
+pywin32==304; platform_system == "Windows"
 pyzmq==23.1.0
 six==1.16.0
 SQLAlchemy==1.4.37
