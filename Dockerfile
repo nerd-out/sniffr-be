@@ -6,6 +6,9 @@ RUN mkdir -p $INSTALL_PATH
 
 WORKDIR $INSTALL_PATH
 
+
+RUN pip install --upgrade pip
+
 COPY requirements.txt requirements.txt
 RUN pip install -r requirements.txt
 
