@@ -14,7 +14,7 @@ def create_app():
 
     app = Flask(__name__)
     if os.getenv("FLASK_ENV") == "production":
-        app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
+        app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("PG_DATABSE_URI")
 
     else:
         app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + os.path.join(
