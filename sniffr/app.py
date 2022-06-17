@@ -20,7 +20,7 @@ def create_app():
         )
 
     elif os.getenv("FLASK_ENV") == "development":
-        app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("PG_DATABASE_URL")
+        app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
 
     else:
         print("Error: No environment specified")
