@@ -13,18 +13,13 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 def create_app():
 
     app = Flask(__name__)
-
-    if os.getenv("FLASK_ENV") == "development":
-        app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + os.path.join(
-            basedir, "database.db"
-        )
-
-    elif os.getenv("FLASK_ENV") == "production":
+    if os.getenv("FLASK_ENV") == "production":
         app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
 
     else:
-        print("Error: No environment specified")
-        sys.exit(1)
+        app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + os.path.join(
+            basedir, "sniffrdb.db"
+        )
 
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
