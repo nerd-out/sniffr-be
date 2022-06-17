@@ -19,7 +19,7 @@ def create_app():
             basedir, "database.db"
         )
 
-    elif os.getenv("FLASK_ENV") == "development":
+    elif os.getenv("FLASK_ENV") == "production":
         app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
 
     else:
