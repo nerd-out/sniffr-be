@@ -131,3 +131,4 @@ scratchpad.ipynb
 postgres.py
 
 migrations/
+*.db
