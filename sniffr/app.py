@@ -13,13 +13,13 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 def create_app():
 
     app = Flask(__name__)
-    if os.getenv("FLASK_ENV") == "production":
-        app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("PG_DATABSE_URI")
+    # if os.getenv("FLASK_ENV") == "production":
+    app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("PG_DATABSE_URI")
 
-    else:
-        app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + os.path.join(
-            basedir, "sniffrdb.db"
-        )
+    # else:
+    #     app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + os.path.join(
+    #         basedir, "sniffrdb.db"
+    #     )
 
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
