@@ -35,3 +35,18 @@ class Dog(db.Model):
 
     def __repr__(self):
         return f"<Dog: {self.dog_name} | Age: {self.dog_age}>"
+
+
+def process_records(sqlalchemy_records):
+    """
+    A helper method for converting a list of database record objects into a list of dictionaries, so they can be returned as JSON
+    Param: database_records (a list of db.Model instances)
+    Example: parse_records(User.query.all())
+    Returns: a list of dictionaries
+    """
+    records = []
+    for record in sqlalchemy_records:
+        processed_record = record.__dict__
+        del processed_record["_sa_instance_state"]
+        records.append(processed_record)
+    return records

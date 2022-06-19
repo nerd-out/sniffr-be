@@ -5,21 +5,28 @@ import os
 load_dotenv()
 import sys
 
-from sniffr.models import db, migrate, Dog
+from sniffr.models import db, migrate, Dog, process_records
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 
 def create_app():
+    flask_env =  os.getenv("FLASK_ENV")
 
+    # Load app
     app = Flask(__name__)
-    # if os.getenv("FLASK_ENV") == "production":
-    app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("PG_DATABSE_URI")
 
-    # else:
-    #     app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + os.path.join(
-    #         basedir, "sniffrdb.db"
-    #     )
+    # Load database given flask_env env variable
+    if flask_env == "production":
+        app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("PG_DATABSE_URI")
+        print('Using prod environment')
+
+    else:
+        app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + os.path.join(
+            basedir, "sniffrdb.db"
+        )
+        print(f'Using development set up for SQLALCHEMY_DATABASE_URI: {app.config["SQLALCHEMY_DATABASE_URI"]}')
+    
 
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
@@ -34,7 +41,8 @@ def create_app():
     @app.route("/all_dogs")
     def all_dogs():
         dogs = Dog.query.all()
-        return f"There are {len(dogs)} dogs in the database right now!"
+        dogs = process_records(dogs)
+        return jsonify(dogs)
 
     @app.route("/add_dog/<dog_name>/<dog_age>")
     def add_dog(dog_name, dog_age):
