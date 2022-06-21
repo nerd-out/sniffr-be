@@ -2,7 +2,6 @@ version: '3'
 
 services:
   website:
-    container_name: sniffr-be
     build: .
     command: >
       gunicorn -b 0.0.0.0:8000 --access-logfile - --reload "sniffr.app:create_app()"

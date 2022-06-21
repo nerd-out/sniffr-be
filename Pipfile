@@ -10,6 +10,9 @@ gunicorn = "*"
 sqlalchemy = "*"
 psycopg2-binary = "*"
 flask-migrate = "*"
+jwt = "*"
+flask-cors = "*"
+requests = "*"
 
 [dev-packages]
 ipykernel = "*"

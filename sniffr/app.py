@@ -1,8 +1,12 @@
 from flask import Flask, jsonify
+from sniffr.auth_routes.views import auth_bp
 from dotenv import load_dotenv
+from flask_cors import cross_origin
+
 import os
 
 load_dotenv()
+
 import sys
 
 from sniffr.models import db, migrate, Dog, process_records
@@ -11,22 +15,26 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 
 def create_app():
-    flask_env =  os.getenv("FLASK_ENV")
+    flask_env = os.getenv("FLASK_ENV")
+    SECRET_KEY = os.getenv("SECRET_KEY")
 
     # Load app
     app = Flask(__name__)
+    app.config['SECRET_KEY'] = SECRET_KEY
+
 
     # Load database given flask_env env variable
     if flask_env == "production":
         app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("PG_DATABSE_URI")
-        print('Using prod environment')
+        print("Using prod environment")
 
     else:
         app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + os.path.join(
             basedir, "sniffrdb.db"
         )
-        print(f'Using development set up for SQLALCHEMY_DATABASE_URI: {app.config["SQLALCHEMY_DATABASE_URI"]}')
-    
+        print(
+            f'Using development set up for SQLALCHEMY_DATABASE_URI: {app.config["SQLALCHEMY_DATABASE_URI"]}'
+        )
 
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
@@ -39,6 +47,7 @@ def create_app():
         return "<h3>Welcome to Sniffr's Backend! Feel free to take a whiff!</h3>"
 
     @app.route("/all_dogs")
+    @cross_origin()
     def all_dogs():
         dogs = Dog.query.all()
         dogs = process_records(dogs)
@@ -55,7 +64,13 @@ def create_app():
 
         return jsonify({"DogID": f"{dog_id}"})
 
-    return app
+    with app.app_context():
+
+        # Register Blueprints
+        app.register_blueprint(auth_bp)
+
+        return app
+
 
 
 if __name__ == "__main__":
