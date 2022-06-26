@@ -6,6 +6,8 @@ RUN mkdir -p $INSTALL_PATH
 
 WORKDIR $INSTALL_PATH
 
+RUN apt-get update
+RUN apt-get -y install gcc
 
 RUN pip install --upgrade pip
 

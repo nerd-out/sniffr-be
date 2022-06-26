@@ -132,3 +132,4 @@ postgres.py
 
 migrations/
 *.db
+extra/
