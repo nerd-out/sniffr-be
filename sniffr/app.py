@@ -1,5 +1,6 @@
 from flask import Flask, jsonify
 from sniffr.auth_routes.views import auth_bp
+from sniffr.dog_routes.dog_routes import dog_bp
 from dotenv import load_dotenv
 from flask_cors import cross_origin
 
@@ -71,6 +72,9 @@ def create_app():
 
         # Auth routes
         app.register_blueprint(auth_bp)
+
+        # Dog routes
+        app.register_blueprint(dog_bp)
 
         return app
 
