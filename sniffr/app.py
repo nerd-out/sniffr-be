@@ -46,27 +46,30 @@ def create_app():
     def our_first_route():
         return "<h3>Welcome to Sniffr's Backend! Feel free to take a whiff!</h3>"
 
-    @app.route("/all_dogs")
-    @cross_origin()
-    def all_dogs():
-        dogs = Dog.query.all()
-        dogs = process_records(dogs)
-        return jsonify(dogs)
+    # @app.route("/all_dogs")
+    # @cross_origin()
+    # def all_dogs():
+    #     dogs = Dog.query.all()
+    #     dogs = process_records(dogs)
+    #     return jsonify(dogs)
 
-    @app.route("/add_dog/<dog_name>/<dog_age>")
-    def add_dog(dog_name, dog_age):
-        dog = Dog(dog_name=dog_name, dog_age=dog_age)
-        db.session.add(dog)
-        db.session.commit()
+    # @app.route("/add_dog/<dog_name>/<dog_age>")
+    # def add_dog(dog_name, dog_age):
+    #     dog = Dog(dog_name=dog_name, dog_age=dog_age)
+    #     db.session.add(dog)
+    #     db.session.commit()
 
-        # Return the dog that was just added
-        dog_id = db.session.query(Dog).get(dog.dog_id)
+    #     # Return the dog that was just added
+    #     dog_id = db.session.query(Dog).get(dog.dog_id)
 
-        return jsonify({"DogID": f"{dog_id}"})
+    #     return jsonify({"DogID": f"{dog_id}"})
+
 
     with app.app_context():
 
         # Register Blueprints
+
+        # Auth routes
         app.register_blueprint(auth_bp)
 
         return app
