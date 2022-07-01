@@ -1,8 +1,8 @@
 from concurrent.futures import process
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, make_response
 from flask import current_app as app
 from flask_cors import cross_origin
-from sniffr.models import db, Dog, process_records
+from sniffr.models import Dog, process_records, db
 
 # Blueprint Configuration
 dog_bp = Blueprint("dog_bp", __name__)
@@ -13,10 +13,15 @@ dog_bp = Blueprint("dog_bp", __name__)
 def get_dog(dog_id):
     dog_id = int(dog_id)
 
-    queried_dog = db.session.query(Dog).filter_by(dog_id=dog_id).first()
-    queried_dog = process_records(queried_dog)
-
-    return jsonify(queried_dog)
+    queried_dog = db.session.query(Dog).filter_by(dog_id=dog_id).all()
+    if queried_dog:
+        queried_dog = process_records(queried_dog)
+        return jsonify(queried_dog)
+    else:
+        payload = jsonify({"Status": 404, 
+        "Message": "Dog Not Found", 
+        "Success": False})
+        return make_response(payload, 400)
 
 
 @dog_bp.route("/dog", methods=["POST"])
