@@ -31,37 +31,27 @@ def post_dog():
 
     # If dog_id not in body then they are trying to create
     # If dog_id in body then updating content
-    if content["dog_id"]:
+    if "dog_id" in content.keys():
         # update dog
-        ...
+        return jsonify({"Success": True, "Message": f"Editing dog id #{content['dog_id']}"})
 
     else:
         # create dog
         dog_name = content["dog_name"]
         user_id = content["user_id"]
-        breed_id = content["breed_id"]
-        size_id = content["size_id"]
-        temperament_id = content["temperament_id"]
         age = content["age"]
         sex = content["sex"]
-        is_vaccinated = content["is_vaccinated"]
-        is_fixed = content["is_fixed"]
 
         new_dog = Dog(
             dog_name=dog_name,
             user_id=user_id,
-            breed_id=breed_id,
-            size_id=size_id,
-            temperament_id=temperament_id,
             age=age,
             sex=sex,
-            is_vaccinated=is_vaccinated,
-            is_fixed=is_fixed,
         )
         db.session.add(new_dog)
         db.session.commit()
 
-        queried_dog = db.session.query(Dog).filter_by(dog_id=new_dog.dog_id).first()
-        queried_dog = process(queried_dog)
-
+        queried_dog = db.session.query(Dog).filter_by(dog_id=new_dog.dog_id).all()
+        queried_dog = process_records(queried_dog)
         return jsonify(queried_dog)
+

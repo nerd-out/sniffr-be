@@ -22,7 +22,7 @@ def seed_db_dog():
     db.session.add(Dog(
         dog_name="Augie", 
         age=2,
-        user_id=1,
+        user_id=4,
         sex='Male'))
     db.session.commit()
 
@@ -60,7 +60,7 @@ def check_results():
 if __name__ == "__main__":
     app = create_app()
     with app.app_context():
-        #Reset database
+        # Reset database
         db.drop_all()
         db.create_all()
 
