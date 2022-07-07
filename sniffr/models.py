@@ -28,6 +28,25 @@ class User(db.Model):
     def __repr__(self):
         return "<User {}>".format(self.username)
 
+class Swipe(db.Model):
+    __tablename__ = "swipes"
+
+    swipe_id = db.Column(db.Integer, primary_key=True)
+    dog_id = db.Column(db.Integer, db.ForeignKey("dogs.dog_id"))
+    swiped_dog_id = db.Column(db.Integer, db.ForeignKey("dogs.dog_id"))
+    is_interested = db.Column(db.Boolean)
+    creation_time = db.Column(db.DateTime)
+
+    def __init__(self, swipe_id, dog_id, swiped_dog_id, is_interested):
+        self.swipe_id = swipe_id
+        self.dog_id = dog_id
+        self.swiped_dog_id = swiped_dog_id
+        self.is_interested = is_interested
+        self.creation_time = datetime.datetime.now()
+
+    def __repr__(self):
+        return f"<Dog {self.dog_id} swiped on dog {self.swiped_dog_id} and is {'' if self.is_interested else 'not'} interested in playing.>"
+
 
 # Let's create the dog table
 class Dog(db.Model):
@@ -59,7 +78,6 @@ class Dog(db.Model):
         sex,
         is_vaccinated,
         is_fixed,
-        creation_time,
     ):
         self.dog_name = dog_name
         self.user_id = user_id
