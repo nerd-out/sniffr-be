@@ -1,8 +1,9 @@
-from flask import Flask, jsonify
+from flask import Flask # , jsonify
 from sniffr.auth_routes.views import auth_bp
 from sniffr.dog_routes.dog_routes import dog_bp
+from sniffr.activity_routes.activity_routes import activity_bp
 from dotenv import load_dotenv
-from flask_cors import cross_origin
+# from flask_cors import cross_origin
 
 import os
 
@@ -10,7 +11,7 @@ load_dotenv()
 
 import sys
 
-from sniffr.models import db, migrate, Dog, process_records
+from sniffr.models import db, migrate # , Dog, process_records
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -75,6 +76,9 @@ def create_app():
 
         # Dog routes
         app.register_blueprint(dog_bp)
+
+        # Activity routes
+        app.register_blueprint(activity_bp)
 
         return app
 
