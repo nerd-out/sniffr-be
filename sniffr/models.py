@@ -78,7 +78,6 @@ def process_records(sqlalchemy_records):
     for record in sqlalchemy_records:
         processed_record = record.__dict__
         del processed_record["_sa_instance_state"]
-        processed_record.update({'Success': True})
         records.append(processed_record)
     return records
 

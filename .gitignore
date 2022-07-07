@@ -133,3 +133,4 @@ postgres.py
 migrations/
 *.db
 extra/
+sniffr/helper_notebook.ipynb

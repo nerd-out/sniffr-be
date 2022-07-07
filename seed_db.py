@@ -1,19 +1,22 @@
 from sniffr.models import Dog, User, db
 import os
 from sniffr.app import create_app
+from dotenv import load_dotenv
+
+load_dotenv()
 
 def seed_db_user():
 
     # Add user
-    db.session.add(User(username="jon", email="jon@sniffr.be", password="spice"))
+    db.session.add(User(username="jon", email="jon@sniffr.be", password=os.getenv('JON_PASS')))
     # Add user
-    db.session.add(User(username="dan", email="dan@sniffr.be", password="blue"))
+    db.session.add(User(username="dan", email="dan@sniffr.be", password=os.getenv('DAN_PASS')))
     # Add user
-    db.session.add(User(username="josh", email="josh@sniffr.be", password="apple"))
+    db.session.add(User(username="josh", email="josh@sniffr.be", password=os.getenv('JOSH_PASS')))
     # Add user
-    db.session.add(User(username="allie", email="allie@sniffr.be", password="lalala"))
+    db.session.add(User(username="allie", email="allie@sniffr.be", password=os.getenv('ALLIE_PASS')))
     # Add user
-    db.session.add(User(username="mashima", email="mashima@sniffr.be", password="noob"))
+    db.session.add(User(username="mashima", email="mashima@sniffr.be", password=os.getenv('MASHIMA_PASS')))
     db.session.commit()
 
 def seed_db_dog():
