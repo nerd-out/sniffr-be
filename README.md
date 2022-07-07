@@ -29,10 +29,10 @@ If you want to quickly run a docker container of this app then you can:
 ## User Routes
 #### `/login` 
 
-Success example (*with my correct password cesnored to xxxxxx*):
+Success example (*with my correct password cesnored to xxxxxx*):  
 ![login success example](extra\readme_images\user_success.PNG)  
 
-Fail example (*wrong password*):
+Fail example (*wrong password*):  
 ![login fail example](extra\readme_images\user_fail.PNG)
 
 
