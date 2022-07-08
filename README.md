@@ -30,25 +30,30 @@ If you want to quickly run a docker container of this app then you can:
 #### `/login` 
 
 Success example (*with my correct password cesnored to xxxxxx*):  
-![login success example](extra\readme_images\user_success.png)  
+![login success example](https://raw.githubusercontent.com/the-best-team-seven/sniffr-be/finish-user-login-routes/extra/readme_images/user_success.png)  
+
 
 Fail example (*wrong password*):  
-![login fail example](extra\readme_images\user_fail.png)
+![login fail example](https://raw.githubusercontent.com/the-best-team-seven/sniffr-be/finish-user-login-routes/extra/readme_images/user_fail.png)  
+
 
 
 ## Dog Routes
 ### `/dog/:id` **GET** 
 
 Success example:  
-![GET Dog success](extra\readme_images\dog_get_success.png)  
+![GET Dog success](https://raw.githubusercontent.com/the-best-team-seven/sniffr-be/finish-user-login-routes/extra/readme_images/dog_get_success.png)  
+
 
 Fail example:  
-![GET Dog fail](extra\readme_images\dog_get_fail.png)
+![GET Dog fail](https://raw.githubusercontent.com/the-best-team-seven/sniffr-be/finish-user-login-routes/extra/readme_images/dog_get_fail.png)  
+
 
 ### `/dog:id` **POST**
 
 Successfully adding a new dog example (*request sent without a dog id*):  
-![GET Dog success](extra\readme_images\dog_post_success.png)  
+![Post Dog success](https://raw.githubusercontent.com/the-best-team-seven/sniffr-be/finish-user-login-routes/extra/readme_images/dog_post_success.png)  
+
 
 Editing a dog is broken example (**This route is currently under construction still**):  
-![GET Dog fail](extra\readme_images\dog_post_edit_broken.png)
+![Post Dog edit](https://raw.githubusercontent.com/the-best-team-seven/sniffr-be/finish-user-login-routes/extra/readme_images/dog_post_edit_broken.png)  
