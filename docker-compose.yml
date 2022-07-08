@@ -2,6 +2,7 @@ version: '3'
 
 services:
   website:
+    container_name: sniffr-be
     build: .
     command: >
       gunicorn -b 0.0.0.0:8000 --access-logfile - --reload "sniffr.app:create_app()"
@@ -11,3 +12,33 @@ services:
       - '.:/sniffr'
     ports:
       - '8000:8000'
+
+  # database:
+  #   # Official Postgres image from DockerHub (we use the last version)
+  #   image: 'postgres:latest'
+
+  #   # By default, a Postgres database is running on the 5432 port.
+  #   # If we want to access the database from our computer (outside the container),
+  #   # we must share the port with our computer's port.
+  #   # The syntax is [port we want on our machine]:[port we want to retrieve in the container]
+  #   # Note: You are free to change your computer's port,
+  #   # but take into consideration that it will change the way
+  #   # you are connecting to your database.
+  #   ports:
+  #     - 5432:5432
+
+  #   environment:
+  #     .env # The name of your environment file (the one at the repository root)
+
+  #   ####
+  #   ## If you want to persist the database data, please uncomment the lines below.
+  #   ####
+
+  #   # The `volumes` tag allows us to share a folder with our container.
+  #   # Its syntax is as follows: [folder path on our machine]:[folder path to retrieve in the container]
+  #   volumes:
+  #     # In this example, we share the folder `db-data` in our root repository, with the default PostgreSQL data path.
+  #     # It means that every time the repository is modifying the data inside
+  #     # of `/var/lib/postgresql/data/`, automatically the change will appear in `db-data`.
+  #     # You don't need to create the `db-data` folder. Docker Compose will do it for you.
+  #     - ./db-data/:/var/lib/postgresql/data/
