@@ -1,4 +1,3 @@
-# from concurrent.futures import process
 from flask import Blueprint, request, jsonify, make_response
 from flask import current_app as app
 from flask_cors import cross_origin
