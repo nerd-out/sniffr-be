@@ -56,17 +56,9 @@ class Dog(db.Model):
     dog_id = db.Column(db.Integer, primary_key=True)
     dog_name = db.Column(db.Text(), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
-    # breed_id = db.Column(db.Integer, nullable=False)
-    # size_id = db.Column(db.Integer, nullable=False)
-    # temperament_id = db.Column(db.Integer, nullable=False)
     age = db.Column(db.Integer, nullable=False)
     sex = db.Column(db.Text(), nullable=False)
-    # is_vaccinated = db.Column(db.Boolean, nullable=False)
-    # is_fixed = db.Column(db.Boolean, nullable=False)
-    # dog_bio = db.Column(db.Text(), nullable=False)
-    # dog_pic = db.Column(db.Text(), nullable=False)
     creation_time = db.Column(db.DateTime)
-    # last_update = db.Column(db.DateTime)
 
     def __init__(
         self,
