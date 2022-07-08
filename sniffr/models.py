@@ -58,10 +58,6 @@ class Dog(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
     age = db.Column(db.Integer, nullable=False)
     sex = db.Column(db.Text(), nullable=False)
-    # is_vaccinated = db.Column(db.Boolean, nullable=False)
-    # is_fixed = db.Column(db.Boolean, nullable=False)
-    # dog_bio = db.Column(db.Text(), nullable=False)
-    # dog_pic = db.Column(db.Text(), nullable=False)
     creation_time = db.Column(db.DateTime)
     # last_update = db.Column(db.DateTime)
 
