@@ -59,7 +59,6 @@ class Dog(db.Model):
     age = db.Column(db.Integer, nullable=False)
     sex = db.Column(db.Text(), nullable=False)
     creation_time = db.Column(db.DateTime)
-    # last_update = db.Column(db.DateTime)
 
     def __init__(
         self,
