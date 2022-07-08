@@ -21,7 +21,7 @@ def get_dog(dog_id):
         return response
 
     else:
-        payload = jsonify({"Message": "Dog Not Found"})
+        payload = jsonify({"message": "Dog Not Found"})
         response = make_response(payload, 400)
         response.headers["Content-Type"] = "application/json"
         return response
@@ -39,14 +39,14 @@ def post_dog():
         if queried_dog:
             # update dog
             payload = jsonify(
-                {"Message": f"Successfully pinged API but editing dog id #{content['dog_id']} is not available yet."}
+                {"message": f"Successfully pinged API but editing dog id #{content['dog_id']} is not available yet."}
             )
-            response = make_response(jsonify({"Message": f"Successfully pinged API but editing dog id #{content['dog_id']} is not available yet."}), 200)
+            response = make_response(jsonify({"message": f"Successfully pinged API but editing dog id #{content['dog_id']} is not available yet."}), 200)
             response.headers["Content-Type"] = "application/json"
             return response
         
         else:
-            payload = jsonify({"Message": "Dog Not Found"})
+            payload = jsonify({"message": "Dog Not Found"})
             response = make_response(payload, 400)
             response.headers["Content-Type"] = "application/json"
             return response
