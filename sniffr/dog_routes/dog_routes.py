@@ -1,5 +1,4 @@
-from flask import Blueprint, request, jsonify, make_response
-from flask import current_app as app
+from flask import Blueprint, request, jsonify
 from flask_cors import cross_origin
 from sniffr.models import Dog, process_records, db
 
@@ -10,26 +9,24 @@ dog_bp = Blueprint("dog_bp", __name__)
 @dog_bp.route("/dog/<dog_id>", methods=["GET"])
 @cross_origin()
 def get_dog(dog_id):
+    """ Get dog info"""
     dog_id = int(dog_id)
 
     queried_dog = db.session.query(Dog).filter_by(dog_id=dog_id).all()
     if queried_dog:
-        queried_dog = process_records(queried_dog)
-        payload = jsonify(queried_dog)
-        response = make_response(payload, 200)
-        response.headers["Content-Type"] = "application/json"
+        response = process_records(queried_dog)
+        response = jsonify(response)
         return response
 
     else:
-        payload = jsonify({"message": "Dog Not Found"})
-        response = make_response(payload, 400)
-        response.headers["Content-Type"] = "application/json"
-        return response
+        response = {"message": "Dog Not Found"}
+        return response, 400
 
 
 @dog_bp.route("/dog", methods=["POST"])
 @cross_origin()
 def post_dog():
+    """ Create or edit dog info """
     content = request.json
 
     # If dog_id not in body then they are trying to create
@@ -38,17 +35,11 @@ def post_dog():
         queried_dog = db.session.query(Dog).filter_by(dog_id=content['dog_id']).all()
         if queried_dog:
             # update dog
-            payload = jsonify(
-                {"message": f"Successfully pinged API but editing dog id #{content['dog_id']} is not available yet."}
-            )
-            response = make_response(jsonify({"message": f"Successfully pinged API but editing dog id #{content['dog_id']} is not available yet."}), 200)
-            response.headers["Content-Type"] = "application/json"
+            response = {"message": f"Successfully pinged API but editing dog id #{content['dog_id']} is not available yet."}
             return response
         
         else:
-            payload = jsonify({"message": "Dog Not Found"})
-            response = make_response(payload, 400)
-            response.headers["Content-Type"] = "application/json"
+            response = {"message": "Dog Not Found"}
             return response
 
     else:
@@ -69,4 +60,4 @@ def post_dog():
 
         queried_dog = db.session.query(Dog).filter_by(dog_id=new_dog.dog_id).all()
         queried_dog = process_records(queried_dog)
-        return jsonify(queried_dog)
+        return queried_dog
