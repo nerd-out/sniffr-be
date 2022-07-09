@@ -1,7 +1,6 @@
 from flask import Blueprint, request, jsonify
-from flask import current_app as app
 from flask_cors import cross_origin
-from sniffr.models import db, User
+from sniffr.models import User, db
 
 # Blueprint Configuration
 auth_bp = Blueprint("auth_bp", __name__)
