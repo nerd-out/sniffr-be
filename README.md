@@ -9,19 +9,20 @@ A python flask app, which is dockerizerd
 1. Clone the backend repo to a folder on your machine.  
 ![clone this repo](https://raw.githubusercontent.com/the-best-team-seven/sniffr-be/main/extra/readme_images/clone_repo.png)  
 
-2. If you are going to be changing code then switch to a new branch using:
-```
-git checkout xxxx
-```
-3. Move into the cloned repo with: 
+2. Move into the cloned repo with: 
 ```bash
 cd sniffr-be
 ```
 
-4. Add a blank file called `.env` into the repo so the app can pull sensitive information. Fill the `.env` file with the information in the discord pinned messages.  
+3. If you are going to be changing code then switch to a new branch using:
+```
+git checkout xxxx
+```
+
+4. Add a blank file called `.env` into the repo so the app can pull sensitive information. Fill the `.env` file with the information from the .env pinned message in our discord.  
 ![env file](https://raw.githubusercontent.com/the-best-team-seven/sniffr-be/main/extra/readme_images/env_directory.png)  
 
-5. Set up a virtual environment (a mini python development workspace) using `pipenv` by running `pipenv install` when in the app's base directory:  
+5. Set up a virtual environment (a mini python development workspace) using *pipenv* by running `pipenv install` when in the app's base directory:  
 🚨 *This step will produce more code than just shown below and could take a few minutes depending on dependancy installation / your machine.*  
 ![pipenv install](https://raw.githubusercontent.com/the-best-team-seven/sniffr-be/main/extra/readme_images/pipenv_install.png) 
 
@@ -60,13 +61,13 @@ Supposing you did steps 1-8 above already...
 
     ✔️ *This should run up the app. You can view the exact url and port you need in the output.  And now you can now use* curl *,* postman *,* thunder client *, or* a browser *to access routes*
 
-### Note: Did you make changes to `models.py`
-If you made changes to `models.py` during development... you do not need to completely remake the database. Instead, you can **migrate** and **upgrade** the database (usually). If not, you may need to remake it from scratch after deleteing the `sniffrdb.db` file and `migrations` folder. Once you have run
+### 💡 Hint: Did you make changes to `models.py`??
+If you made changes to `models.py` during development... you do not need to completely remake the database. Instead, you can **migrate** and **upgrade** the database (usually).  Try running:
     ```
     flask db migrate
     flask db upgrade
     ```
-successfully, then you should be able to seed and use the new database tables/columns.
+If successful, then you should be able to seed and use the new database tables/columns. If not, you may need to remake it from scratch after deleting the `sniffrdb.db` file and `migrations` folder.
 
 # DOCKER -- UNDER CONSTRUCTION
 If you want to quickly run a docker container of this app then you can:
@@ -82,7 +83,7 @@ If you want to quickly run a docker container of this app then you can:
 #### `/login` 
 
 Success example (*with my correct password cesnored to xxxxxx*):  
-![login success example](https://raw.githubusercontent.com/the-best-team-seven/sniffr-be/main/main/extra/readme_images/user_success.png)  
+![login success example](https://raw.githubusercontent.com/the-best-team-seven/sniffr-be/main/extra/readme_images/user_success.png)  
 
 
 Fail example (*wrong password*):  
