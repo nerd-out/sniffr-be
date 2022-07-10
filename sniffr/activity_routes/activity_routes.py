@@ -1,4 +1,3 @@
-from concurrent.futures import process
 from flask import Blueprint, request, jsonify
 from flask import current_app as app
 from flask_cors import cross_origin
@@ -22,7 +21,7 @@ def get_activities():
 def get_activity(activity_id):
     """Get a specific activity by id."""
     activity_id = int(activity_id)
-    queried_activity = db.session.query(Activity).filter_by(activity_id=activity_id).first()
+    queried_activity = db.session.query(Activity).filter_by(activity_id=activity_id).all()
     queried_activity = process_records(queried_activity)
     return jsonify(queried_activity)
 

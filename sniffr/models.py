@@ -1,10 +1,11 @@
+import datetime
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-import datetime
 
 # Set up flask & sqlalchemy
 db = SQLAlchemy()
 migrate = Migrate()
+
 
 
 class User(db.Model):
@@ -55,79 +56,59 @@ class Dog(db.Model):
     dog_id = db.Column(db.Integer, primary_key=True)
     dog_name = db.Column(db.Text(), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
-    breed_id = db.Column(db.Integer, nullable=False)
-    size_id = db.Column(db.Integer, nullable=False)
-    temperament_id = db.Column(db.Integer, nullable=False)
     age = db.Column(db.Integer, nullable=False)
     sex = db.Column(db.Text(), nullable=False)
-    is_vaccinated = db.Column(db.Boolean, nullable=False)
-    is_fixed = db.Column(db.Boolean, nullable=False)
-    dog_bio = db.Column(db.Text(), nullable=False)
-    dog_pic = db.Column(db.Text(), nullable=False)
     creation_time = db.Column(db.DateTime)
-    last_update = db.Column(db.DateTime)
 
     def __init__(
         self,
         dog_name,
         user_id,
-        breed_id,
-        size_id,
-        temperament_id,
         age,
         sex,
-        is_vaccinated,
-        is_fixed,
     ):
         self.dog_name = dog_name
         self.user_id = user_id
-        self.breed_id = breed_id
-        self.size_id = size_id
-        self.temperament_id = temperament_id
         self.age = age
         self.sex = sex
-        self.is_vaccinated = is_vaccinated
-        self.is_fixed = is_fixed
         self.creation_time = datetime.datetime.now()
 
     def __repr__(self):
         return f"<Dog: {self.dog_name} | Age: {self.age}>"
 
 class Activity(db.Model):
-    __tablename__ = "activity"
+    __tablename__ = "activities"
 
     activity_id = db.Column(db.Integer, primary_key=True)
     activity_description = db.Column(db.Text(), nullable=False)
 
-    def __init__(self, activity_id, activity_description):
-        self.activity_id = activity_id
+    def __init__(self, activity_description):
         self.activity_description = activity_description
         
     def __repr__(self):
         return f"<Description: {self.activity_description}>"
 
-class DogActivies(db.Model):
+class DogActivity(db.Model):
     __tablename__ = "dog_activities"
 
-    dog_activities_id = db.Column(db.Integer, primary_key=True)
+    dog_activity_id = db.Column(db.Integer, primary_key=True)
     dog_id = db.Column(db.Integer, db.ForeignKey("dogs.dog_id"))
-    activity_id = db.Column(db.Integer, db.ForeignKey("activity.activity_id"))
+    activity_id = db.Column(db.Integer, db.ForeignKey("activities.activity_id"))
     activity_rank = db.Column(db.Integer(), nullable=False)
 
     def __init__(
         self,
-        dog_activities_id,
         dog_id,
         activity_id,
         activity_rank        
     ):
-        self.dog_activities_id = dog_activities_id
         self.dog_id = dog_id
         self.activity_id = activity_id
         self.activity_rank = activity_rank
 
     def __repr__(self):
         return f"<Dog {self.dog_id}'s #{self.activity_rank} preference is activity #{self.activity_id}>"
+
 
 def process_records(sqlalchemy_records):
     """
@@ -142,3 +123,4 @@ def process_records(sqlalchemy_records):
         del processed_record["_sa_instance_state"]
         records.append(processed_record)
     return records
+
