@@ -76,6 +76,38 @@ class Dog(db.Model):
     def __repr__(self):
         return f"<Dog: {self.dog_name} | Age: {self.age}>"
 
+class Activity(db.Model):
+    __tablename__ = "activities"
+
+    activity_id = db.Column(db.Integer, primary_key=True)
+    activity_description = db.Column(db.Text(), nullable=False)
+
+    def __init__(self, activity_description):
+        self.activity_description = activity_description
+        
+    def __repr__(self):
+        return f"<Description: {self.activity_description}>"
+
+class DogActivity(db.Model):
+    __tablename__ = "dog_activities"
+
+    dog_activity_id = db.Column(db.Integer, primary_key=True)
+    dog_id = db.Column(db.Integer, db.ForeignKey("dogs.dog_id"))
+    activity_id = db.Column(db.Integer, db.ForeignKey("activities.activity_id"))
+    activity_rank = db.Column(db.Integer(), nullable=False)
+
+    def __init__(
+        self,
+        dog_id,
+        activity_id,
+        activity_rank        
+    ):
+        self.dog_id = dog_id
+        self.activity_id = activity_id
+        self.activity_rank = activity_rank
+
+    def __repr__(self):
+        return f"<Dog {self.dog_id}'s #{self.activity_rank} preference is activity #{self.activity_id}>"
 
 
 def process_records(sqlalchemy_records):

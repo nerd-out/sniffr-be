@@ -1,4 +1,4 @@
-from sniffr.models import Dog, User, db
+from sniffr.models import Dog, User, Activity, db
 import os
 from sniffr.app import create_app
 from dotenv import load_dotenv
@@ -30,6 +30,7 @@ def seed_db_dog():
     db.session.commit()
 
 def check_results():
+    """ Prints out the results of the database for users, dogs, and activities """
     result = db.session.query(User).all()
     for row in result:
         print(
@@ -58,6 +59,25 @@ def check_results():
             row.user_id,
         )
 
+    result = db.session.query(Activity).all()
+    for row in result:
+        print(
+            "# ",
+            row.activity_id,
+            "Activity:",
+            row.activity_description,
+        )
+
+def seed_db_activities():
+    # Add activities
+    db.session.add(Activity(activity_description="Walking"))    
+    db.session.add(Activity(activity_description="Fetching"))
+    db.session.add(Activity(activity_description="Frisbee"))
+    db.session.add(Activity(activity_description="Sniffing"))
+    db.session.add(Activity(activity_description="Chasing Squirrels"))
+    db.session.add(Activity(activity_description="Staring at a blank wall"))
+    db.session.add(Activity(activity_description="Drinking from the toilet"))
+    db.session.commit()
 
 
 if __name__ == "__main__":
@@ -72,6 +92,9 @@ if __name__ == "__main__":
 
         # Add augie to dog table
         seed_db_dog()
+
+        # Add stuff for the dogs to do.
+        seed_db_activities()
 
         # Check results
         check_results()

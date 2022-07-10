@@ -1,7 +1,8 @@
-from flask import Flask, jsonify
+from flask import Flask
 
 from sniffr.auth_routes.auth_blueprint import auth_bp
 from sniffr.dog_routes.dog_routes import dog_bp
+from sniffr.activity_routes.activity_routes import activity_bp
 from sniffr.models import db, migrate
 
 import os
@@ -47,6 +48,9 @@ def create_app():
 
     # Dog routes
     app.register_blueprint(dog_bp)
+
+    # Activity routes
+    app.register_blueprint(activity_bp)
 
     return app
 
