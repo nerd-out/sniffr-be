@@ -41,19 +41,21 @@ git checkout xxxx
 
     💻 *You should end up with a folder called `migrations/` and the file `sniffrdb.db`, which contains our blank tables, if everything went well.* 
 
-8. Lastly, we need to seed our database with starter information. To do so, run `python seed_db.py` when in the base directory to run the seed script. If successful, it should print out new entries in each of the tables that were seeded. Example:  
+8. Lastly, we need to seed our database with starter information. To do so, run `python seed_db.py` when in the base directory to activate the seed script. If successful, it should print out new entries in each of the tables that were seeded. Example:  
 ![seed db output](https://raw.githubusercontent.com/the-best-team-seven/sniffr-be/main/extra/readme_images/seed_db.png)
 
 ## Running the app (after the first-time installation steps above)
 Supposing you did steps 1-8 above already...
 
-1. Make sure you are in the correct branch, and then activate your pipenv shell:  
+1. Make sure you are in the correct branch!
+
+2. Then activate your pipenv shell:  
     ```bash
     pipenv shell
     ``` 
     ![pipenv shell 2](https://raw.githubusercontent.com/the-best-team-seven/sniffr-be/main/extra/readme_images/pipenv_shell.png) 
 
-2. Once active, you can run the flask app:  
+3. Once active, you can run the flask app:  
     ```bash
     flask run
     ```
