@@ -1,7 +1,9 @@
-from sniffr.models import Dog, User, Activity, db
+
+from dotenv import load_dotenv
 import os
 from sniffr.app import create_app
-from dotenv import load_dotenv
+from sniffr.models import Dog, User, Activity, db
+from sniffr.breeds.seed_db_breeds import Breed, seed_db_breeds
 
 load_dotenv()
 
@@ -68,6 +70,18 @@ def check_results():
             row.activity_description,
         )
 
+    #Print Number of Breeds
+    print("\nBREEDS:")
+    breeds_result = db.session.query(Breed).all()
+    print("There are total of " + str(len(breeds_result)) + " breeds in this database\n")
+    for breed in breeds_result:
+        print(
+            "# ",
+            breed.breed_id,
+            "Breed Name: ",
+            breed.breed_name,
+        )
+
 def seed_db_activities():
     # Add activities
     db.session.add(Activity(activity_description="Walking"))    
@@ -86,6 +100,9 @@ if __name__ == "__main__":
         # Reset database
         db.drop_all()
         db.create_all()
+        
+        # Add breeds
+        seed_db_breeds()
 
         # Seed user table
         seed_db_user()

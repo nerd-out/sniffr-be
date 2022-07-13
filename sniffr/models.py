@@ -6,8 +6,6 @@ from flask_migrate import Migrate
 db = SQLAlchemy()
 migrate = Migrate()
 
-
-
 class User(db.Model):
     __tablename__ = "users"
 
@@ -108,7 +106,6 @@ class DogActivity(db.Model):
 
     def __repr__(self):
         return f"<Dog {self.dog_id}'s #{self.activity_rank} preference is activity #{self.activity_id}>"
-
 
 def process_records(sqlalchemy_records):
     """
