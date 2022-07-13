@@ -1,4 +1,3 @@
-
 from dotenv import load_dotenv
 import os
 from sniffr.app import create_app
