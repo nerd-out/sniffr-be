@@ -1,13 +1,12 @@
 from dotenv import load_dotenv
 import os
 from sniffr.app import create_app
-from sniffr.models import Dog, User, Activity, db
 from sniffr.breeds.seed_db_breeds import Breed, seed_db_breeds
+from sniffr.models import Dog, User, Activity, db
 
 load_dotenv()
 
 def seed_db_user():
-
     # Add user
     db.session.add(User(username="jon", email="jon@sniffr.be", password=os.getenv('JON_PASS')))
     # Add user
@@ -21,7 +20,6 @@ def seed_db_user():
     db.session.commit()
 
 def seed_db_dog():
-
     # Add Augie
     db.session.add(Dog(
         dog_name="Augie", 
@@ -69,7 +67,7 @@ def check_results():
             row.activity_description,
         )
 
-    #Print Number of Breeds
+    #Print Number of Breeds and Breeds List
     print("\nBREEDS:")
     breeds_result = db.session.query(Breed).all()
     print("There are total of " + str(len(breeds_result)) + " breeds in this database\n")
