@@ -1,12 +1,12 @@
-from sniffr.models import Dog, User, Activity, db
+import csv
+from dotenv import load_dotenv
 import os
 from sniffr.app import create_app
-from dotenv import load_dotenv
+from sniffr.models import Activity, Breed, db, Dog, User
 
 load_dotenv()
 
 def seed_db_user():
-
     # Add user
     db.session.add(User(username="jon", email="jon@sniffr.be", password=os.getenv('JON_PASS')))
     # Add user
@@ -20,13 +20,24 @@ def seed_db_user():
     db.session.commit()
 
 def seed_db_dog():
-
     # Add Augie
     db.session.add(Dog(
         dog_name="Augie", 
         age=2,
         user_id=4,
         sex='Male'))
+    db.session.commit()
+
+#Seed database with breeds
+def seed_db_breeds():
+  with open('./sniffr/data/breeds.csv', newline='') as csvfile:
+    spamreader = csv.reader(csvfile, delimiter=',')
+    
+    next(spamreader)
+
+    for row in spamreader:
+      db.session.add(Breed(breed_name=row[0]))
+    
     db.session.commit()
 
 def check_results():
@@ -68,6 +79,18 @@ def check_results():
             row.activity_description,
         )
 
+    #Print Number of Breeds and Breeds List
+    print("\nBREEDS:")
+    breeds_result = db.session.query(Breed).all()
+    print("There are total of " + str(len(breeds_result)) + " breeds in this database\n")
+    for breed in breeds_result:
+        print(
+            "# ",
+            breed.breed_id,
+            "Breed Name: ",
+            breed.breed_name,
+        )
+
 def seed_db_activities():
     # Add activities
     db.session.add(Activity(activity_description="Walking"))    
@@ -86,6 +109,9 @@ if __name__ == "__main__":
         # Reset database
         db.drop_all()
         db.create_all()
+        
+        # Add breeds
+        seed_db_breeds()
 
         # Seed user table
         seed_db_user()

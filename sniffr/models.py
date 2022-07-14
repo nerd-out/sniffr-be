@@ -1,12 +1,10 @@
 import datetime
-from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from flask_sqlalchemy import SQLAlchemy
 
 # Set up flask & sqlalchemy
 db = SQLAlchemy()
 migrate = Migrate()
-
-
 
 class User(db.Model):
     __tablename__ = "users"
@@ -48,6 +46,21 @@ class Swipe(db.Model):
     def __repr__(self):
         return f"<Dog {self.dog_id} swiped on dog {self.swiped_dog_id} and is {'' if self.is_interested else 'not'} interested in playing.>"
 
+# Breeds
+class Breed(db.Model):
+    __tablename__ = "breeds"
+
+    breed_id = db.Column(db.Integer, primary_key=True)
+    breed_name = db.Column(db.Text(), nullable=False)
+
+    def __init__(
+        self,
+        breed_name      
+    ):
+        self.breed_name = breed_name
+
+    def __repr__(self):
+        return f"<Breed #{self.breed_id} {self.breed_name}>"
 
 # Let's create the dog table
 class Dog(db.Model):
@@ -108,7 +121,6 @@ class DogActivity(db.Model):
 
     def __repr__(self):
         return f"<Dog {self.dog_id}'s #{self.activity_rank} preference is activity #{self.activity_id}>"
-
 
 def process_records(sqlalchemy_records):
     """

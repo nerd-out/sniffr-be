@@ -1,12 +1,12 @@
 from flask import Flask
 
-from sniffr.auth_routes.auth_blueprint import auth_bp
-from sniffr.dog_routes.dog_routes import dog_bp
-from sniffr.activity_routes.activity_routes import activity_bp
-from sniffr.models import db, migrate
-
 import os
-import sys
+
+from sniffr.auth_routes.auth_blueprint import auth_bp
+from sniffr.activity_routes.activity_routes import activity_bp
+from sniffr.breed_routes.breed_routes import breed_bp
+from sniffr.dog_routes.dog_routes import dog_bp
+from sniffr.models import db, migrate
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -46,11 +46,14 @@ def create_app():
     # Auth routes
     app.register_blueprint(auth_bp)
 
-    # Dog routes
-    app.register_blueprint(dog_bp)
-
     # Activity routes
     app.register_blueprint(activity_bp)
+
+    # Breed routes
+    app.register_blueprint(breed_bp)
+
+    # Dog routes
+    app.register_blueprint(dog_bp)
 
     return app
 
