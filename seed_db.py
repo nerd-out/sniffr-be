@@ -1,8 +1,8 @@
+import csv
 from dotenv import load_dotenv
 import os
 from sniffr.app import create_app
-from sniffr.breeds.seed_db_breeds import Breed, seed_db_breeds
-from sniffr.models import Dog, User, Activity, db
+from sniffr.models import Activity, Breed, db, Dog, User
 
 load_dotenv()
 
@@ -26,6 +26,18 @@ def seed_db_dog():
         age=2,
         user_id=4,
         sex='Male'))
+    db.session.commit()
+
+#Seed database with breeds
+def seed_db_breeds():
+  with open('./sniffr/data/breeds.csv', newline='') as csvfile:
+    spamreader = csv.reader(csvfile, delimiter=',')
+    
+    next(spamreader)
+
+    for row in spamreader:
+      db.session.add(Breed(breed_name=row[0]))
+    
     db.session.commit()
 
 def check_results():

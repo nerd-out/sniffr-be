@@ -1,7 +1,6 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, jsonify
 from flask_cors import cross_origin
-from sniffr.breeds.models import Breed, db
-from sniffr.models  import process_records
+from sniffr.models  import Breed, db, process_records
 
 breed_bp = Blueprint("breed_bp", __name__)
 

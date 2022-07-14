@@ -1,13 +1,12 @@
 from flask import Flask
 
+import os
+
 from sniffr.auth_routes.auth_blueprint import auth_bp
 from sniffr.activity_routes.activity_routes import activity_bp
-from sniffr.breeds.routes import breed_bp
+from sniffr.breed_routes.breed_routes import breed_bp
 from sniffr.dog_routes.dog_routes import dog_bp
 from sniffr.models import db, migrate
-
-import os
-import sys
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
