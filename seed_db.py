@@ -40,57 +40,6 @@ def seed_db_breeds():
     
     db.session.commit()
 
-def check_results():
-    """ Prints out the results of the database for users, dogs, and activities """
-    result = db.session.query(User).all()
-    for row in result:
-        print(
-            "Name: ",
-            row.username,
-            "PW:",
-            row.password,
-            "Email:",
-            row.email,
-            "ID:",
-            row.user_id,
-        )
-
-    result = db.session.query(Dog).all()
-    for row in result:
-        print(
-            "# ",
-            row.dog_id,
-            "Dog:",
-            row.dog_name,
-            "Age:",
-            row.age,
-            "Sex:",
-            row.sex,
-            "Owner:",
-            row.user_id,
-        )
-
-    result = db.session.query(Activity).all()
-    for row in result:
-        print(
-            "# ",
-            row.activity_id,
-            "Activity:",
-            row.activity_description,
-        )
-
-    #Print Number of Breeds and Breeds List
-    print("\nBREEDS:")
-    breeds_result = db.session.query(Breed).all()
-    print("There are total of " + str(len(breeds_result)) + " breeds in this database\n")
-    for breed in breeds_result:
-        print(
-            "# ",
-            breed.breed_id,
-            "Breed Name: ",
-            breed.breed_name,
-        )
-
 def seed_db_activities():
     # Add activities
     db.session.add(Activity(activity_description="Walking"))    
@@ -102,6 +51,33 @@ def seed_db_activities():
     db.session.add(Activity(activity_description="Drinking from the toilet"))
     db.session.commit()
 
+def check_results():
+    """ Prints out the results of the database for users, dogs, and activities """
+    print("USERS:")
+    result = db.session.query(User).all()
+    for row in result:
+        print(row)
+    print('-------------------')
+
+    print("DOGS:")
+    result = db.session.query(Dog).all()
+    for row in result:
+        print(row)
+    print('-------------------')
+
+    print("ACTIVITIES:")
+    result = db.session.query(Activity).all()
+    for row in result:
+        print(row)
+    print('-------------------')
+
+    #Print Number of Breeds and Breeds List
+    print("BREEDS:")
+    breeds_result = db.session.query(Breed).all()
+    print("There are total of " + str(len(breeds_result)) + " breeds in this database\n")
+    for breed in breeds_result:
+        print(breed)
+    print('-------------------')
 
 if __name__ == "__main__":
     app = create_app()
