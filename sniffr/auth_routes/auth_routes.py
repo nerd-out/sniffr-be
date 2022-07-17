@@ -20,7 +20,11 @@ def login():
 
         # Check that there is a valid result and a correct password
         if result and result.verify_password(password=passwd):
-            return {"message": "success!"}
+            return {
+                "user_id": result.user_id,
+                "username": result.username,
+                "email": result.email,
+            }
 
         else:
             return {"message": "fail"}, 400
@@ -58,5 +62,5 @@ def create_user():
     return {
         "user_id": new_user.user_id,
         "username": new_user.username,
-        "email": new_user.email
+        "email": new_user.email,
     }
