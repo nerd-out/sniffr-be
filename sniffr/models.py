@@ -1,6 +1,7 @@
 import datetime
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
+from werkzeug.security import generate_password_hash, check_password_hash
 
 # Set up flask & sqlalchemy
 db = SQLAlchemy()
@@ -10,9 +11,9 @@ class User(db.Model):
     __tablename__ = "users"
 
     user_id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.Text(), unique=True, nullable=False)
+    username = db.Column(db.Text(), nullable=False)
     email = db.Column(db.Text(), unique=True, nullable=False)
-    password = db.Column(db.Text(), unique=True, nullable=False)
+    password_hash = db.Column(db.String(128)) # Removed password so we do not reveal passwords in the db
     name = db.Column(db.Text())
     age = db.Column(db.Integer)
     gender = db.Column(db.Text())
@@ -22,7 +23,18 @@ class User(db.Model):
     zipcode = db.Column(db.Text())
     creation_time = db.Column(db.DateTime, default= datetime.datetime.now())
     last_update = db.Column(db.DateTime)
-    db.Column()
+
+    @property
+    def password(self):
+        raise AttributeError('password is not a readable attribute!')
+
+    @password.setter
+    def password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    def verify_password(self, password):
+        return check_password_hash(self.password_hash, password)
+
     def __init__(self, username, email, password):
         self.username = username
         self.email = email
