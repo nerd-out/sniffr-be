@@ -1,6 +1,7 @@
 import datetime
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
+from werkzeug.security import generate_password_hash, check_password_hash
 
 # Set up flask & sqlalchemy
 db = SQLAlchemy()
@@ -10,22 +11,37 @@ class User(db.Model):
     __tablename__ = "users"
 
     user_id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.Text(), unique=True)
-    email = db.Column(db.Text(), unique=True)
-    password = db.Column(db.Text(), unique=True)
-    created_on = db.Column(db.DateTime, nullable=False)
-    admin = db.Column(db.Boolean, nullable=False, default=False)
-    dog = db.relationship("Dog", backref="owner", lazy="dynamic")
+    username = db.Column(db.Text(), nullable=False)
+    email = db.Column(db.Text(), unique=True, nullable=False)
+    password_hash = db.Column(db.String(128)) # Removed password so we do not reveal passwords in the db
+    name = db.Column(db.Text())
+    age = db.Column(db.Integer)
+    gender = db.Column(db.Text())
+    user_pic = db.Column(db.Text())
+    user_bio = db.Column(db.Text())
+    max_distance = db.Column(db.Integer)
+    zipcode = db.Column(db.Text())
+    creation_time = db.Column(db.DateTime, default= datetime.datetime.now())
+    last_update = db.Column(db.DateTime)
 
-    def __init__(self, username, email, password, admin=False):
+    @property
+    def password(self):
+        raise AttributeError('password is not a readable attribute!')
+
+    @password.setter
+    def password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    def verify_password(self, password):
+        return check_password_hash(self.password_hash, password)
+
+    def __init__(self, username, email, password):
         self.username = username
         self.email = email
         self.password = password
-        self.created_on = datetime.datetime.now()
-        self.admin = admin
 
     def __repr__(self):
-        return "<User {}>".format(self.username)
+        return f"#{self.user_id} {self.username} | {self.creation_time.strftime('%D %T')} "
 
 class Swipe(db.Model):
     __tablename__ = "swipes"
@@ -44,7 +60,7 @@ class Swipe(db.Model):
         self.creation_time = datetime.datetime.now()
 
     def __repr__(self):
-        return f"<Dog {self.dog_id} swiped on dog {self.swiped_dog_id} and is {'' if self.is_interested else 'not'} interested in playing.>"
+        return f"Dog {self.dog_id} swiped on dog {self.swiped_dog_id} and is {'' if self.is_interested else 'not'} interested in playing."
 
 # Breeds
 class Breed(db.Model):
@@ -60,7 +76,7 @@ class Breed(db.Model):
         self.breed_name = breed_name
 
     def __repr__(self):
-        return f"<Breed #{self.breed_id} {self.breed_name}>"
+        return f"Breed #{self.breed_id} {self.breed_name}"
 
 # Let's create the dog table
 class Dog(db.Model):
@@ -87,7 +103,7 @@ class Dog(db.Model):
         self.creation_time = datetime.datetime.now()
 
     def __repr__(self):
-        return f"<Dog: {self.dog_name} | Age: {self.age}>"
+        return f"Dog: {self.dog_name} | Age: {self.age}"
 
 class Activity(db.Model):
     __tablename__ = "activities"
@@ -99,7 +115,7 @@ class Activity(db.Model):
         self.activity_description = activity_description
         
     def __repr__(self):
-        return f"<Description: {self.activity_description}>"
+        return f"Description: {self.activity_description}"
 
 class DogActivity(db.Model):
     __tablename__ = "dog_activities"
@@ -120,7 +136,7 @@ class DogActivity(db.Model):
         self.activity_rank = activity_rank
 
     def __repr__(self):
-        return f"<Dog {self.dog_id}'s #{self.activity_rank} preference is activity #{self.activity_id}>"
+        return f"Dog {self.dog_id}'s #{self.activity_rank} preference is activity #{self.activity_id}"
 
 def process_records(sqlalchemy_records):
     """
