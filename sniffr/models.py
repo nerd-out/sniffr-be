@@ -83,19 +83,32 @@ class Dog(db.Model):
     __tablename__ = "dogs"
 
     dog_id = db.Column(db.Integer, primary_key=True)
+    owner_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
+    breed_id = db.Column(db.Integer, db.ForeignKey("breeds.breed_id"))
+    breed = db.relationship("Breed", back_populates = "dogs")
+
+    # size_id = db.Column(db.Integer, db.ForeignKey("sizes.size_id"))
+    # temperament_id = db.Column(db.Integer, db.ForeignKey("temperaments.temperament_id"))
+
     dog_name = db.Column(db.Text(), nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
-    age = db.Column(db.Integer, nullable=False)
-    sex = db.Column(db.Text(), nullable=False)
+    age = db.Column(db.Integer)
+    sex = db.Column(db.Text())
+    is_vaccinated = db.Column(db.Boolean)
+    is_fixed = db.Column(db.Boolean)
+    dog_bio = db.Column(db.Text())
+    dog_pic = db.Column(db.Text())
     creation_time = db.Column(db.DateTime)
+
 
     def __init__(
         self,
+        breed_id,
         dog_name,
         user_id,
         age,
         sex,
     ):
+        self.breed_id = breed_id
         self.dog_name = dog_name
         self.user_id = user_id
         self.age = age
