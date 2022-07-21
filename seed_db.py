@@ -25,6 +25,7 @@ def seed_db_dog():
         dog_name="Augie", 
         age=2,
         user_id=4,
+        breed_id=123,
         sex='Male'))
     db.session.commit()
 
@@ -74,9 +75,9 @@ def check_results():
     #Print Number of Breeds and Breeds List
     print("BREEDS:")
     breeds_result = db.session.query(Breed).all()
-    print("There are total of " + str(len(breeds_result)) + " breeds in this database\n")
-    for breed in breeds_result:
-        print(breed)
+    print("There are total of " + str(len(breeds_result)) + " breeds in this database now.")
+    # for breed in breeds_result:
+    #     print(breed)
     print('-------------------')
 
 if __name__ == "__main__":

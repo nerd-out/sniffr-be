@@ -85,7 +85,7 @@ class Dog(db.Model):
     dog_id = db.Column(db.Integer, primary_key=True)
     owner_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
     breed_id = db.Column(db.Integer, db.ForeignKey("breeds.breed_id"))
-    breed = db.relationship("Breed", back_populates = "dogs")
+    breed = db.relationship("Breed", backref='dogs')
 
     # size_id = db.Column(db.Integer, db.ForeignKey("sizes.size_id"))
     # temperament_id = db.Column(db.Integer, db.ForeignKey("temperaments.temperament_id"))
@@ -116,7 +116,7 @@ class Dog(db.Model):
         self.creation_time = datetime.datetime.now()
 
     def __repr__(self):
-        return f"Dog: {self.dog_name} | Age: {self.age}"
+        return f"Dog: {self.dog_name} | Breed: {self.breed.breed_name} | Age: {self.age}"
 
 class Activity(db.Model):
     __tablename__ = "activities"
