@@ -24,9 +24,11 @@ def seed_db_dog():
     db.session.add(Dog(
         dog_name="Augie", 
         age=2,
-        user_id=4,
+        owner_id=4,
         breed_id=123,
-        sex='Male'))
+        sex='Male',
+        is_vaccinated=True,
+        is_fixed=False))
     db.session.commit()
 
 #Seed database with breeds
