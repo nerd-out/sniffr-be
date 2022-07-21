@@ -92,7 +92,10 @@ class Dog(db.Model):
     breed = db.relationship("Breed", backref=db.backref("dogs", lazy=True))
 
     # size_id = db.Column(db.Integer, db.ForeignKey("sizes.size_id"))
+    # size = db.relationship("Size", backref=db.backref("dogs", lazy=True))
+
     # temperament_id = db.Column(db.Integer, db.ForeignKey("temperaments.temperament_id"))
+    # temperament = db.relationship("Temperament", backref=db.backref("dogs", lazy=True))
 
     age = db.Column(db.Integer, nullable=False)
     sex = db.Column(db.Text(), nullable=False)
