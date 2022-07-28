@@ -28,7 +28,8 @@ def seed_db_dog():
         breed_id=123,
         sex='Male',
         is_vaccinated=True,
-        is_fixed=False))
+        is_fixed=False
+        ))
     db.session.commit()
 
 #Seed database with breeds

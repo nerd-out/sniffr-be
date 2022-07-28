@@ -2,6 +2,7 @@ import datetime
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
+from sqlalchemy import inspect
 
 # Set up flask & sqlalchemy
 db = SQLAlchemy()
@@ -13,7 +14,7 @@ class User(db.Model):
     user_id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.Text(), nullable=False)
     email = db.Column(db.Text(), unique=True, nullable=False)
-    password_hash = db.Column(db.String(128)) # Removed password so we do not reveal passwords in the db
+    password_hash = db.Column(db.String(128))
     name = db.Column(db.Text())
     age = db.Column(db.Integer)
     gender = db.Column(db.Text())
@@ -104,6 +105,7 @@ class Dog(db.Model):
     dog_bio = db.Column(db.Text())
     dog_pic = db.Column(db.Text())
     creation_time = db.Column(db.DateTime, default=datetime.datetime.now())
+    last_updated = db.Column(db.DateTime)
 
     def __repr__(self):
         return f"Dog: {self.dog_name} | Breed: {self.breed.breed_name} | Age: {self.age} | Sex: {self.sex} | Fixed: {self.is_fixed} | Vx: {self.is_vaccinated} | Pic: {self.dog_pic} | Bio: {self.dog_bio} | Created: {self.creation_time:%Y-%m-%d}"
@@ -155,3 +157,6 @@ def process_records(sqlalchemy_records):
         records.append(processed_record)
     return records
 
+def process_record(obj):
+    return {c.key: getattr(obj, c.key)
+            for c in inspect(obj).mapper.column_attrs}
