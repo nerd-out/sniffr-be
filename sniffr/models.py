@@ -87,10 +87,10 @@ class Dog(db.Model):
     dog_name = db.Column(db.Text(), nullable=False)
 
     owner_id = db.Column(db.Integer, db.ForeignKey("users.user_id"), nullable=False)
-    owner = db.relationship("User", backref=db.backref("dogs", lazy=True))
+    owner = db.relationship("User")
 
     breed_id = db.Column(db.Integer, db.ForeignKey("breeds.breed_id"), nullable=False)
-    breed = db.relationship("Breed", backref=db.backref("dogs", lazy=True))
+    breed = db.relationship("Breed")
 
     # size_id = db.Column(db.Integer, db.ForeignKey("sizes.size_id"))
     # size = db.relationship("Size", backref=db.backref("dogs", lazy=True))
