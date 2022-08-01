@@ -81,34 +81,4 @@ If you want to quickly run a docker container of this app then you can:
 
 
 # Backend Routes
-## User Routes
-#### `/login` 
-
-Success example (*with my correct password cesnored to xxxxxx*):  
-![login success example](https://raw.githubusercontent.com/the-best-team-seven/sniffr-be/main/extra/readme_images/user_success.png)  
-
-
-Fail example (*wrong password*):  
-![login fail example](https://raw.githubusercontent.com/the-best-team-seven/sniffr-be/main/extra/readme_images/user_fail.png)  
-
-
-
-## Dog Routes
-### `/dog/:id` **GET** 
-
-Success example:  
-![GET Dog success](https://raw.githubusercontent.com/the-best-team-seven/sniffr-be/main/extra/readme_images/dog_get_success.png)  
-
-
-Fail example:  
-![GET Dog fail](https://raw.githubusercontent.com/the-best-team-seven/sniffr-be/main/extra/readme_images/dog_get_fail.png)  
-
-
-### `/dog:id` **POST**
-
-Successfully adding a new dog example (*request sent without a dog id*):  
-![Post Dog success](https://raw.githubusercontent.com/the-best-team-seven/sniffr-be/main/extra/readme_images/dog_post_success.png)  
-
-
-Editing a dog is broken example (**This route is currently under construction still**):  
-![Post Dog edit](https://raw.githubusercontent.com/the-best-team-seven/sniffr-be/main/extra/readme_images/dog_post_edit_broken.png)  
+To view usable routes, please check out our group postman project. Any route that is usable is found there.
