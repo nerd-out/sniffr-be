@@ -65,7 +65,6 @@ def get_dogs():
         response = {"message": "Dog Not Found"}
         return response, 400
 
-
 #
 # Create / Edit Dog 
 #
