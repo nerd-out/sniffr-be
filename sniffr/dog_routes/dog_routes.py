@@ -82,14 +82,13 @@ def post_dog():
         if queried_dog:
             # Update properties
             queried_dog.dog_name = content['dog_name']
-            queried_dog.owner_id = content['owner_id']
             queried_dog.breed_id = content['breed_id']
             queried_dog.is_vaccinated = content['is_vaccinated']
             queried_dog.is_fixed = content['is_fixed']
             queried_dog.age = content['age']
             queried_dog.sex = content['sex']
-            queried_dog.sex = content['sex']
-            queried_dog.sex = content['sex']
+            queried_dog.dog_bio = content['dog_bio']
+            queried_dog.dog_pic = content['dog_pic']
             queried_dog.last_updated = datetime.now()
 
             db.session.commit()
@@ -112,6 +111,8 @@ def post_dog():
         is_fixed = content["is_fixed"]
         age = content["age"]
         sex = content["sex"]
+        dog_pic = content['dog_pic']
+        dog_bio = content['dog_bio']
 
         new_dog = Dog(
             dog_name=dog_name,
@@ -120,7 +121,9 @@ def post_dog():
             age=age,
             sex=sex,
             is_vaccinated=is_vaccinated,
-            is_fixed=is_fixed
+            is_fixed=is_fixed,
+            dog_bio=dog_bio,
+            dog_pic=dog_pic
         )
         db.session.add(new_dog)
         db.session.commit()
