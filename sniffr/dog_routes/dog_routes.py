@@ -26,7 +26,7 @@ def get_dog(dog_id):
 
     else:
         response = {"message": "Dog Not Found"}
-        return response, 400
+        return response, 404
 
 #
 # Get Dogs
@@ -63,7 +63,7 @@ def get_dogs():
 
     else:
         response = {"message": "Dog Not Found"}
-        return response, 400
+        return response, 404
 
 #
 # Create / Edit Dog 
@@ -100,7 +100,7 @@ def post_dog():
 
         else:
             response = {"message": "Dog Not Found"}
-            return response
+            return response, 404
 
     else:
         # create dog
@@ -134,4 +134,24 @@ def post_dog():
         response = process_record(queried_dog)
         response['breed'] = queried_dog.breed.breed_name
 
-        return response
+        return response, 201
+#
+# Delete Dog
+#
+
+@dog_bp.route("/dog/<dog_id>", methods=["DELETE"])
+@cross_origin()
+def delete_dog(dog_id):
+    dog_id = int(dog_id)
+
+    queried_dog = db.session.query(Dog).filter(Dog.dog_id==dog_id).first()
+
+    if queried_dog:
+        db.session.delete(queried_dog)
+        db.session.commit()
+
+        return {'message': f"Success!"}, 410
+
+    else:
+        response = {"message": "Dog Not Found"}
+        return response, 404
