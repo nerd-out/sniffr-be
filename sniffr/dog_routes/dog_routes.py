@@ -100,7 +100,6 @@ def get_users_dogs(user_id):
         response = {"message": "Dogs Not Found"}
         return response, 404
 
-
 # Create / Edit Dog 
 
 @dog_bp.route("/dog", methods=["POST"])
