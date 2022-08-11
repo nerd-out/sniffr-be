@@ -26,7 +26,7 @@ def get_dog(dog_id):
         response = {"message": "Dog Not Found"}
         return response, 404
 
-# Get Dogs
+# Get All Dogs
 
 @dog_bp.route("/dogs", methods=["GET"])
 @cross_origin()
