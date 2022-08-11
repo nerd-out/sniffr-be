@@ -7,9 +7,7 @@ from sniffr.models import Dog, process_records, db, User, process_record, Breed
 # Blueprint Configuration
 dog_bp = Blueprint("dog_bp", __name__)
 
-#
 # Get Dog
-#
 
 @dog_bp.route("/dog/<dog_id>", methods=["GET"])
 @cross_origin()
@@ -28,9 +26,7 @@ def get_dog(dog_id):
         response = {"message": "Dog Not Found"}
         return response, 404
 
-#
 # Get Dogs
-#
 
 @dog_bp.route("/dogs", methods=["GET"])
 @cross_origin()
@@ -65,9 +61,7 @@ def get_dogs():
         response = {"message": "Dog Not Found"}
         return response, 404
 
-#
 # Create / Edit Dog 
-#
 
 @dog_bp.route("/dog", methods=["POST"])
 @cross_origin()
@@ -135,9 +129,7 @@ def post_dog():
         response['breed'] = queried_dog.breed.breed_name
 
         return response, 201
-#
 # Delete Dog
-#
 
 @dog_bp.route("/dog/<dog_id>", methods=["DELETE"])
 @cross_origin()
