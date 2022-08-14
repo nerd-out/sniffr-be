@@ -15,8 +15,6 @@ dog_bp = Blueprint("dog_bp", __name__)
 @cross_origin()
 def get_dog(dog_id):
     """Get dog info"""
-    dog_id = int(dog_id)
-
     queried_dog = db.session.query(Dog).join(User).filter(Dog.dog_id==dog_id).first()
     if queried_dog:
         response = process_record(queried_dog)
@@ -142,8 +140,6 @@ def post_dog():
 @dog_bp.route("/dog/<dog_id>", methods=["DELETE"])
 @cross_origin()
 def delete_dog(dog_id):
-    dog_id = int(dog_id)
-
     queried_dog = db.session.query(Dog).filter(Dog.dog_id==dog_id).first()
 
     if queried_dog:
