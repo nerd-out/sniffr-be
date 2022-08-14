@@ -7,9 +7,7 @@ from sniffr.models import Dog, process_records, db, User, process_record, Breed
 # Blueprint Configuration
 dog_bp = Blueprint("dog_bp", __name__)
 
-#
 # Get Dog
-#
 
 @dog_bp.route("/dog/<dog_id>", methods=["GET"])
 @cross_origin()
@@ -26,9 +24,7 @@ def get_dog(dog_id):
         response = {"message": "Dog Not Found"}
         return response, 404
 
-#
-# Get Dogs
-#
+# Get All Dogs
 
 @dog_bp.route("/dogs", methods=["GET"])
 @cross_origin()
@@ -63,9 +59,46 @@ def get_dogs():
         response = {"message": "Dog Not Found"}
         return response, 404
 
-#
+# Get a User's Dogs
+
+@dog_bp.route("/dogs/user/<user_id>", methods=["GET"])
+@cross_origin()
+def get_users_dogs(user_id):
+
+    # Query and get dogs given a user id
+    user_id = int(user_id)
+    queried_dogs = db.session.query(Dog).join(User, Dog.owner_id==User.user_id).filter(Dog.owner_id==user_id).all()
+
+    # Return response
+    response = []
+    if queried_dogs:
+        for row in queried_dogs:
+            dog = {
+                'owner': row.owner.username,
+                'owner_id': row.owner.user_id,
+                'dog_id': row.dog_id,
+                'dog_name': row.dog_name,
+                'age': row.age,
+                'sex': row.sex,
+                'is_vaccinated': row.is_vaccinated,
+                'is_fixed': row.is_fixed,
+                'dog_bio': row.dog_bio,
+                'dog_pic': row.dog_bio,
+                'creation_time': row.creation_time,
+                'last_updated': row.last_updated,
+                'breed_id': row.breed.breed_id,
+                'breed': row.breed.breed_name
+                }
+            
+            response.append(dog)
+
+        return jsonify(response)
+    
+    else:
+        response = {"message": "Dogs Not Found"}
+        return response, 404
+
 # Create / Edit Dog 
-#
 
 @dog_bp.route("/dog", methods=["POST"])
 @cross_origin()
@@ -133,9 +166,7 @@ def post_dog():
         response['breed'] = queried_dog.breed.breed_name
 
         return response, 201
-#
 # Delete Dog
-#
 
 @dog_bp.route("/dog/<dog_id>", methods=["DELETE"])
 @cross_origin()
