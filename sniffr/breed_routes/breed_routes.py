@@ -9,6 +9,19 @@ breed_bp = Blueprint("breed_bp", __name__)
 def get_breed():
     """Get all breeds"""
     all_breeds = db.session.query(Breed).all()
-    all_breeds = process_records(all_breeds)
 
-    return jsonify(all_breeds)
+    response = []
+    if all_breeds:
+        for breed in all_breeds:
+            breed_record = {
+                'breed_id': breed.breed_id,
+                'breed_name': breed.breed_name
+                }
+            
+            response.append(breed_record)
+
+        return jsonify(response)
+
+    else:
+        response = {"message": "Breeds Not Found"}
+        return response, 404
