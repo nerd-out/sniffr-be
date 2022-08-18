@@ -1,8 +1,9 @@
 import csv
+from xml.dom.expatbuilder import TEXT_NODE
 from dotenv import load_dotenv
 import os
 from sniffr.app import create_app
-from sniffr.models import Activity, Breed, db, Dog, User
+from sniffr.models import Activity, Breed, db, Dog, Temperament, User
 
 load_dotenv()
 
@@ -23,7 +24,7 @@ def seed_db_dog():
     # Add Augie
     db.session.add(Dog(
         dog_name="Augie", 
-        age=2,
+        age='2',
         owner_id=4,
         breed_id=123,
         sex='Male',
@@ -55,6 +56,14 @@ def seed_db_activities():
     db.session.add(Activity(activity_description="Drinking from the toilet"))
     db.session.commit()
 
+def seed_db_temperaments():
+    # Add activities
+    db.session.add(Temperament("Shy"))    
+    db.session.add(Temperament("Playful"))
+    db.session.add(Temperament("Cautious"))
+    db.session.add(Temperament("Old and wise"))
+    db.session.commit()
+
 def check_results():
     """ Prints out the results of the database for users, dogs, and activities """
     print("USERS:")
@@ -83,6 +92,13 @@ def check_results():
     #     print(breed)
     print('-------------------')
 
+        #Print Number of Breeds and Breeds List
+    print("TEMPERAMENTS:")
+    temperament_result = db.session.query(Temperament).all()
+    for row in temperament_result:
+        print(row);
+    print('-------------------')
+
 if __name__ == "__main__":
     app = create_app()
     with app.app_context():
@@ -101,6 +117,9 @@ if __name__ == "__main__":
 
         # Add stuff for the dogs to do.
         seed_db_activities()
+
+        # Add temperament
+        seed_db_temperaments()
 
         # Check results
         check_results()

@@ -95,10 +95,10 @@ class Dog(db.Model):
     # size_id = db.Column(db.Integer, db.ForeignKey("sizes.size_id"))
     # size = db.relationship("Size", backref=db.backref("dogs", lazy=True))
 
-    # temperament_id = db.Column(db.Integer, db.ForeignKey("temperaments.temperament_id"))
-    # temperament = db.relationship("Temperament", backref=db.backref("dogs", lazy=True))
+    temperament_id = db.Column(db.Integer, db.ForeignKey("temperaments.temperament_id"))
+    temperament = db.relationship("Temperament", backref=db.backref("dogs", lazy=True))
 
-    age = db.Column(db.Integer, nullable=False)
+    age = db.Column(db.Text(), nullable=False)
     sex = db.Column(db.Text(), nullable=False)
     is_vaccinated = db.Column(db.Boolean, nullable=False)
     is_fixed = db.Column(db.Boolean, nullable=False)
@@ -109,6 +109,21 @@ class Dog(db.Model):
 
     def __repr__(self):
         return f"Dog: {self.dog_name} | Breed: {self.breed.breed_name} | Age: {self.age} | Sex: {self.sex} | Fixed: {self.is_fixed} | Vx: {self.is_vaccinated} | Pic: {self.dog_pic} | Bio: {self.dog_bio} | Created: {self.creation_time:%Y-%m-%d}"
+
+class Temperament(db.Model):
+    __tablename__ = "temperaments"
+
+    temperament_id = db.Column(db.Integer, primary_key=True)
+    temperament_type = db.Column(db.Text(), nullable=False)
+
+    def __init__(
+        self,
+        temperament_type
+    ):
+        self.temperament_type  = temperament_type
+
+    def __repr__(self):
+        return f"Temperament ID #{self.temperament_id}: {self.temperament_type}"
 
 class Activity(db.Model):
     __tablename__ = "activities"
