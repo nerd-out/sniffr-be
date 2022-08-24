@@ -8,16 +8,18 @@ from sniffr.models import Activity, Breed, db, Dog, Temperament, User
 load_dotenv()
 
 def seed_db_user():
-    # Add user
+    # Add users
     db.session.add(User(username="jon", email="jon@sniffr.be", password=os.getenv('JON_PASS')))
-    # Add user
     db.session.add(User(username="dan", email="dan@sniffr.be", password=os.getenv('DAN_PASS')))
-    # Add user
     db.session.add(User(username="josh", email="josh@sniffr.be", password=os.getenv('JOSH_PASS')))
-    # Add user
     db.session.add(User(username="allie", email="allie@sniffr.be", password=os.getenv('ALLIE_PASS')))
-    # Add user
     db.session.add(User(username="mashima", email="mashima@sniffr.be", password=os.getenv('MASHIMA_PASS')))
+    db.session.add(User(username="shaggy", email="shaggyrogers@sniffr.be", password="scooby"))
+    db.session.add(User(username="jim", email="jimdavis@sniffr.be", password="odie"))
+    db.session.add(User(username="chuck", email="charlesschultz@sniffr.be", password="snoopy"))
+    db.session.add(User(username="scott", email="scottadams@sniffr.be", password="dogbert"))
+    db.session.add(User(username="walt", email="waltdisney@sniffr.be", password="pluto"))
+
     db.session.commit()
 
 def seed_db_dog():
@@ -30,6 +32,60 @@ def seed_db_dog():
         sex='Male',
         is_vaccinated=True,
         is_fixed=False
+        ))
+    db.session.add(Dog(
+        dog_name="Scooby Doo", 
+        age='2',
+        owner_id=6,
+        breed_id=123,
+        sex='Male',
+        is_vaccinated=True,
+        is_fixed=False
+        ))
+    db.session.add(Dog(
+        dog_name="Odie", 
+        age='35',
+        owner_id=7,
+        breed_id=123,
+        sex='Male',
+        is_vaccinated=True,
+        is_fixed=True
+        ))
+    db.session.add(Dog(
+        dog_name="Snoopy", 
+        age='85',
+        owner_id=8,
+        breed_id=123,
+        sex='Male',
+        is_vaccinated=True,
+        is_fixed=False
+        ))
+    db.session.add(Dog(
+        dog_name="Dogbert", 
+        age='20',
+        owner_id=9,
+        breed_id=123,
+        sex='Male',
+        is_vaccinated=True,
+        is_fixed=False
+        ))
+    db.session.add(Dog(
+        dog_name="Pluto", 
+        age='60',
+        owner_id=10,
+        breed_id=123,
+        sex='Male',
+        is_vaccinated=True,
+        is_fixed=False
+        ))
+    db.session.add(Dog(
+        dog_name="Pokey", 
+        age='10',
+        owner_id=2,
+        breed_id=123,
+        sex='Female',
+        is_vaccinated=True,
+        is_fixed=True
         ))
     db.session.commit()
 
