@@ -3,6 +3,11 @@ from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy import inspect
+import jwt
+import os
+import datetime
+
+SECRET_KEY = os.getenv("SECRET_KEY")
 
 # Set up flask & sqlalchemy
 db = SQLAlchemy()
@@ -28,6 +33,37 @@ class User(db.Model):
     @property
     def password(self):
         raise AttributeError('password is not a readable attribute!')
+    
+    def encode_auth_token(self, user_id):
+        """
+        generates an auth token
+        """
+        try:
+            payload = {
+                'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, seconds=5),
+                'iat': datetime.datetime.utcnow(),
+                'sub': user_id
+            }
+            return jwt.encode(
+                payload,
+                SECRET_KEY,
+                algorithm='HS256'
+            )
+        except Exception as e:
+            return e
+
+    @staticmethod
+    def decode_auth_token(auth_token):
+        """
+        decodes an auth token
+        """
+        try:
+            payload = jwt.decode(auth_token, SECRET_KEY)
+            return payload['sub']
+        except jwt.ExpiredSignatureError:
+            return {'message': 'Signature expired -- please log in again.'}
+        except jwt.InvalidTokenError:
+            return {'message': 'Invalid token -- please log in again.'}
 
     @password.setter
     def password(self, password):
