@@ -4,8 +4,10 @@ from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy import inspect
 import jwt
-import os
 import datetime
+from functools import wraps
+from flask import request
+import os
 
 SECRET_KEY = os.getenv("SECRET_KEY")
 
@@ -33,37 +35,6 @@ class User(db.Model):
     @property
     def password(self):
         raise AttributeError('password is not a readable attribute!')
-    
-    def encode_auth_token(self, user_id):
-        """
-        generates an auth token
-        """
-        try:
-            payload = {
-                'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, seconds=5),
-                'iat': datetime.datetime.utcnow(),
-                'sub': user_id
-            }
-            return jwt.encode(
-                payload,
-                SECRET_KEY,
-                algorithm='HS256'
-            )
-        except Exception as e:
-            return e
-
-    @staticmethod
-    def decode_auth_token(auth_token):
-        """
-        decodes an auth token
-        """
-        try:
-            payload = jwt.decode(auth_token, SECRET_KEY)
-            return payload['sub']
-        except jwt.ExpiredSignatureError:
-            return {'message': 'Signature expired -- please log in again.'}
-        except jwt.InvalidTokenError:
-            return {'message': 'Invalid token -- please log in again.'}
 
     @password.setter
     def password(self, password):
@@ -211,3 +182,28 @@ def process_records(sqlalchemy_records):
 def process_record(obj):
     return {c.key: getattr(obj, c.key)
             for c in inspect(obj).mapper.column_attrs}
+
+# decorator for verifying the JWT
+def token_required(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        token = None
+        # jwt is passed in the request header
+        if 'x-access-token' in request.headers:
+            token = request.headers['x-access-token']
+        # return 401 if token is not passed
+        if not token:
+            return {'message' : 'Token is missing !!'}, 401
+
+        try:
+            # decoding the payload to fetch the stored details
+            data = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
+            current_user = User.query\
+                .filter_by(user_id = data['user_id'])\
+                .first()
+        except:
+            return {'message' : 'Token is invalid !!'}, 401
+        # returns the current logged in users contex to the routes
+        return  f(current_user, *args, **kwargs)
+
+    return decorated
