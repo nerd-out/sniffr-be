@@ -2,7 +2,10 @@ from concurrent.futures import process
 from datetime import datetime
 from flask import Blueprint, request, jsonify
 from flask_cors import cross_origin
-from sniffr.models import Dog, process_records, db, User, process_record, Breed
+from sniffr.models import Dog, db, User, process_record, Breed, token_required
+import os
+
+SECRET_KEY = os.getenv("SECRET_KEY")
 
 # Blueprint Configuration
 dog_bp = Blueprint("dog_bp", __name__)
@@ -61,12 +64,16 @@ def get_dogs():
 
 # Get a User's Dogs
 
-@dog_bp.route("/dogs/user/<user_id>", methods=["GET"])
+@dog_bp.route("/dogs/user", methods=["GET"])
+@token_required
 @cross_origin()
-def get_users_dogs(user_id):
+def get_users_dogs(current_user):
+    """
+    Given a jwt, returns a json of that users dogs.
+    """
 
     # Query and get dogs given a user id
-    user_id = int(user_id)
+    user_id = current_user.user_id
     queried_dogs = db.session.query(Dog).join(User, Dog.owner_id==User.user_id).filter(Dog.owner_id==user_id).all()
 
     # Return response
