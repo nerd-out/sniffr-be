@@ -59,7 +59,6 @@ traitlets = "==5.2.2.post1"
 urllib3 = "==1.26.9"
 wcwidth = "==0.2.5"
 werkzeug = "==2.1.2"
-pyjwt = "*"
 
 [dev-packages]
 

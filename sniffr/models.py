@@ -3,13 +3,6 @@ from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy import inspect
-import jwt
-import datetime
-from functools import wraps
-from flask import request
-import os
-
-SECRET_KEY = os.getenv("SECRET_KEY")
 
 # Set up flask & sqlalchemy
 db = SQLAlchemy()
@@ -182,28 +175,3 @@ def process_records(sqlalchemy_records):
 def process_record(obj):
     return {c.key: getattr(obj, c.key)
             for c in inspect(obj).mapper.column_attrs}
-
-# decorator for verifying the JWT
-def token_required(f):
-    @wraps(f)
-    def decorated(*args, **kwargs):
-        token = None
-        # jwt is passed in the request header
-        if 'x-access-token' in request.headers:
-            token = request.headers['x-access-token']
-        # return 401 if token is not passed
-        if not token:
-            return {'message' : 'Token is missing !!'}, 401
-
-        try:
-            # decoding the payload to fetch the stored details
-            data = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
-            current_user = User.query\
-                .filter_by(user_id = data['user_id'])\
-                .first()
-        except:
-            return {'message' : 'Token is invalid !!'}, 401
-        # returns the current logged in users contex to the routes
-        return  f(current_user, *args, **kwargs)
-
-    return decorated

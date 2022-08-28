@@ -1,11 +1,6 @@
-from flask import Blueprint, request, make_response, jsonify
+from flask import Blueprint, request
 from flask_cors import cross_origin
-from sniffr.models import User, db
-import jwt
-from datetime import datetime, timedelta
-import os
-
-SECRET_KEY = os.getenv("SECRET_KEY")
+from sniffr.models import User, db, process_records
 
 # Blueprint Configuration
 auth_bp = Blueprint("auth_bp", __name__)
@@ -25,14 +20,11 @@ def login():
 
         # Check that there is a valid result and a correct password
         if result and result.verify_password(password=passwd):
-
-            # generates the JWT Token
-            token = jwt.encode({
-                'user_id': result.user_id,
-                'exp' : datetime.utcnow() + timedelta(minutes = 30)
-            }, SECRET_KEY)
-
-            return make_response(jsonify({'token' : token}), 201)
+            return {
+                "user_id": result.user_id,
+                "username": result.username,
+                "email": result.email,
+            }
 
         else:
             return {"message": "fail"}, 400
