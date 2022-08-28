@@ -29,7 +29,7 @@ def login():
             # generates the JWT Token
             token = jwt.encode({
                 'user_id': result.user_id,
-                'exp' : datetime.utcnow() + timedelta(minutes = 30)
+                'exp' : datetime.utcnow() + timedelta(days = 7)
             }, SECRET_KEY)
 
             return make_response(jsonify({'token' : token}), 201)
