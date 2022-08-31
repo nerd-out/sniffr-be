@@ -70,7 +70,6 @@ class Swipe(db.Model):
     def __repr__(self):
         return f"Dog {self.dog_id} swiped on dog {self.swiped_dog_id} and is {'' if self.is_interested else 'not'} interested in playing."
 
-# Breeds
 class Breed(db.Model):
     __tablename__ = "breeds"
 
@@ -86,7 +85,21 @@ class Breed(db.Model):
     def __repr__(self):
         return f"Breed #{self.breed_id} {self.breed_name}"
 
-# Let's create the dog table
+class Size(db.Model):
+    __tablename__ = "sizes"
+
+    size_id = db.Column(db.Integer, primary_key=True)
+    size = db.Column(db.Text(), nullable=False)
+
+    def __init__(
+        self,
+        size      
+    ):
+        self.size = size
+
+    def __repr__(self):
+        return f"Size #{self.size_id} {self.size}"
+
 class Dog(db.Model):
     __tablename__ = "dogs"
 
