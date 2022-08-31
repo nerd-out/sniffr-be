@@ -8,6 +8,7 @@ import os
 SECRET_KEY = os.getenv("SECRET_KEY")
 
 # Blueprint Configuration
+
 dog_bp = Blueprint("dog_bp", __name__)
 
 # Get Dog
@@ -21,6 +22,9 @@ def get_dog(dog_id):
         response = process_record(queried_dog)
         response['owner'] = queried_dog.owner.username
         response['breed'] = queried_dog.breed.breed_name
+        response['size'] = queried_dog.size.size
+        response['temperament_type'] = queried_dog.temperament.temperament_type
+
         return response
 
     else:
@@ -51,7 +55,11 @@ def get_dogs():
                 'creation_time': row.creation_time,
                 'last_updated': row.last_updated,
                 'breed_id': row.breed.breed_id,
-                'breed': row.breed.breed_name
+                'breed': row.breed.breed_name,
+                'temperament_id': row.temperament.temperament_id,
+                'temperament_type': row.temperament.temperament_type,
+                'size_id': row.size.size_id,
+                'size': row.size.size,
                 }
             
             response.append(dog)
@@ -84,6 +92,7 @@ def get_users_dogs(current_user):
                 'owner': row.owner.username,
                 'owner_id': row.owner.user_id,
                 'dog_id': row.dog_id,
+                'dog_size': row.size_id,
                 'dog_name': row.dog_name,
                 'age': row.age,
                 'sex': row.sex,
@@ -94,7 +103,11 @@ def get_users_dogs(current_user):
                 'creation_time': row.creation_time,
                 'last_updated': row.last_updated,
                 'breed_id': row.breed.breed_id,
-                'breed': row.breed.breed_name
+                'breed': row.breed.breed_name,
+                'temperament_id': row.temperament.temperament_id,
+                'temperament_type': row.temperament.temperament_type,
+                'size_id': row.size.size_id,
+                'size': row.size.size,
                 }
             
             response.append(dog)
@@ -121,6 +134,8 @@ def post_dog():
             # Update properties
             queried_dog.dog_name = content['dog_name']
             queried_dog.breed_id = content['breed_id']
+            queried_dog.temperament_id = content['temperament_id']
+            queried_dog.size_id = content['size_id']
             queried_dog.is_vaccinated = content['is_vaccinated']
             queried_dog.is_fixed = content['is_fixed']
             queried_dog.age = content['age']
@@ -133,6 +148,8 @@ def post_dog():
 
             response = process_record(queried_dog)
             response['breed'] = queried_dog.breed.breed_name
+            response['size'] = queried_dog.size.size
+            response['temperament_type'] = queried_dog.temperament.temperament_type
 
             return response
 
@@ -142,27 +159,21 @@ def post_dog():
 
     else:
         # create dog
-        dog_name = content["dog_name"]
-        owner_id = content["owner_id"]
-        breed_id = content["breed_id"]
-        is_vaccinated = content["is_vaccinated"]
-        is_fixed = content["is_fixed"]
-        age = content["age"]
-        sex = content["sex"]
-        dog_pic = content['dog_pic']
-        dog_bio = content['dog_bio']
 
         new_dog = Dog(
-            dog_name=dog_name,
-            owner_id=owner_id,
-            breed_id=breed_id,
-            age=age,
-            sex=sex,
-            is_vaccinated=is_vaccinated,
-            is_fixed=is_fixed,
-            dog_bio=dog_bio,
-            dog_pic=dog_pic
+            dog_name=content["dog_name"],
+            owner_id=content["owner_id"],
+            breed_id=content["breed_id"],
+            size_id=content["size_id"],
+            temperament_id=content["temperament_id"],
+            age=content["age"],
+            sex=content["sex"],
+            is_vaccinated=content["is_vaccinated"],
+            is_fixed=content["is_fixed"],
+            dog_bio=content['dog_bio'],
+            dog_pic=content['dog_pic'],
         )
+
         db.session.add(new_dog)
         db.session.commit()
 
@@ -171,6 +182,8 @@ def post_dog():
         )
         response = process_record(queried_dog)
         response['breed'] = queried_dog.breed.breed_name
+        response['size'] = queried_dog.size.size
+        response['temperament_type'] = queried_dog.temperament.temperament_type
 
         return response, 201
 # Delete Dog

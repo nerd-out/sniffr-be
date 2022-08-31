@@ -7,6 +7,7 @@ from sniffr.activity_routes.activity_routes import activity_bp
 from sniffr.breed_routes.breed_routes import breed_bp
 from sniffr.dog_routes.dog_routes import dog_bp
 from sniffr.temperament_routes.temperament_routes import temperament_bp
+from sniffr.size_routes.size_routes import size_bp
 from sniffr.models import db, migrate
 
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -58,6 +59,9 @@ def create_app():
 
     # Temperament Routes
     app.register_blueprint(temperament_bp)
+
+    # Size Routes
+    app.register_blueprint(size_bp)
 
     return app
 

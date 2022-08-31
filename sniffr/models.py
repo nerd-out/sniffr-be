@@ -85,6 +85,36 @@ class Breed(db.Model):
     def __repr__(self):
         return f"Breed #{self.breed_id} {self.breed_name}"
 
+class Dog(db.Model):
+    __tablename__ = "dogs"
+
+    dog_id = db.Column(db.Integer, primary_key=True)
+    dog_name = db.Column(db.Text(), nullable=False)
+
+    owner_id = db.Column(db.Integer, db.ForeignKey("users.user_id"), nullable=False)
+    owner = db.relationship("User")
+
+    breed_id = db.Column(db.Integer, db.ForeignKey("breeds.breed_id"), nullable=False)
+    breed = db.relationship("Breed")
+
+    size_id = db.Column(db.Integer, db.ForeignKey("sizes.size_id"), nullable=False)
+    size = db.relationship("Size")
+
+    temperament_id = db.Column(db.Integer, db.ForeignKey("temperaments.temperament_id"), nullable=False)
+    temperament = db.relationship("Temperament", backref=db.backref("dogs", lazy=True))
+
+    age = db.Column(db.Text(), nullable=False)
+    sex = db.Column(db.Text(), nullable=False)
+    is_vaccinated = db.Column(db.Boolean, nullable=False)
+    is_fixed = db.Column(db.Boolean, nullable=False)
+    dog_bio = db.Column(db.Text())
+    dog_pic = db.Column(db.Text())
+    creation_time = db.Column(db.DateTime, default=datetime.datetime.now())
+    last_updated = db.Column(db.DateTime)
+
+    def __repr__(self):
+        return f"Dog: {self.dog_name} | Breed: {self.breed.breed_name} | Size: {self.size.size} | Temperament: {self.temperament.temperament_type} | Age: {self.age} | Sex: {self.sex} | Fixed: {self.is_fixed} | Vx: {self.is_vaccinated} | Pic: {self.dog_pic} | Bio: {self.dog_bio} | Created: {self.creation_time:%Y-%m-%d}"
+
 class Size(db.Model):
     __tablename__ = "sizes"
 
@@ -99,36 +129,6 @@ class Size(db.Model):
 
     def __repr__(self):
         return f"Size #{self.size_id} {self.size}"
-
-class Dog(db.Model):
-    __tablename__ = "dogs"
-
-    dog_id = db.Column(db.Integer, primary_key=True)
-    dog_name = db.Column(db.Text(), nullable=False)
-
-    owner_id = db.Column(db.Integer, db.ForeignKey("users.user_id"), nullable=False)
-    owner = db.relationship("User")
-
-    breed_id = db.Column(db.Integer, db.ForeignKey("breeds.breed_id"), nullable=False)
-    breed = db.relationship("Breed")
-
-    # size_id = db.Column(db.Integer, db.ForeignKey("sizes.size_id"))
-    # size = db.relationship("Size", backref=db.backref("dogs", lazy=True))
-
-    temperament_id = db.Column(db.Integer, db.ForeignKey("temperaments.temperament_id"))
-    temperament = db.relationship("Temperament", backref=db.backref("dogs", lazy=True))
-
-    age = db.Column(db.Text(), nullable=False)
-    sex = db.Column(db.Text(), nullable=False)
-    is_vaccinated = db.Column(db.Boolean, nullable=False)
-    is_fixed = db.Column(db.Boolean, nullable=False)
-    dog_bio = db.Column(db.Text())
-    dog_pic = db.Column(db.Text())
-    creation_time = db.Column(db.DateTime, default=datetime.datetime.now())
-    last_updated = db.Column(db.DateTime)
-
-    def __repr__(self):
-        return f"Dog: {self.dog_name} | Breed: {self.breed.breed_name} | Age: {self.age} | Sex: {self.sex} | Fixed: {self.is_fixed} | Vx: {self.is_vaccinated} | Pic: {self.dog_pic} | Bio: {self.dog_bio} | Created: {self.creation_time:%Y-%m-%d}"
 
 class Temperament(db.Model):
     __tablename__ = "temperaments"
