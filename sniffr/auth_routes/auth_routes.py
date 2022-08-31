@@ -12,7 +12,6 @@ auth_bp = Blueprint("auth_bp", __name__)
 
 # Login route
 @auth_bp.route("/login", methods=["POST"])
-@cross_origin()
 def login():
     """When a correct email and password is given, provide a success prompt"""
     content = request.json
@@ -43,7 +42,6 @@ def login():
 
 # Logout route
 @auth_bp.route("/logout", methods=["POST"])
-@cross_origin()
 def logout():
     """Simulates a logout point. Doesn't do much until json webtokens are added"""
 
@@ -52,7 +50,6 @@ def logout():
 
 # Create user route
 @auth_bp.route("/createuser", methods=["POST"])
-@cross_origin()
 def create_user():
     """Creates a user when a username, password, and email."""
 
