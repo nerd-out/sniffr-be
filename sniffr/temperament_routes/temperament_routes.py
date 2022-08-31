@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify
 from flask_cors import cross_origin
-from sniffr.models  import Temperament, db, process_records
+from sniffr.models import Temperament, db, process_records
 
 temperament_bp = Blueprint("temperament_bp", __name__)
 

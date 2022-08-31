@@ -3,26 +3,22 @@ from xml.dom.expatbuilder import TEXT_NODE
 from dotenv import load_dotenv
 import os
 from sniffr.app import create_app
-from sniffr.models import Activity, Breed, db, Dog, Temperament, User
+from sniffr.models import Activity, Breed, db, Dog, Temperament, User, Size
 
 load_dotenv()
 
 def seed_db_user():
-    # Add user
+    # Add users
     db.session.add(User(username="jon", email="jon@sniffr.be", password=os.getenv('JON_PASS')))
-    # Add user
     db.session.add(User(username="dan", email="dan@sniffr.be", password=os.getenv('DAN_PASS')))
-    # Add user
     db.session.add(User(username="josh", email="josh@sniffr.be", password=os.getenv('JOSH_PASS')))
-    # Add user
     db.session.add(User(username="allie", email="allie@sniffr.be", password=os.getenv('ALLIE_PASS')))
-    # Add user
     db.session.add(User(username="mashima", email="mashima@sniffr.be", password=os.getenv('MASHIMA_PASS')))
     db.session.add(User(username="rando", email="rando@sniffr.be", password=os.getenv('RANDO_PASS')))
     db.session.commit()
 
 def seed_db_dog():
-    # Add Augie
+    # Add dogs
     db.session.add(Dog(
         dog_name="Augie", 
         age='2',
@@ -30,7 +26,31 @@ def seed_db_dog():
         breed_id=123,
         sex='Male',
         is_vaccinated=True,
-        is_fixed=False
+        is_fixed=False,
+        size_id=4,
+        temperament_id=2,
+        ))
+    db.session.add(Dog(
+        dog_name="Max", 
+        age='15',
+        owner_id=4,
+        breed_id=137,
+        sex='Male',
+        is_vaccinated=True,
+        is_fixed=False,
+        size_id=3,
+        temperament_id=2,
+        ))
+    db.session.add(Dog(
+        dog_name="Siri", 
+        age='10',
+        owner_id=4,
+        breed_id=61,
+        sex='Female',
+        is_vaccinated=True,
+        is_fixed=True,
+        size_id=5,
+        temperament_id=3,
         ))
     db.session.commit()
 
@@ -58,11 +78,23 @@ def seed_db_activities():
     db.session.commit()
 
 def seed_db_temperaments():
-    # Add activities
-    db.session.add(Temperament("Shy"))    
+    # Add temperaments
+    db.session.add(Temperament("Saucy"))
     db.session.add(Temperament("Playful"))
     db.session.add(Temperament("Cautious"))
+    db.session.add(Temperament("Clingy"))
+    db.session.add(Temperament("Permanently Ecstatic"))
     db.session.add(Temperament("Old and wise"))
+    db.session.commit()
+
+def seed_db_sizes():
+    # Add sizes
+    db.session.add(Size(size="Teacup (less than 5 lbs)"))    
+    db.session.add(Size(size="Toy (6 to 12 lbs)"))    
+    db.session.add(Size(size="Small (13 to 24 lbs)"))
+    db.session.add(Size(size="Medium (25 to 59 lbs)"))
+    db.session.add(Size(size="Large (60 to 99 lbs)"))
+    db.session.add(Size(size="Giant (100+ pounds)"))
     db.session.commit()
 
 def check_results():
@@ -85,18 +117,20 @@ def check_results():
         print(row)
     print('-------------------')
 
-    #Print Number of Breeds and Breeds List
     print("BREEDS:")
-    breeds_result = db.session.query(Breed).all()
-    print("There are total of " + str(len(breeds_result)) + " breeds in this database now.")
-    # for breed in breeds_result:
-    #     print(breed)
+    result = db.session.query(Breed).all()
+    print("There are total of " + str(len(result)) + " breeds in this database now.")
     print('-------------------')
 
-        #Print Number of Breeds and Breeds List
     print("TEMPERAMENTS:")
-    temperament_result = db.session.query(Temperament).all()
-    for row in temperament_result:
+    result = db.session.query(Temperament).all()
+    for row in result:
+        print(row);
+    print('-------------------')
+
+    print("SIZES:")
+    result = db.session.query(Size).all()
+    for row in result:
         print(row);
     print('-------------------')
 
@@ -110,13 +144,16 @@ if __name__ == "__main__":
         # Add breeds
         seed_db_breeds()
 
+        # Add Sizes
+        seed_db_sizes()
+
         # Seed user table
         seed_db_user()
 
-        # Add augie to dog table
+        # Add dogs + augie to dog table
         seed_db_dog()
 
-        # Add stuff for the dogs to do.
+        # Add stuff for the dogs to do
         seed_db_activities()
 
         # Add temperament
