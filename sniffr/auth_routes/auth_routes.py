@@ -45,16 +45,16 @@ def login():
 
 
 # Create user route
-@auth_bp.route("/createuser", methods=["POST"])
+@auth_bp.route("/register", methods=["POST"])
 @cross_origin()
-def create_user():
+def register():
     """Creates a user when a username, password, and email."""
 
     # Grab json content
     content = request.json
     email = content["email"]
     passwd = content["password"]
-    username = content["password"]
+    username = content["username"]
 
     # Create user
     new_user = User(username=username, password=passwd, email=email)

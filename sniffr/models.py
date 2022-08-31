@@ -29,7 +29,7 @@ class User(db.Model):
     user_bio = db.Column(db.Text())
     max_distance = db.Column(db.Integer)
     zipcode = db.Column(db.Text())
-    creation_time = db.Column(db.DateTime, default= datetime.datetime.now())
+    creation_time = db.Column(db.DateTime, default=datetime.datetime.now())
     last_update = db.Column(db.DateTime)
 
     @property
