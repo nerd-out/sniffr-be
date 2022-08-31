@@ -81,4 +81,4 @@ If you want to quickly run a docker container of this app then you can:
 
 
 # Backend Routes
-To view usable routes, please check out our group postman project. Any route that is usable is found there.
+To view usable routes, <a href="https://dark-satellite-157884.postman.co/workspace/734f5948-c8cb-4fd1-b163-2b8d22b24036">please click here to check out our group postman project.</a> Any route that is usable is found there.
