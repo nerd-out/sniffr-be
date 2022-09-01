@@ -87,10 +87,10 @@ If you want to quickly run a docker container of this app then you can:
 # Backend Routes
 Click the links below for the corresponding documentation.
 
-<a href="https://documenter.getpostman.com/view/10064838/VUxPtS6S#1d986618-74e8-417e-9bb0-f9a59dfd1d84">Activity routes</a>
-<a href="https://documenter.getpostman.com/view/12180328/VUxPtSAm">Auth Routes</a>
-<a href="https://documenter.getpostman.com/view/10064838/VUxPtSAo">Breed Routes</a>
-<a href="https://documenter.getpostman.com/view/10064838/VUxPtSAp">Dog Routes</a>
-<a href="https://documenter.getpostman.com/view/10064838/VUxPtSAq">Size Routes</a>
-<a href="https://documenter.getpostman.com/view/10064838/VUxPtSAr">Temperament Routes</a>
-<a href="https://documenter.getpostman.com/view/10064838/VUxPtSAt">User Routes</a>
+- <a href="https://documenter.getpostman.com/view/10064838/VUxPtS6S#1d986618-74e8-417e-9bb0-f9a59dfd1d84">Activity routes</a>
+- <a href="https://documenter.getpostman.com/view/12180328/VUxPtSAm">Auth Routes</a>
+- <a href="https://documenter.getpostman.com/view/10064838/VUxPtSAo">Breed Routes</a>
+- <a href="https://documenter.getpostman.com/view/10064838/VUxPtSAp">Dog Routes</a>
+- <a href="https://documenter.getpostman.com/view/10064838/VUxPtSAq">Size Routes</a>
+- <a href="https://documenter.getpostman.com/view/10064838/VUxPtSAr">Temperament Routes</a>
+- <a href="https://documenter.getpostman.com/view/10064838/VUxPtSAt">User Routes</a>
