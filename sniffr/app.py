@@ -1,8 +1,5 @@
 from flask import Flask
-from flask_cors import CORS
-
 import os
-
 from sniffr.auth_routes.auth_routes import auth_bp
 from sniffr.activity_routes.activity_routes import activity_bp
 from sniffr.breed_routes.breed_routes import breed_bp
@@ -20,7 +17,6 @@ def create_app():
 
     # Load app
     app = Flask(__name__)
-    CORS(app)
     app.config["SECRET_KEY"] = SECRET_KEY
 
     # Load database given flask_env env variable

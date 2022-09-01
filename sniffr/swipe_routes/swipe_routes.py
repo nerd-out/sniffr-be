@@ -1,12 +1,14 @@
 from concurrent.futures import process
 from flask import Blueprint, request, jsonify, current_app as app
 from sniffr.models import db, Swipe, process_records
+from flask_cors import cross_origin
 
 # Blueprint Configuration
 swipe_bp = Blueprint("swipe_bp", __name__)
 
 
 @swipe_bp.route("/swipe/<swipe_id>", methods=["GET"])
+@cross_origin()
 def get_swipe(swipe_id):
     swipe_id = int(swipe_id)
 
@@ -14,4 +16,3 @@ def get_swipe(swipe_id):
     queried_swipe = process_records(queried_swipe)
 
     return jsonify(queried_swipe)
-
