@@ -3,7 +3,6 @@ from datetime import datetime
 from flask import Blueprint, request, jsonify
 from sniffr.models import Dog, db, User, process_record, Breed, token_required
 import os
-from flask_cors import cross_origin
 
 SECRET_KEY = os.getenv("SECRET_KEY")
 
@@ -15,7 +14,6 @@ dog_bp = Blueprint("dog_bp", __name__)
 
 
 @dog_bp.route("/dog/<dog_id>", methods=["GET"])
-@cross_origin()
 def get_dog(dog_id):
     """Get dog info"""
     queried_dog = db.session.query(Dog).join(User).filter(Dog.dog_id == dog_id).first()
@@ -37,7 +35,6 @@ def get_dog(dog_id):
 
 
 @dog_bp.route("/dogs", methods=["GET"])
-@cross_origin()
 def get_dogs():
 
     queried_dogs = db.session.query(Dog).join(User, Dog.owner_id == User.user_id).all()
@@ -79,7 +76,6 @@ def get_dogs():
 
 @dog_bp.route("/dogs/user", methods=["GET"])
 @token_required
-@cross_origin()
 def get_users_dogs(current_user):
     """
     Given a jwt, returns a json of that users dogs.
@@ -133,7 +129,6 @@ def get_users_dogs(current_user):
 
 
 @dog_bp.route("/dog", methods=["POST"])
-@cross_origin()
 def post_dog():
     """Create or edit dog info"""
     content = request.json
@@ -210,7 +205,6 @@ def post_dog():
 
 
 @dog_bp.route("/dog/<dog_id>", methods=["DELETE"])
-@cross_origin()
 def delete_dog(dog_id):
     queried_dog = db.session.query(Dog).filter(Dog.dog_id == dog_id).first()
 

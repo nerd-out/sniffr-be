@@ -1,13 +1,10 @@
 from flask import Blueprint, jsonify
-from flask_cors import cross_origin
 from sniffr.models import Size, db, process_records
-from flask_cors import cross_origin
 
 size_bp = Blueprint("size_bp", __name__)
 
 
 @size_bp.route("/sizes", methods=["GET"])
-@cross_origin()
 def get_size():
     """Get all sizes"""
     all_sizes = db.session.query(Size).all()
