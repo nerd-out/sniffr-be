@@ -142,6 +142,9 @@ if __name__ == "__main__":
 
         # Add temperament
         seed_db_temperaments()
+
+        # Check results
+        check_results()
         
         # Add breeds
         seed_db_breeds()
