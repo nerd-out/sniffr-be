@@ -139,6 +139,9 @@ if __name__ == "__main__":
         # Reset database
         db.drop_all()
         db.create_all()
+
+        # Add temperament
+        seed_db_temperaments()
         
         # Add breeds
         seed_db_breeds()
@@ -154,9 +157,6 @@ if __name__ == "__main__":
 
         # Add stuff for the dogs to do
         seed_db_activities()
-
-        # Add temperament
-        seed_db_temperaments()
 
         # Check results
         check_results()
