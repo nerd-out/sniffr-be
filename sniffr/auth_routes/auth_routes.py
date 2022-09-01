@@ -1,5 +1,4 @@
 from flask import Blueprint, request, make_response, jsonify
-from flask_cors import cross_origin
 from sniffr.models import User, db
 import jwt
 from datetime import datetime, timedelta
