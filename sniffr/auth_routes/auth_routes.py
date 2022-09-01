@@ -25,26 +25,21 @@ def login():
         if result and result.verify_password(password=passwd):
 
             # generates the JWT Token
-            token = jwt.encode({
-                'user_id': result.user_id,
-                'exp' : datetime.utcnow() + timedelta(days = 7)
-            }, SECRET_KEY)
+            token = jwt.encode(
+                {
+                    "user_id": result.user_id,
+                    "exp": datetime.utcnow() + timedelta(days=7),
+                },
+                SECRET_KEY,
+            )
 
-            return make_response(jsonify({'token' : token}), 201)
+            return make_response(jsonify({"token": token}), 201)
 
         else:
             return {"message": "fail"}, 400
 
     else:
         return {"message": "fail"}, 400
-
-
-# Logout route
-@auth_bp.route("/logout", methods=["POST"])
-def logout():
-    """Simulates a logout point. Doesn't do much until json webtokens are added"""
-
-    return {"message": "success!"}
 
 
 # Create user route
