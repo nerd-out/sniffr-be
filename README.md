@@ -71,6 +71,10 @@ If you made changes to `models.py` during development... you do not need to comp
     ```
 If successful, then you should be able to seed and use the new database tables/columns. If not, you may need to remake it from scratch after deleting the `sniffrdb.db` file and `migrations` folder.
 
+# Heroku Commands
+`heroku run bash --app sniffr-be`
+
+
 # DOCKER -- UNDER CONSTRUCTION
 If you want to quickly run a docker container of this app then you can:
 1. Download the repo
