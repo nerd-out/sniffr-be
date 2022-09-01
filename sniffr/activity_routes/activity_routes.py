@@ -1,7 +1,6 @@
 from flask import Blueprint, request, jsonify
 from flask import current_app as app
 from sniffr.models import db, Activity, process_records
-from flask_cors import cross_origin
 
 # Blueprint Configuration
 activity_bp = Blueprint("activity_bp", __name__)
@@ -10,7 +9,6 @@ activity_bp = Blueprint("activity_bp", __name__)
 
 
 @activity_bp.route("/activities", methods=["GET"])
-@cross_origin()
 def get_activities():
     """Get all activities"""
     queried_activity = db.session.query(Activity).all()
@@ -19,7 +17,6 @@ def get_activities():
 
 
 @activity_bp.route("/activity/<activity_id>", methods=["GET"])
-@cross_origin()
 def get_activity(activity_id):
     """Get a specific activity by id."""
     activity_id = int(activity_id)
@@ -31,7 +28,6 @@ def get_activity(activity_id):
 
 
 @activity_bp.route("/activity", methods=["POST"])
-@cross_origin()
 def post_activity():
     """Create a new activity"""
     content = request.json
@@ -52,7 +48,6 @@ def post_activity():
 
 
 @activity_bp.route("/activity/<activity_id>", methods=["DELETE"])
-@cross_origin()
 def delete_activity(activity_id):
     """Delete a specific activity by id."""
     activity_id = int(activity_id)

@@ -8,8 +8,10 @@ from sniffr.temperament_routes.temperament_routes import temperament_bp
 from sniffr.size_routes.size_routes import size_bp
 from sniffr.user_routes.user_routes import user_bp
 from sniffr.models import db, migrate
+from flask_cors import CORS
 
 basedir = os.path.abspath(os.path.dirname(__file__))
+
 
 def create_app():
     flask_env = os.getenv("FLASK_ENV")
@@ -18,6 +20,7 @@ def create_app():
     # Load app
     app = Flask(__name__)
     app.config["SECRET_KEY"] = SECRET_KEY
+    CORS(app)
 
     # Load database given flask_env env variable
     if flask_env == "production":
@@ -64,7 +67,6 @@ def create_app():
 
     # User Routes
     app.register_blueprint(user_bp)
-
 
     return app
 
