@@ -1,9 +1,12 @@
 from flask import Blueprint, jsonify
-from sniffr.models  import Breed, db, process_records
+from sniffr.models import Breed, db, process_records
+from flask_cors import cross_origin
 
 breed_bp = Blueprint("breed_bp", __name__)
 
-@breed_bp.route('/breeds', methods=['GET'])
+
+@breed_bp.route("/breeds", methods=["GET"])
+@cross_origin()
 def get_breed():
     """Get all breeds"""
     all_breeds = db.session.query(Breed).all()
@@ -11,11 +14,8 @@ def get_breed():
     response = []
     if all_breeds:
         for breed in all_breeds:
-            breed_record = {
-                'breed_id': breed.breed_id,
-                'breed_name': breed.breed_name
-                }
-            
+            breed_record = {"breed_id": breed.breed_id, "breed_name": breed.breed_name}
+
             response.append(breed_record)
 
         return jsonify(response)
