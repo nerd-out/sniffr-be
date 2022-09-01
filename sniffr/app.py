@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_cors import CORS
 
 import os
 
@@ -19,6 +20,7 @@ def create_app():
 
     # Load app
     app = Flask(__name__)
+    CORS(app)
     app.config["SECRET_KEY"] = SECRET_KEY
 
     # Load database given flask_env env variable
