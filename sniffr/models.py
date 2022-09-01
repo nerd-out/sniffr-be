@@ -70,7 +70,6 @@ class Swipe(db.Model):
     def __repr__(self):
         return f"Dog {self.dog_id} swiped on dog {self.swiped_dog_id} and is {'' if self.is_interested else 'not'} interested in playing."
 
-# Breeds
 class Breed(db.Model):
     __tablename__ = "breeds"
 
@@ -86,7 +85,6 @@ class Breed(db.Model):
     def __repr__(self):
         return f"Breed #{self.breed_id} {self.breed_name}"
 
-# Let's create the dog table
 class Dog(db.Model):
     __tablename__ = "dogs"
 
@@ -99,10 +97,10 @@ class Dog(db.Model):
     breed_id = db.Column(db.Integer, db.ForeignKey("breeds.breed_id"), nullable=False)
     breed = db.relationship("Breed")
 
-    # size_id = db.Column(db.Integer, db.ForeignKey("sizes.size_id"))
-    # size = db.relationship("Size", backref=db.backref("dogs", lazy=True))
+    size_id = db.Column(db.Integer, db.ForeignKey("sizes.size_id"), nullable=False)
+    size = db.relationship("Size")
 
-    temperament_id = db.Column(db.Integer, db.ForeignKey("temperaments.temperament_id"))
+    temperament_id = db.Column(db.Integer, db.ForeignKey("temperaments.temperament_id"), nullable=False)
     temperament = db.relationship("Temperament", backref=db.backref("dogs", lazy=True))
 
     age = db.Column(db.Text(), nullable=False)
@@ -115,7 +113,22 @@ class Dog(db.Model):
     last_updated = db.Column(db.DateTime)
 
     def __repr__(self):
-        return f"Dog: {self.dog_name} | Breed: {self.breed.breed_name} | Age: {self.age} | Sex: {self.sex} | Fixed: {self.is_fixed} | Vx: {self.is_vaccinated} | Pic: {self.dog_pic} | Bio: {self.dog_bio} | Created: {self.creation_time:%Y-%m-%d}"
+        return f"Dog: {self.dog_name} | Breed: {self.breed.breed_name} | Size: {self.size.size} | Temperament: {self.temperament.temperament_type} | Age: {self.age} | Sex: {self.sex} | Fixed: {self.is_fixed} | Vx: {self.is_vaccinated} | Pic: {self.dog_pic} | Bio: {self.dog_bio} | Created: {self.creation_time:%Y-%m-%d}"
+
+class Size(db.Model):
+    __tablename__ = "sizes"
+
+    size_id = db.Column(db.Integer, primary_key=True)
+    size = db.Column(db.Text(), nullable=False)
+
+    def __init__(
+        self,
+        size      
+    ):
+        self.size = size
+
+    def __repr__(self):
+        return f"Size #{self.size_id} {self.size}"
 
 class Temperament(db.Model):
     __tablename__ = "temperaments"

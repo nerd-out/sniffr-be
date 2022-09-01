@@ -1,4 +1,5 @@
 from flask import Blueprint, jsonify
+
 from sniffr.models  import Temperament, db, process_records
 
 temperament_bp = Blueprint("temperament_bp", __name__)
