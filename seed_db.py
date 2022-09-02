@@ -11,10 +11,13 @@ def seed_db_user():
     # Add users
     db.session.add(User(username="jon", email="jon@sniffr.be", password=os.getenv('JON_PASS')))
     db.session.add(User(username="dan", email="dan@sniffr.be", password=os.getenv('DAN_PASS')))
+    print(os.getenv('DAN_PASS'))
     db.session.add(User(username="josh", email="josh@sniffr.be", password=os.getenv('JOSH_PASS')))
+    print(os.getenv('JOSH_PASS'))
     db.session.add(User(username="allie", email="allie@sniffr.be", password=os.getenv('ALLIE_PASS')))
+    print(os.getenv('ALLIE_PASS'))
     db.session.add(User(username="mashima", email="mashima@sniffr.be", password=os.getenv('MASHIMA_PASS')))
-    db.session.add(User(username="rando", email="rando@sniffr.be", password=os.getenv('RANDO_PASS')))
+    print(os.getenv('MASHIMA_PASS'))
     db.session.commit()
 
 def seed_db_dog():
@@ -140,6 +143,9 @@ if __name__ == "__main__":
         # Reset database
         db.drop_all()
         db.create_all()
+
+        # Add temperament
+        seed_db_temperaments()
         
         # Add breeds
         seed_db_breeds()
@@ -155,9 +161,6 @@ if __name__ == "__main__":
 
         # Add stuff for the dogs to do
         seed_db_activities()
-
-        # Add temperament
-        seed_db_temperaments()
 
         # Check results
         check_results()

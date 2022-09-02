@@ -1,7 +1,6 @@
 from concurrent.futures import process
 from datetime import datetime
 from flask import Blueprint, request, jsonify
-from flask_cors import cross_origin
 from sniffr.models import Dog, db, User, process_record, Breed, token_required
 import os
 
@@ -13,17 +12,17 @@ dog_bp = Blueprint("dog_bp", __name__)
 
 # Get Dog
 
+
 @dog_bp.route("/dog/<dog_id>", methods=["GET"])
-@cross_origin()
 def get_dog(dog_id):
     """Get dog info"""
-    queried_dog = db.session.query(Dog).join(User).filter(Dog.dog_id==dog_id).first()
+    queried_dog = db.session.query(Dog).join(User).filter(Dog.dog_id == dog_id).first()
     if queried_dog:
         response = process_record(queried_dog)
-        response['owner'] = queried_dog.owner.username
-        response['breed'] = queried_dog.breed.breed_name
-        response['size'] = queried_dog.size.size
-        response['temperament_type'] = queried_dog.temperament.temperament_type
+        response["owner"] = queried_dog.owner.username
+        response["breed"] = queried_dog.breed.breed_name
+        response["size"] = queried_dog.size.size
+        response["temperament_type"] = queried_dog.temperament.temperament_type
 
         return response
 
@@ -31,37 +30,38 @@ def get_dog(dog_id):
         response = {"message": "Dog Not Found"}
         return response, 404
 
+
 # Get All Dogs
 
+
 @dog_bp.route("/dogs", methods=["GET"])
-@cross_origin()
 def get_dogs():
 
-    queried_dogs = db.session.query(Dog).join(User, Dog.owner_id==User.user_id).all()
+    queried_dogs = db.session.query(Dog).join(User, Dog.owner_id == User.user_id).all()
     response = []
     if queried_dogs:
         for row in queried_dogs:
             dog = {
-                'owner': row.owner.username,
-                'owner_id': row.owner.user_id,
-                'dog_id': row.dog_id,
-                'dog_name': row.dog_name,
-                'age': row.age,
-                'sex': row.sex,
-                'is_vaccinated': row.is_vaccinated,
-                'is_fixed': row.is_fixed,
-                'dog_bio': row.dog_bio,
-                'dog_pic': row.dog_bio,
-                'creation_time': row.creation_time,
-                'last_updated': row.last_updated,
-                'breed_id': row.breed.breed_id,
-                'breed': row.breed.breed_name,
-                'temperament_id': row.temperament.temperament_id,
-                'temperament_type': row.temperament.temperament_type,
-                'size_id': row.size.size_id,
-                'size': row.size.size,
-                }
-            
+                "owner": row.owner.username,
+                "owner_id": row.owner.user_id,
+                "dog_id": row.dog_id,
+                "dog_name": row.dog_name,
+                "age": row.age,
+                "sex": row.sex,
+                "is_vaccinated": row.is_vaccinated,
+                "is_fixed": row.is_fixed,
+                "dog_bio": row.dog_bio,
+                "dog_pic": row.dog_bio,
+                "creation_time": row.creation_time,
+                "last_updated": row.last_updated,
+                "breed_id": row.breed.breed_id,
+                "breed": row.breed.breed_name,
+                "temperament_id": row.temperament.temperament_id,
+                "temperament_type": row.temperament.temperament_type,
+                "size_id": row.size.size_id,
+                "size": row.size.size,
+            }
+
             response.append(dog)
 
         return jsonify(response)
@@ -70,11 +70,12 @@ def get_dogs():
         response = {"message": "Dog Not Found"}
         return response, 404
 
+
 # Get a User's Dogs
+
 
 @dog_bp.route("/dogs/user", methods=["GET"])
 @token_required
-@cross_origin()
 def get_users_dogs(current_user):
     """
     Given a jwt, returns a json of that users dogs.
@@ -82,46 +83,52 @@ def get_users_dogs(current_user):
 
     # Query and get dogs given a user id
     user_id = current_user.user_id
-    queried_dogs = db.session.query(Dog).join(User, Dog.owner_id==User.user_id).filter(Dog.owner_id==user_id).all()
+    queried_dogs = (
+        db.session.query(Dog)
+        .join(User, Dog.owner_id == User.user_id)
+        .filter(Dog.owner_id == user_id)
+        .all()
+    )
 
     # Return response
     response = []
     if queried_dogs:
         for row in queried_dogs:
             dog = {
-                'owner': row.owner.username,
-                'owner_id': row.owner.user_id,
-                'dog_id': row.dog_id,
-                'dog_size': row.size_id,
-                'dog_name': row.dog_name,
-                'age': row.age,
-                'sex': row.sex,
-                'is_vaccinated': row.is_vaccinated,
-                'is_fixed': row.is_fixed,
-                'dog_bio': row.dog_bio,
-                'dog_pic': row.dog_bio,
-                'creation_time': row.creation_time,
-                'last_updated': row.last_updated,
-                'breed_id': row.breed.breed_id,
-                'breed': row.breed.breed_name,
-                'temperament_id': row.temperament.temperament_id,
-                'temperament_type': row.temperament.temperament_type,
-                'size_id': row.size.size_id,
-                'size': row.size.size,
-                }
-            
+                "owner": row.owner.username,
+                "owner_id": row.owner.user_id,
+                "dog_id": row.dog_id,
+                "dog_size": row.size_id,
+                "dog_name": row.dog_name,
+                "age": row.age,
+                "sex": row.sex,
+                "is_vaccinated": row.is_vaccinated,
+                "is_fixed": row.is_fixed,
+                "dog_bio": row.dog_bio,
+                "dog_pic": row.dog_bio,
+                "creation_time": row.creation_time,
+                "last_updated": row.last_updated,
+                "breed_id": row.breed.breed_id,
+                "breed": row.breed.breed_name,
+                "temperament_id": row.temperament.temperament_id,
+                "temperament_type": row.temperament.temperament_type,
+                "size_id": row.size.size_id,
+                "size": row.size.size,
+            }
+
             response.append(dog)
 
         return jsonify(response)
-    
+
     else:
         response = {"message": "Dogs Not Found"}
         return response, 404
 
-# Create / Edit Dog 
+
+# Create / Edit Dog
+
 
 @dog_bp.route("/dog", methods=["POST"])
-@cross_origin()
 def post_dog():
     """Create or edit dog info"""
     content = request.json
@@ -129,27 +136,29 @@ def post_dog():
     # If dog_id not in body then they are trying to create
     # If dog_id in body then updating content
     if "dog_id" in content.keys():
-        queried_dog = db.session.query(Dog).filter(Dog.dog_id==content["dog_id"]).first()
+        queried_dog = (
+            db.session.query(Dog).filter(Dog.dog_id == content["dog_id"]).first()
+        )
         if queried_dog:
             # Update properties
-            queried_dog.dog_name = content['dog_name']
-            queried_dog.breed_id = content['breed_id']
-            queried_dog.temperament_id = content['temperament_id']
-            queried_dog.size_id = content['size_id']
-            queried_dog.is_vaccinated = content['is_vaccinated']
-            queried_dog.is_fixed = content['is_fixed']
-            queried_dog.age = content['age']
-            queried_dog.sex = content['sex']
-            queried_dog.dog_bio = content['dog_bio']
-            queried_dog.dog_pic = content['dog_pic']
+            queried_dog.dog_name = content["dog_name"]
+            queried_dog.breed_id = content["breed_id"]
+            queried_dog.temperament_id = content["temperament_id"]
+            queried_dog.size_id = content["size_id"]
+            queried_dog.is_vaccinated = content["is_vaccinated"]
+            queried_dog.is_fixed = content["is_fixed"]
+            queried_dog.age = content["age"]
+            queried_dog.sex = content["sex"]
+            queried_dog.dog_bio = content["dog_bio"]
+            queried_dog.dog_pic = content["dog_pic"]
             queried_dog.last_updated = datetime.now()
 
             db.session.commit()
 
             response = process_record(queried_dog)
-            response['breed'] = queried_dog.breed.breed_name
-            response['size'] = queried_dog.size.size
-            response['temperament_type'] = queried_dog.temperament.temperament_type
+            response["breed"] = queried_dog.breed.breed_name
+            response["size"] = queried_dog.size.size
+            response["temperament_type"] = queried_dog.temperament.temperament_type
 
             return response
 
@@ -170,34 +179,40 @@ def post_dog():
             sex=content["sex"],
             is_vaccinated=content["is_vaccinated"],
             is_fixed=content["is_fixed"],
-            dog_bio=content['dog_bio'],
-            dog_pic=content['dog_pic'],
+            dog_bio=content["dog_bio"],
+            dog_pic=content["dog_pic"],
         )
 
         db.session.add(new_dog)
         db.session.commit()
 
         queried_dog = (
-            db.session.query(Dog).join(Breed).join(User).filter(Dog.dog_id==new_dog.dog_id).first()
+            db.session.query(Dog)
+            .join(Breed)
+            .join(User)
+            .filter(Dog.dog_id == new_dog.dog_id)
+            .first()
         )
         response = process_record(queried_dog)
-        response['breed'] = queried_dog.breed.breed_name
-        response['size'] = queried_dog.size.size
-        response['temperament_type'] = queried_dog.temperament.temperament_type
+        response["breed"] = queried_dog.breed.breed_name
+        response["size"] = queried_dog.size.size
+        response["temperament_type"] = queried_dog.temperament.temperament_type
 
         return response, 201
+
+
 # Delete Dog
 
+
 @dog_bp.route("/dog/<dog_id>", methods=["DELETE"])
-@cross_origin()
 def delete_dog(dog_id):
-    queried_dog = db.session.query(Dog).filter(Dog.dog_id==dog_id).first()
+    queried_dog = db.session.query(Dog).filter(Dog.dog_id == dog_id).first()
 
     if queried_dog:
         db.session.delete(queried_dog)
         db.session.commit()
 
-        return {'message': f"Success!"}, 410
+        return {"message": f"Success!"}, 410
 
     else:
         response = {"message": "Dog Not Found"}

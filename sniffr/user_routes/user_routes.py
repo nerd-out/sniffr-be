@@ -1,18 +1,18 @@
-
 from flask import Blueprint, request
 from sniffr.models import User, db, token_required, process_record
 
 user_bp = Blueprint("user_bp", __name__)
 
+
 @user_bp.route("/user/<user_id>", methods=["DELETE"])
 def delete_user(user_id):
-    queried_user = db.session.query(User).filter(User.user_id==user_id).first()
+    queried_user = db.session.query(User).filter(User.user_id == user_id).first()
 
     if queried_user:
         db.session.delete(queried_user)
         db.session.commit()
 
-        return {'message': f"Successfully deleted user"}, 410
+        return {"message": f"Successfully deleted user"}, 410
 
     else:
         response = {"message": "User Not Found"}

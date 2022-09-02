@@ -1,5 +1,4 @@
 from flask import Blueprint, request, make_response, jsonify
-from flask_cors import cross_origin
 from sniffr.models import User, db
 import jwt
 from datetime import datetime, timedelta
@@ -12,7 +11,6 @@ auth_bp = Blueprint("auth_bp", __name__)
 
 # Login route
 @auth_bp.route("/login", methods=["POST"])
-@cross_origin()
 def login():
     """When a correct email and password is given, provide a success prompt"""
     content = request.json
