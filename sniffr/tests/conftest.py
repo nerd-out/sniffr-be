@@ -3,7 +3,7 @@ import pytest
 from sniffr.app import create_app
 
 # With scope=session, this function will run at the start of each session only
-@pytest.yield_fixture(scope="session")
+@pytest.fixture(scope="session")
 def app():
     """
     Setup our flask test app, this only gets executed once.
@@ -27,7 +27,7 @@ def app():
 
 
 # With scope=function, app will load for each test & info will not be shared
-@pytest.yield_fixture(scope="function")
+@pytest.fixture(scope="function")
 def client(app):
     """
     Setup an app client, this gets executed for each test function.
