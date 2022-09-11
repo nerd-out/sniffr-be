@@ -44,7 +44,6 @@ def login():
 
 # Create user route
 @auth_bp.route("/register", methods=["POST"])
-@cross_origin()
 def register():
     """Creates a user when a username, password, and email."""
 
