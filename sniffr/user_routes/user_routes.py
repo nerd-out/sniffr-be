@@ -30,7 +30,6 @@ def edit_user(current_user):
     if queried_user:
         queried_user.email = content["email"]
         queried_user.password = content["password"]
-        queried_user.username = content["username"]
         queried_user.age = content["age"]
         queried_user.gender = content["gender"]
         queried_user.max_distance = content["max_distance"]

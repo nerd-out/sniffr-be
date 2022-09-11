@@ -9,16 +9,16 @@ load_dotenv()
 
 def seed_db_user():
     # Add users
-    db.session.add(User(username="jon", email="jon@sniffr.be", password=os.getenv('JON_PASS')))
-    db.session.add(User(username="dan", email="dan@sniffr.be", password=os.getenv('DAN_PASS')))
+    db.session.add(User(email="jon@sniffr.be", password=os.getenv('JON_PASS')))
+    db.session.add(User(email="dan@sniffr.be", password=os.getenv('DAN_PASS')))
     print(os.getenv('DAN_PASS'))
-    db.session.add(User(username="josh", email="josh@sniffr.be", password=os.getenv('JOSH_PASS')))
+    db.session.add(User(email="josh@sniffr.be", password=os.getenv('JOSH_PASS')))
     print(os.getenv('JOSH_PASS'))
-    db.session.add(User(username="allie", email="allie@sniffr.be", password=os.getenv('ALLIE_PASS')))
+    db.session.add(User(email="allie@sniffr.be", password=os.getenv('ALLIE_PASS')))
     print(os.getenv('ALLIE_PASS'))
-    db.session.add(User(username="mashima", email="mashima@sniffr.be", password=os.getenv('MASHIMA_PASS')))
+    db.session.add(User(email="mashima@sniffr.be", password=os.getenv('MASHIMA_PASS')))
     print(os.getenv('MASHIMA_PASS'))
-    db.session.add(User(username="benedict", email="benedict@sniffr.be", password=os.getenv('BENEDICT_PASS')))
+    db.session.add(User(email="benedict@sniffr.be", password=os.getenv('BENEDICT_PASS')))
     print(os.getenv('BENEDICT_PASS'))
     db.session.commit()
 

@@ -45,21 +45,19 @@ def login():
 # Create user route
 @auth_bp.route("/register", methods=["POST"])
 def register():
-    """Creates a user when a username, password, and email."""
+    """Creates a user when an emaila and new password is supplied."""
 
     # Grab json content
     content = request.json
     email = content["email"]
     passwd = content["password"]
-    username = content["username"]
 
     # Create user
-    new_user = User(username=username, password=passwd, email=email)
+    new_user = User(password=passwd, email=email)
     db.session.add(new_user)
     db.session.commit()
 
     return {
         "user_id": new_user.user_id,
-        "username": new_user.username,
         "email": new_user.email,
     }
