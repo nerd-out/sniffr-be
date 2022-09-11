@@ -13,7 +13,7 @@ from flask_cors import CORS
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 
-def create_app():
+def create_app(settings_override=None):
     flask_env = os.getenv("FLASK_ENV")
     SECRET_KEY = os.getenv("SECRET_KEY")
 
@@ -21,6 +21,10 @@ def create_app():
     app = Flask(__name__)
     app.config["SECRET_KEY"] = SECRET_KEY
     CORS(app)
+
+    # settings_override helps with testing
+    if settings_override:
+        app.config.update(settings_override)
 
     # Load database given flask_env env variable
     if flask_env == "production":
@@ -32,7 +36,8 @@ def create_app():
             basedir, "sniffrdb.db"
         )
         print(
-            f'Using development set up for SQLALCHEMY_DATABASE_URI: {app.config["SQLALCHEMY_DATABASE_URI"]}'
+            f'Using development set up for \
+                SQLALCHEMY_DATABASE_URI: {app.config["SQLALCHEMY_DATABASE_URI"]}'
         )
 
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
@@ -43,7 +48,7 @@ def create_app():
     migrate.init_app(app, db)
 
     @app.route("/")
-    def our_first_route():
+    def home_route():
         return "<h3>Welcome to Sniffr's Backend! Feel free to take a whiff!</h3>"
 
     # Register Blueprints
