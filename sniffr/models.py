@@ -19,7 +19,6 @@ class User(db.Model):
     __tablename__ = "users"
 
     user_id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.Text(), nullable=False)
     email = db.Column(db.Text(), unique=True, nullable=False)
     password_hash = db.Column(db.String(128))
     name = db.Column(db.Text())
@@ -43,13 +42,12 @@ class User(db.Model):
     def verify_password(self, password):
         return check_password_hash(self.password_hash, password)
 
-    def __init__(self, username, email, password):
-        self.username = username
+    def __init__(self, email, password):
         self.email = email
         self.password = password
 
     def __repr__(self):
-        return f"#{self.user_id} {self.username} | {self.creation_time.strftime('%D %T')} "
+        return f"#{self.user_id} {self.email} | {self.creation_time.strftime('%D %T')} "
 
 class Swipe(db.Model):
     __tablename__ = "swipes"

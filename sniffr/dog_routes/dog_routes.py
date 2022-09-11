@@ -19,7 +19,6 @@ def get_dog(dog_id):
     queried_dog = db.session.query(Dog).join(User).filter(Dog.dog_id == dog_id).first()
     if queried_dog:
         response = process_record(queried_dog)
-        response["owner"] = queried_dog.owner.username
         response["breed"] = queried_dog.breed.breed_name
         response["size"] = queried_dog.size.size
         response["temperament_type"] = queried_dog.temperament.temperament_type
@@ -42,7 +41,6 @@ def get_dogs():
     if queried_dogs:
         for row in queried_dogs:
             dog = {
-                "owner": row.owner.username,
                 "owner_id": row.owner.user_id,
                 "dog_id": row.dog_id,
                 "dog_name": row.dog_name,
@@ -95,7 +93,6 @@ def get_users_dogs(current_user):
     if queried_dogs:
         for row in queried_dogs:
             dog = {
-                "owner": row.owner.username,
                 "owner_id": row.owner.user_id,
                 "dog_id": row.dog_id,
                 "dog_size": row.size_id,
