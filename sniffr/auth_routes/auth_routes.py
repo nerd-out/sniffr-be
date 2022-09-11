@@ -45,7 +45,7 @@ def login():
 # Create user route
 @auth_bp.route("/register", methods=["POST"])
 def register():
-    """Creates a user when an emaila and new password is supplied."""
+    """Creates a user when an email and new password is supplied."""
 
     # Grab json content
     content = request.json
