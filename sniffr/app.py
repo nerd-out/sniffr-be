@@ -30,7 +30,7 @@ def create_app(settings_override=None):
     if flask_env == "production":
         app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("PG_DATABSE_URI")
         print("Using prod environment")
-    elif flask_env == 'testing':
+    elif flask_env == "testing":
         app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("TESTING_DATABASE_URI")
         print("Using test environment")
 
