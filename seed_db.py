@@ -18,6 +18,8 @@ def seed_db_user():
     print(os.getenv('ALLIE_PASS'))
     db.session.add(User(username="mashima", email="mashima@sniffr.be", password=os.getenv('MASHIMA_PASS')))
     print(os.getenv('MASHIMA_PASS'))
+    db.session.add(User(username="benedict", email="benedict@sniffr.be", password=os.getenv('BENEDICT_PASS')))
+    print(os.getenv('BENEDICT_PASS'))
     db.session.commit()
 
 def seed_db_dog():
