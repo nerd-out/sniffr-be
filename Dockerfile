@@ -16,4 +16,9 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
+RUN flask db init
+RUN flask db migrate
+RUN flask db upgrade
+RUN python seed_db.py
+
 CMD gunicorn -b 0.0.0.0:8000 --access-logfile "sniffr.app:create_app()"
