@@ -14,10 +14,7 @@ RUN pip install --upgrade pip
 
 COPY requirements.txt requirements.txt
 RUN pip install -r requirements.txt
-RUN pip install libpq5
-RUN pip install psycopg2-binary
 
 COPY . .
-
 
 CMD gunicorn -b 0.0.0.0:8000 --access-logfile "sniffr.app:create_app()"
