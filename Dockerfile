@@ -1,4 +1,4 @@
-FROM python:3.11-slim-buster
+FROM python:3.11.0rc1-slim-buster
 MAINTAINER Jonathan Finger
 
 ENV INSTALL_PATH /sniffr
