@@ -31,8 +31,8 @@ def create_app(settings_override=None):
         app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("PG_DATABSE_URI")
         print("Using prod environment")
     elif flask_env == "testing":
-        app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("TESTING_DATABASE_URI")
-        print("Using test environment")
+        app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DOCKER_DB_URL")
+        print("Using test/docker environment")
 
     else:
         app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + os.path.join(
