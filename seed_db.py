@@ -139,6 +139,28 @@ def check_results():
         print(row);
     print('-------------------')
 
+def seed_db():
+    db.drop_all()
+    db.create_all()
+
+    # Add temperament
+    seed_db_temperaments()
+    
+    # Add breeds
+    seed_db_breeds()
+
+    # Add Sizes
+    seed_db_sizes()
+
+    # Seed user table
+    seed_db_user()
+
+    # Add dogs + augie to dog table
+    seed_db_dog()
+
+    # Add stuff for the dogs to do
+    seed_db_activities()
+
 if __name__ == "__main__":
     app = create_app()
     with app.app_context():
