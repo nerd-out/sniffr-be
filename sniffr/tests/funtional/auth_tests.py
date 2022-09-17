@@ -1,5 +1,6 @@
 from sniffr.app import create_app
 
+
 def test_user_login(test_client):
     """
     GIVEN a Flask application
@@ -12,7 +13,8 @@ def test_user_login(test_client):
         })
 
     assert response.status_code == 200
-    assert '@' in response.json["email"]
+    assert response.json["email"] == 'dannyf@d300.org'
+
 
 def test_user_create(test_client):
     """
