@@ -5,7 +5,9 @@ user_bp = Blueprint("user_bp", __name__)
 
 
 @user_bp.route("/user/<user_id>", methods=["DELETE"])
-def delete_user(user_id):
+@token_required
+def delete_user(current_user):
+    user_id = current_user.user_id
     queried_user = db.session.query(User).filter(User.user_id == user_id).first()
 
     if queried_user:

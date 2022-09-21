@@ -8,7 +8,7 @@ def test_home_page_with_fixture(test_client):
     assert response.status_code == 200
     assert b"Sniffr's" in response.data
 
-def test_user_login(test_client):
+def test_user_create(test_client):
     """
     GIVEN a Flask application
     WHEN the '/login' page (POST)ed right
@@ -23,7 +23,7 @@ def test_user_login(test_client):
     assert response.json["email"] == 'dannyf@d300.org'
 
 
-def test_user_create(test_client):
+def test_user_login(test_client):
     """
     GIVEN a Flask application
     WHEN the '/login' page (POST)ed right
@@ -35,3 +35,7 @@ def test_user_create(test_client):
         })
     assert response.status_code == 201
     assert isinstance(response.json["token"], str)
+
+# user edit
+
+# user delete
