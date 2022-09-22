@@ -161,6 +161,10 @@ def seed_db():
     # Add stuff for the dogs to do
     seed_db_activities()
 
+    # Check results
+    check_results()
+
+
 if __name__ == "__main__":
     app = create_app()
     with app.app_context():

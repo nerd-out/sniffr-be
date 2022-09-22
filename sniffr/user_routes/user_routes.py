@@ -4,7 +4,7 @@ from sniffr.models import User, db, token_required, process_record
 user_bp = Blueprint("user_bp", __name__)
 
 
-@user_bp.route("/user/<user_id>", methods=["DELETE"])
+@user_bp.route("/user", methods=["DELETE"])
 @token_required
 def delete_user(current_user):
     user_id = current_user.user_id
