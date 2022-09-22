@@ -1,5 +1,6 @@
 from concurrent.futures import process
 from datetime import datetime
+from lib2to3.pgen2 import token
 from flask import Blueprint, request, jsonify
 from sniffr.models import Dog, db, User, process_record, Breed, token_required
 import os
@@ -10,7 +11,7 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 
 dog_bp = Blueprint("dog_bp", __name__)
 
-# Get Dog
+# Get a dog's info
 
 
 @dog_bp.route("/dog/<dog_id>", methods=["GET"])
@@ -126,17 +127,20 @@ def get_users_dogs(current_user):
 
 
 @dog_bp.route("/dog", methods=["POST"])
-def post_dog():
+@token_required
+def post_dog(current_user):
     """Create or edit dog info"""
     content = request.json
+    user_id = current_user.user_id
 
     # If dog_id not in body then they are trying to create
     # If dog_id in body then updating content
-    if "dog_id" in content.keys():
+    if "dog_id" in content.keys(): 
         queried_dog = (
-            db.session.query(Dog).filter(Dog.dog_id == content["dog_id"]).first()
+            db.session.query(Dog).filter(Dog.dog_id == content["dog_id"]).filter(Dog.owner_id == user_id).first()
         )
         if queried_dog:
+            breakpoint()
             # Update properties
             queried_dog.dog_name = content["dog_name"]
             queried_dog.breed_id = content["breed_id"]
@@ -168,7 +172,7 @@ def post_dog():
 
         new_dog = Dog(
             dog_name=content["dog_name"],
-            owner_id=content["owner_id"],
+            owner_id=user_id,
             breed_id=content["breed_id"],
             size_id=content["size_id"],
             temperament_id=content["temperament_id"],
