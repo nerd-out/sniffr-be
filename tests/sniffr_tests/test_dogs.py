@@ -73,7 +73,6 @@ def test_new_dog_register(test_existing_user_fixture, test_client):
     assert content["dog_bio"] == create_json["dog_bio"]
     assert content["dog_pic"] == create_json["dog_pic"]
 
-# edit dog
 def test_edit_new_dog(test_existing_user_fixture, test_client):
     """
     GIVEN a Flask application
@@ -116,7 +115,36 @@ def test_edit_new_dog(test_existing_user_fixture, test_client):
     assert content["dog_bio"] == create_json["dog_bio"]
     assert content["dog_pic"] == create_json["dog_pic"]
 
-# get specific dog details
+def test_delete_new_dog(test_existing_user_fixture, test_client):
+    """
+    GIVEN a Flask application
+    WHEN the '/dog' page is sent a POST
+    THEN check that a '200' status code is returned
+    THEN check that the info returned is the same
+    """
+    # Format json post
+    login_token = test_existing_user_fixture['token']
+    # Assemble Headers
+    headers = {"x-access-token": login_token}
 
+    # Register dog using post request
+    create_json = {
+        "dog_name": "Ein",
+        "breed_id": 110,
+        "size_id": 1,
+        "temperament_id": 2,
+        "age": '24',
+        "sex": "Data Dog",
+        "is_vaccinated": False,
+        "is_fixed": False,
+        "dog_bio": """Ein is a Pembroke Welsh Corgi and "data dog," meaning his intelligence was greatly enhanced by a research facility.""",
+        "dog_pic": "Ein driving a car pic"}
+    response = test_client.post("/dog", json=create_json, headers=headers)
+    content = response.json
 
-# delete dog
+    # Delete the dog
+    response = test_client.delete(f"/dog/{str(content['dog_id'])}", headers=headers)
+    content = response.json
+
+    assert response.status_code == 410
+    assert content['message'] == 'Success!'

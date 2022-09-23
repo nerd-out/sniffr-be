@@ -206,8 +206,12 @@ def post_dog(current_user):
 
 
 @dog_bp.route("/dog/<dog_id>", methods=["DELETE"])
+# @token_required
 def delete_dog(dog_id):
-    queried_dog = db.session.query(Dog).filter(Dog.dog_id == dog_id).first()
+    """Create or edit dog info"""
+
+    # user_id = current_user.user_id
+    queried_dog = db.session.query(Dog).filter(Dog.dog_id == dog_id).first()#.filter(Dog.owner_id == user_id).first()
 
     if queried_dog:
         db.session.delete(queried_dog)
