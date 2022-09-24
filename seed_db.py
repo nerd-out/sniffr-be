@@ -18,7 +18,9 @@ def seed_db_user():
     db.session.add(
         User(email="benedict@sniffr.be", password=os.getenv("BENEDICT_PASS"))
     )
-    db.session.add(User(email="test_user@sniffr.be", password=os.getenv("TEST_USER_PASS")))
+    db.session.add(
+        User(email="test_user@sniffr.be", password=os.getenv("TEST_USER_PASS"))
+    )
     db.session.commit()
 
 
@@ -125,32 +127,19 @@ def seed_db_sizes():
     db.session.add(Size(size="Giant (100+ pounds)"))
     db.session.commit()
 
+
 def seed_db_swipes():
     # Add swipes
 
-    # Siri doesn't like augie
-    db.session.add(Swipe(
-        dog_id=3,
-        swiped_dog_id=1,
-        is_interested=False))
-    
+    # Siri doesn't like Augie
+    db.session.add(Swipe(dog_id=3, swiped_dog_id=1, is_interested=False))
+
     # Augie likes Siri & Cerberus
-    db.session.add(Swipe(
-        dog_id=1,
-        swiped_dog_id=2,
-        is_interested=True))
+    db.session.add(Swipe(dog_id=1, swiped_dog_id=2, is_interested=True))
 
-    db.session.add(Swipe(
-        dog_id=1,
-        swiped_dog_id=4,
-        is_interested=True))
+    db.session.add(Swipe(dog_id=1, swiped_dog_id=4, is_interested=True))
 
-    # Cerberus likes Augie
-    db.session.add(Swipe(
-        dog_id=4,
-        swiped_dog_id=1,
-        is_interested=False))
-    
+
     db.session.commit()
 
 
@@ -196,6 +185,7 @@ def check_results():
     for row in result:
         print(row)
     print("-------------------")
+
 
 def seed_db():
     db.drop_all()
