@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify
-from sniffr.models import db, Swipe, process_records, token_required
+from sniffr.models import db, Swipe, process_records, token_required, Dog, User
 
 
 # Blueprint Configuration
@@ -25,15 +25,56 @@ def get_swipes(current_user):
     # Query and get dogs given a user id
 
     user_id = current_user.user_id
-    queried_dogs = (
-        db.session.query(Dog)
-        .join(User, Dog.owner_id == User.user_id)
+
+    past_swipes = (
+        db.session.query(Swipe)
+        .join(Dog, Dog.dog_id == Swipe.dog_id)
+        .filter((Swipe.is_interested == True)|(Swipe.is_interested == False))
         .filter(Dog.owner_id == user_id)
         .all()
     )
+    swiped_dogs = [dog.swiped_dog_id for dog in past_swipes]
 
+    possible_dogs = (
+        db.session.query(Dog)
+        .join(User, Dog.owner_id == User.user_id)
+        .filter(Dog.owner_id != user_id)
+        .filter(Dog.dog_id.not_in(swiped_dogs))
+        .limit(3)
+        .all()
+    )
+
+    response = []
+    if possible_dogs:
+        for row in possible_dogs:
+            dog = {
+                "owner_id": row.owner.user_id,
+                "dog_id": row.dog_id,
+                "dog_name": row.dog_name,
+                "age": row.age,
+                "sex": row.sex,
+                "is_vaccinated": row.is_vaccinated,
+                "is_fixed": row.is_fixed,
+                "dog_bio": row.dog_bio,
+                "dog_pic": row.dog_bio,
+                "creation_time": row.creation_time,
+                "last_updated": row.last_updated,
+                "breed_id": row.breed.breed_id,
+                "breed": row.breed.breed_name,
+                "temperament_id": row.temperament.temperament_id,
+                "temperament_type": row.temperament.temperament_type,
+                "size_id": row.size.size_id,
+                "size": row.size.size,
+            }
+
+            response.append(dog)
+
+        return jsonify(response)
+    else:
+        return {'message': 'no matches found'}
     breakpoint()
     
+
 
 
 # # Add swipe
