@@ -6,7 +6,7 @@ from sniffr.models import db, Swipe, process_records, token_required, Dog, User,
 # Blueprint Configuration
 swipe_bp = Blueprint("swipe_bp", __name__)
 
-
+# Get one swipe
 @swipe_bp.route("/swipe/<swipe_id>", methods=["GET"])
 def get_swipe(swipe_id):
     swipe_id = int(swipe_id)
@@ -16,6 +16,27 @@ def get_swipe(swipe_id):
 
     return jsonify(queried_swipe)
 
+# Get all user's swipes
+@swipe_bp.route("/pastswipes", methods=["GET"])
+@token_required
+def get_past_swipes(current_user):
+    # Accept user token
+    # THEN return up to 3 potential dogs that can be swiped
+    # Query and get dogs given a user id
+
+    user_id = current_user.user_id
+
+    past_swipes = (
+        db.session.query(Swipe)
+        .join(Dog, Dog.dog_id == Swipe.dog_id)
+        .filter((Swipe.is_interested == True)|(Swipe.is_interested == False))
+        .filter(Dog.owner_id == user_id)
+        .all()
+    )
+
+    past_swipes = process_records(past_swipes)
+
+    return jsonify(past_swipes)
 
 # Get new dogs to swipe for a user
 @swipe_bp.route("/swipes", methods=["GET"])
