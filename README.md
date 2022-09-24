@@ -74,6 +74,16 @@ If successful, then you should be able to seed and use the new database tables/c
 # Heroku Commands
 `heroku run bash --app sniffr-be`
 
+# Testing Commands
+**To run all of the tests:**
+```
+pytest -v tests/sniffr_tests
+```
+
+**To run coverage analysis:**
+```
+pytest tests/sniffr_tests --cov=sniffr 
+```
 
 # DOCKER -- UNDER CONSTRUCTION
 If you want to quickly run a docker container of this app then you can:

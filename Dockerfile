@@ -1,8 +1,9 @@
-FROM python:3.10-slim-buster
+FROM python:3.10.7-slim
 MAINTAINER Jonathan Finger
 
 ENV INSTALL_PATH /sniffr
 RUN mkdir -p $INSTALL_PATH
+
 
 WORKDIR $INSTALL_PATH
 
