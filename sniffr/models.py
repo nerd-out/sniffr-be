@@ -58,8 +58,7 @@ class Swipe(db.Model):
     is_interested = db.Column(db.Boolean)
     creation_time = db.Column(db.DateTime)
 
-    def __init__(self, swipe_id, dog_id, swiped_dog_id, is_interested):
-        self.swipe_id = swipe_id
+    def __init__(self, dog_id, swiped_dog_id, is_interested):
         self.dog_id = dog_id
         self.swiped_dog_id = swiped_dog_id
         self.is_interested = is_interested
@@ -111,7 +110,7 @@ class Dog(db.Model):
     last_updated = db.Column(db.DateTime)
 
     def __repr__(self):
-        return f"Dog: {self.dog_name} | Breed: {self.breed.breed_name} | Size: {self.size.size} | Temperament: {self.temperament.temperament_type} | Age: {self.age} | Sex: {self.sex} | Fixed: {self.is_fixed} | Vx: {self.is_vaccinated} | Pic: {self.dog_pic} | Bio: {self.dog_bio} | Created: {self.creation_time:%Y-%m-%d}"
+        return f"Dog ({self.dog_id}): {self.dog_name} | Breed: {self.breed.breed_name} | Size: {self.size.size} | Temperament: {self.temperament.temperament_type} | Age: {self.age} | Sex: {self.sex} | Fixed: {self.is_fixed} | Vx: {self.is_vaccinated} | Pic: {self.dog_pic} | Bio: {self.dog_bio} | Created: {self.creation_time:%Y-%m-%d}"
 
 class Size(db.Model):
     __tablename__ = "sizes"
