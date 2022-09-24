@@ -1,5 +1,6 @@
-from flask import Blueprint, jsonify
-from sniffr.models import db, Swipe, process_records, token_required, Dog, User
+from lib2to3.pgen2 import token
+from flask import Blueprint, jsonify, request
+from sniffr.models import db, Swipe, process_records, token_required, Dog, User, process_record
 
 
 # Blueprint Configuration
@@ -72,12 +73,64 @@ def get_swipes(current_user):
         return jsonify(response)
     else:
         return {'message': 'no potential found'}
-    breakpoint()
+
+
+
+# Add swipe
+@swipe_bp.route("/swipe", methods=["POST"])
+@token_required
+def swipe_dog(current_user):
+    # Accept token and get user id
+    user_id = current_user.user_id
+
+    # Read post request containing information on which dog and swipe-type
+    content = request.json
+
+    # Find user's first dog
+    users_dog = (
+        db.session.query(Dog)
+        .join(User, Dog.owner_id == User.user_id)
+        .filter(Dog.owner_id == user_id)
+        .first()
+    )
+    users_dog = users_dog.dog_id
+    
+    # Log Swipe
+    new_swipe = Swipe(
+            dog_id=users_dog,
+            swiped_dog_id=content["swiped_dog_id"],
+            is_interested=content["is_interested"],
+        )
+    
+    try:
+        db.session.add(new_swipe)
+        db.session.commit()
+        return_json = process_record(new_swipe)
+        return return_json
+
+    except:
+        db.session.rollback()
+        return {'message': 'Unable to add swipe'}
     
 
 
+# Delete Swipe
+@swipe_bp.route("/swipe", methods=["DELETE"])
+@token_required
+def delete_activity(current_user):
+    # Accept token and get user id
+    user_id = current_user.user_id
 
-# # Add swipe
-# def swipe_dog(current_user):
-#     # Accept token and get user id
-#     # Return
+    # Read post request containing information on which swipe
+    content = request.json
+    swipe_id = int(content['swipe_id'])
+
+    queried_swipe = (
+        db.session.query(Swipe).filter_by(swipe_id=swipe_id).first()
+    )
+    if queried_swipe:
+        db.session.delete(queried_swipe)
+        db.session.commit()
+        return jsonify({"message": "Swipe deleted"})
+    else:
+        return {"message": "Swipe not found"}
