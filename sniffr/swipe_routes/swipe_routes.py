@@ -71,7 +71,7 @@ def get_swipes(current_user):
 
         return jsonify(response)
     else:
-        return {'message': 'no matches found'}
+        return {'message': 'no potential found'}
     breakpoint()
     
 
