@@ -209,7 +209,7 @@ def seed_db():
     # Add stuff for the dogs to do
     seed_db_activities()
 
-    # Add a swipe
+    # Add swipes
     seed_db_swipes()
 
 
@@ -238,7 +238,7 @@ if __name__ == "__main__":
         # Add stuff for the dogs to do
         seed_db_activities()
 
-        # Add a swipe
+        # Add swipes
         seed_db_swipes()
 
         # Check results
