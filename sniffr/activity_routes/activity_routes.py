@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 from flask import current_app as app
-from sniffr.models import db, Activity, process_records
+from sniffr.models import db, Activity, process_records, process_record
 
 # Blueprint Configuration
 activity_bp = Blueprint("activity_bp", __name__)
@@ -44,7 +44,7 @@ def post_activity():
         .filter_by(activity_id=new_activity.activity_id)
         .first()
     )
-    return jsonify(queried_activity)
+    return jsonify(process_record(queried_activity))
 
 
 @activity_bp.route("/activity/<activity_id>", methods=["DELETE"])
