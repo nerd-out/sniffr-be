@@ -13,7 +13,7 @@ def test_get_all_dogs(test_client):
 
     # Assert
     assert response.status_code == 200
-    assert len(content) == 3 # number of dogs in database at time of writing
+    assert len(content) == 4 # number of dogs in database at time of writing
 
 def test_get_one_dog(test_client):
     """

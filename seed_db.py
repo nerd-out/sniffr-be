@@ -3,7 +3,7 @@ from xml.dom.expatbuilder import TEXT_NODE
 from dotenv import load_dotenv
 import os
 from sniffr.app import create_app
-from sniffr.models import Activity, Breed, db, Dog, Temperament, User, Size
+from sniffr.models import Activity, Breed, db, Dog, Temperament, User, Size, Swipe
 
 load_dotenv()
 
@@ -12,17 +12,15 @@ def seed_db_user():
     # Add users
     db.session.add(User(email="jon@sniffr.be", password=os.getenv("JON_PASS")))
     db.session.add(User(email="dan@sniffr.be", password=os.getenv("DAN_PASS")))
-    print(os.getenv("DAN_PASS"))
     db.session.add(User(email="josh@sniffr.be", password=os.getenv("JOSH_PASS")))
-    print(os.getenv("JOSH_PASS"))
     db.session.add(User(email="allie@sniffr.be", password=os.getenv("ALLIE_PASS")))
-    print(os.getenv("ALLIE_PASS"))
     db.session.add(User(email="mashima@sniffr.be", password=os.getenv("MASHIMA_PASS")))
-    print(os.getenv("MASHIMA_PASS"))
     db.session.add(
         User(email="benedict@sniffr.be", password=os.getenv("BENEDICT_PASS"))
     )
-    print(os.getenv("BENEDICT_PASS"))
+    db.session.add(
+        User(email="test_user@sniffr.be", password=os.getenv("TEST_USER_PASS"))
+    )
     db.session.commit()
 
 
@@ -65,6 +63,19 @@ def seed_db_dog():
             is_fixed=True,
             size_id=5,
             temperament_id=3,
+        )
+    )
+    db.session.add(
+        Dog(
+            dog_name="Cerberus",
+            age="10",
+            owner_id=7,
+            breed_id=151,
+            sex="Demon",
+            is_vaccinated=False,
+            is_fixed=False,
+            size_id=6,
+            temperament_id=1,
         )
     )
     db.session.commit()
@@ -117,6 +128,21 @@ def seed_db_sizes():
     db.session.commit()
 
 
+def seed_db_swipes():
+    # Add swipes
+
+    # Siri doesn't like Augie
+    db.session.add(Swipe(dog_id=3, swiped_dog_id=1, is_interested=False))
+
+    # Augie likes Siri & Cerberus
+    db.session.add(Swipe(dog_id=1, swiped_dog_id=2, is_interested=True))
+
+    db.session.add(Swipe(dog_id=1, swiped_dog_id=4, is_interested=True))
+
+
+    db.session.commit()
+
+
 def check_results():
     """Prints out the results of the database for users, dogs, and activities"""
     print("USERS:")
@@ -154,6 +180,12 @@ def check_results():
         print(row)
     print("-------------------")
 
+    print("SWIPES:")
+    result = db.session.query(Swipe).all()
+    for row in result:
+        print(row)
+    print("-------------------")
+
 
 def seed_db():
     db.drop_all()
@@ -176,6 +208,9 @@ def seed_db():
 
     # Add stuff for the dogs to do
     seed_db_activities()
+
+    # Add swipes
+    seed_db_swipes()
 
 
 if __name__ == "__main__":
@@ -202,6 +237,9 @@ if __name__ == "__main__":
 
         # Add stuff for the dogs to do
         seed_db_activities()
+
+        # Add swipes
+        seed_db_swipes()
 
         # Check results
         check_results()
