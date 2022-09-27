@@ -1,6 +1,6 @@
 from lib2to3.pgen2 import token
 from flask import Blueprint, jsonify, request
-from sniffr.models import db, process_records, token_required, process_record, Match, Dog, Swipe
+from sniffr.models import db, process_records, token_required, process_record, Match, Dog, User
 
 
 # Blueprint Configuration
@@ -23,4 +23,14 @@ def get_matches(current_user):
         .all()
     )
 
-    return jsonify(process_records(past_matches))
+    # Return list of dogs that are matches
+    matched_dog_ids = [match.dog_id_two for match in past_matches]
+    matched_dogs = (
+            db.session.query(Dog)
+            .join(User, Dog.owner_id == User.user_id)
+            .filter(Dog.owner_id != user_id)
+            .filter(Dog.dog_id.in_(matched_dog_ids))
+            .all()
+            )
+
+    return jsonify(process_records(matched_dogs))
