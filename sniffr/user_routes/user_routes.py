@@ -14,11 +14,11 @@ def delete_user(current_user):
         db.session.delete(queried_user)
         db.session.commit()
 
-        return {"message": f"Successfully deleted user"}, 410
+        return {}, 200
 
     else:
-        response = {"message": "User Not Found"}
-        return response, 404
+        response = {}
+        return response, 204
 
 
 @user_bp.route("/user/edit", methods=["POST"])
@@ -46,5 +46,5 @@ def edit_user(current_user):
         return response
 
     else:
-        response = {"message": "User Not Found"}
+        response = []
         return response, 404
