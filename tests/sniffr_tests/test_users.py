@@ -47,7 +47,7 @@ def test_edit_new_user(new_user_fixture, test_client):
     # Create edit json
     edit_json = {
         "email": "danimal@d300.org",
-        "age": 30,
+        "birthday": "30",
         "gender": "Dude",
         "max_distance": 10,
         "name": "Dan Finger",
@@ -63,7 +63,7 @@ def test_edit_new_user(new_user_fixture, test_client):
     # Check status code & that contents updated
     assert response.status_code == 200
     assert content["email"] == edit_json["email"]
-    assert content["age"] == edit_json["age"]
+    assert content["birthday"] == edit_json["birthday"]
     assert content["gender"] == edit_json["gender"]
     assert content["max_distance"] == edit_json["max_distance"]
     assert content["name"] == edit_json["name"]
@@ -89,4 +89,3 @@ def test_delete_new_user(new_user_fixture, test_client):
 
     # Assert
     assert response.status_code == 200
-
