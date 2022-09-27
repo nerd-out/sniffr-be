@@ -1,8 +1,8 @@
 from concurrent.futures import process
 from datetime import datetime
 from lib2to3.pgen2 import token
-from flask import Blueprint, request, jsonify
-from sniffr.models import Dog, db, User, process_record, Breed, token_required
+from flask import Blueprint, request, jsonify, make_response
+from sniffr.models import Dog, db, User, process_record, Breed, token_required, process_records
 import os
 
 SECRET_KEY = os.getenv("SECRET_KEY")
@@ -27,8 +27,8 @@ def get_dog(dog_id):
         return response
 
     else:
-        response = {"message": "Dog Not Found"}
-        return response, 404
+        response = {}
+        return jsonify(response)
 
 
 # Get All Dogs
@@ -37,37 +37,18 @@ def get_dog(dog_id):
 @dog_bp.route("/dogs", methods=["GET"])
 def get_dogs():
 
-    queried_dogs = db.session.query(Dog).join(User, Dog.owner_id == User.user_id).all()
-    response = []
+    queried_dogs = (
+        db.session.query(Dog)
+        .join(User, Dog.owner_id == User.user_id)
+        .all()
+    )
+
     if queried_dogs:
-        for row in queried_dogs:
-            dog = {
-                "owner_id": row.owner.user_id,
-                "dog_id": row.dog_id,
-                "dog_name": row.dog_name,
-                "age": row.age,
-                "sex": row.sex,
-                "is_vaccinated": row.is_vaccinated,
-                "is_fixed": row.is_fixed,
-                "dog_bio": row.dog_bio,
-                "dog_pic": row.dog_bio,
-                "creation_time": row.creation_time,
-                "last_updated": row.last_updated,
-                "breed_id": row.breed.breed_id,
-                "breed": row.breed.breed_name,
-                "temperament_id": row.temperament.temperament_id,
-                "temperament_type": row.temperament.temperament_type,
-                "size_id": row.size.size_id,
-                "size": row.size.size,
-            }
-
-            response.append(dog)
-
-        return jsonify(response)
+        return jsonify(process_records(queried_dogs))
 
     else:
-        response = {"message": "Dog Not Found"}
-        return response, 404
+        response = []
+        return jsonify(response)
 
 
 # Get a User's Dogs
@@ -92,35 +73,10 @@ def get_users_dogs(current_user):
     # Return response
     response = []
     if queried_dogs:
-        for row in queried_dogs:
-            dog = {
-                "owner_id": row.owner.user_id,
-                "dog_id": row.dog_id,
-                "dog_size": row.size_id,
-                "dog_name": row.dog_name,
-                "age": row.age,
-                "sex": row.sex,
-                "is_vaccinated": row.is_vaccinated,
-                "is_fixed": row.is_fixed,
-                "dog_bio": row.dog_bio,
-                "dog_pic": row.dog_bio,
-                "creation_time": row.creation_time,
-                "last_updated": row.last_updated,
-                "breed_id": row.breed.breed_id,
-                "breed": row.breed.breed_name,
-                "temperament_id": row.temperament.temperament_id,
-                "temperament_type": row.temperament.temperament_type,
-                "size_id": row.size.size_id,
-                "size": row.size.size,
-            }
-
-            response.append(dog)
-
-        return jsonify(response)
+        return jsonify(process_records(queried_dogs))
 
     else:
-        response = {"message": "Dogs Not Found"}
-        return response, 404
+        return jsonify(response), 200
 
 
 # Create / Edit Dog
@@ -131,16 +87,19 @@ def get_users_dogs(current_user):
 def post_dog(current_user):
     """Create or edit dog info"""
     content = request.json
-    user_id = current_user.user_id
+    user_id = int(current_user.user_id)
+
 
     # If dog_id not in body then they are trying to create
     # If dog_id in body then updating content
-    if "dog_id" in content.keys(): 
+    if "dog_id" in content.keys():
         queried_dog = (
-            db.session.query(Dog).filter(Dog.dog_id == content["dog_id"]).filter(Dog.owner_id == user_id).first()
+            db.session.query(Dog)
+            .filter(Dog.dog_id == int(content["dog_id"]))
+            .filter(Dog.owner_id == user_id)
+            .first()
         )
         if queried_dog:
-            breakpoint()
             # Update properties
             queried_dog.dog_name = content["dog_name"]
             queried_dog.breed_id = content["breed_id"]
@@ -164,8 +123,7 @@ def post_dog(current_user):
             return response
 
         else:
-            response = {"message": "Dog Not Found"}
-            return response, 404
+            return {}, 200
 
     else:
         # create dog
@@ -218,8 +176,7 @@ def delete_dog(current_user, dog_id):
             db.session.delete(queried_dog)
             db.session.commit()
 
-            return "Success!", 200
+            return {}, 200
 
     else:
-        response = {}
-        return response, 204
+        return {}, 204
