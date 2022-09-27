@@ -47,4 +47,4 @@ def edit_user(current_user):
 
     else:
         response = []
-        return response, 404
+        return response

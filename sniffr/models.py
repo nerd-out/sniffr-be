@@ -176,6 +176,24 @@ class DogActivity(db.Model):
     def __repr__(self):
         return f"Dog {self.dog_id}'s #{self.activity_rank} preference is activity #{self.activity_id}"
 
+
+class Match(db.Model):
+    __tablename__ = "matches"
+
+    match_id = db.Column(db.Integer, primary_key=True)
+    dog_id_one = db.Column(db.Integer)
+    dog_id_two = db.Column(db.Integer)
+    creation_time = db.Column(db.DateTime)
+
+    def __init__(self, match_id, dog_id_one, dog_id_two):
+        self.match_id = match_id
+        self.dog_id_one = dog_id_one
+        self.dog_id_two = dog_id_two
+        self.creation_time = datetime.datetime.now()
+
+    def __repr__(self):
+        return f"Match # {self.match_id}: Dog {self.dog_id_one} & Dog{self.dog_id_two} on {self.creation_time}"
+
 def process_records(sqlalchemy_records):
     """
     A helper method for converting a list of database record objects into a list of dictionaries, so they can be returned as JSON

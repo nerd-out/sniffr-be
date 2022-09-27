@@ -171,6 +171,7 @@ def delete_dog(current_user, dog_id):
     dog_id = int(dog_id)
 
     queried_dog = db.session.query(Dog).filter(Dog.owner_id==user_id).first()
+    
     if queried_dog:
         if queried_dog.owner_id == user_id:
             db.session.delete(queried_dog)
