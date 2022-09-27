@@ -1,6 +1,6 @@
 from lib2to3.pgen2 import token
 from flask import Blueprint, jsonify, request
-from sniffr.models import db, Swipe, process_records, token_required, Dog, User, process_record
+from sniffr.models import db, Swipe, process_records, token_required, Dog, User, process_record, Match
 
 
 # Blueprint Configuration
@@ -116,10 +116,14 @@ def swipe_dog(current_user):
         # If is_interested matching swipe found
         if matching_like.is_interested == True:
             # then create match
+            new_match = Match(
+                dog_id_one=Swipe.swiped_dog_id,
+                dog_id_two=matching_like.
+            )
 
-            # Return swipe to front end
-            return_json = process_record(new_swipe)
-            return return_json
+        # Return swipe to front end
+        return_json = process_record(new_swipe)
+        return return_json
 
     except:
         db.session.rollback()

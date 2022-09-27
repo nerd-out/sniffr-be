@@ -37,6 +37,8 @@ def seed_db_dog():
             is_fixed=False,
             size_id=4,
             temperament_id=2,
+            dog_bio="A poof of a dog who enjoys playing fetch."
+
         )
     )
     db.session.add(
@@ -50,6 +52,7 @@ def seed_db_dog():
             is_fixed=False,
             size_id=3,
             temperament_id=2,
+            dog_bio="Max loves running around the yard, playing chase with other dogs, and finding the local vermin. He's not too good at fetch, but he'll always want to be your friend!"
         )
     )
     db.session.add(
@@ -63,6 +66,7 @@ def seed_db_dog():
             is_fixed=True,
             size_id=5,
             temperament_id=3,
+            dog_bio="A former frisbee dog who loves playing in the back yard or going swimming!"
         )
     )
     db.session.add(
@@ -76,6 +80,7 @@ def seed_db_dog():
             is_fixed=False,
             size_id=6,
             temperament_id=1,
+            dog_bio="Cerberus, often referred to as the hound of Hades, is a multi-headed dog that guards the gates of the Underworld to prevent the dead from leaving."
         )
     )
     db.session.commit()
