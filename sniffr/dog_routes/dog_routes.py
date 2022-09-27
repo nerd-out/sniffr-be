@@ -206,19 +206,20 @@ def post_dog(current_user):
 
 
 @dog_bp.route("/dog/<dog_id>", methods=["DELETE"])
-# @token_required
-def delete_dog(dog_id):
+@token_required
+def delete_dog(current_user, dog_id):
     """Create or edit dog info"""
+    user_id = int(current_user.user_id)
+    dog_id = int(dog_id)
 
-    # user_id = current_user.user_id
-    queried_dog = db.session.query(Dog).filter(Dog.dog_id == dog_id).first()#.filter(Dog.owner_id == user_id).first()
-
+    queried_dog = db.session.query(Dog).filter(Dog.owner_id==user_id).first()
     if queried_dog:
-        db.session.delete(queried_dog)
-        db.session.commit()
+        if queried_dog.owner_id == user_id:
+            db.session.delete(queried_dog)
+            db.session.commit()
 
-        return {"message": f"Success!"}, 410
+            return "Success!", 200
 
     else:
-        response = {"message": "Dog Not Found"}
-        return response, 404
+        response = {}
+        return response, 204

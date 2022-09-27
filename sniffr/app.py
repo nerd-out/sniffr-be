@@ -15,7 +15,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 
 def create_app(settings_override=None):
-    flask_env = os.getenv("FLASK_ENV")
+    flask_env = os.getenv("DEV_ENV")
     SECRET_KEY = os.getenv("SECRET_KEY")
 
     # Load app

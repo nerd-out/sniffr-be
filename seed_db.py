@@ -9,23 +9,23 @@ load_dotenv()
 
 
 def seed_db_user():
-    # Add users
+    """
+    This function seeds the datbase with users.
+    """
     db.session.add(User(email="jon@sniffr.be", password=os.getenv("JON_PASS")))
     db.session.add(User(email="dan@sniffr.be", password=os.getenv("DAN_PASS")))
     db.session.add(User(email="josh@sniffr.be", password=os.getenv("JOSH_PASS")))
     db.session.add(User(email="allie@sniffr.be", password=os.getenv("ALLIE_PASS")))
     db.session.add(User(email="mashima@sniffr.be", password=os.getenv("MASHIMA_PASS")))
-    db.session.add(
-        User(email="benedict@sniffr.be", password=os.getenv("BENEDICT_PASS"))
-    )
-    db.session.add(
-        User(email="test_user@sniffr.be", password=os.getenv("TEST_USER_PASS"))
-    )
+    db.session.add(User(email="benedict@sniffr.be", password=os.getenv("BENEDICT_PASS")))
+    db.session.add(User(email="demo@sniffr.be", password=os.getenv("DEMO_USER_PASS")))
     db.session.commit()
 
 
 def seed_db_dog():
-    # Add dogs
+    """
+    This function seeds the datbase with dogs.
+    """
     db.session.add(
         Dog(
             dog_name="Augie",
@@ -81,8 +81,10 @@ def seed_db_dog():
     db.session.commit()
 
 
-# Seed database with breeds
 def seed_db_breeds():
+    """
+    This function seeds the datbase with breeds.
+    """
     with open("./sniffr/data/breeds.csv", newline="") as csvfile:
         spamreader = csv.reader(csvfile, delimiter=",")
 
@@ -95,7 +97,9 @@ def seed_db_breeds():
 
 
 def seed_db_activities():
-    # Add activities
+    """
+    This function seeds the datbase with activities.
+    """
     db.session.add(Activity(activity_description="Walking"))
     db.session.add(Activity(activity_description="Fetching"))
     db.session.add(Activity(activity_description="Frisbee"))
@@ -107,7 +111,9 @@ def seed_db_activities():
 
 
 def seed_db_temperaments():
-    # Add temperaments
+    """
+    This function seeds the datbase with temperaments.
+    """
     db.session.add(Temperament("Saucy"))
     db.session.add(Temperament("Playful"))
     db.session.add(Temperament("Cautious"))
@@ -118,7 +124,9 @@ def seed_db_temperaments():
 
 
 def seed_db_sizes():
-    # Add sizes
+    """
+    This function seeds the datbase with dog sizes.
+    """
     db.session.add(Size(size="Teacup (less than 5 lbs)"))
     db.session.add(Size(size="Toy (6 to 12 lbs)"))
     db.session.add(Size(size="Small (13 to 24 lbs)"))
@@ -129,6 +137,9 @@ def seed_db_sizes():
 
 
 def seed_db_swipes():
+    """
+    This function seeds the datbase with swipes.
+    """
     # Add swipes
 
     # Siri doesn't like Augie
@@ -136,15 +147,15 @@ def seed_db_swipes():
 
     # Augie likes Siri & Cerberus
     db.session.add(Swipe(dog_id=1, swiped_dog_id=2, is_interested=True))
-
     db.session.add(Swipe(dog_id=1, swiped_dog_id=4, is_interested=True))
-
 
     db.session.commit()
 
 
 def check_results():
-    """Prints out the results of the database for users, dogs, and activities"""
+    """
+    Prints out the results of the database
+    """
     print("USERS:")
     result = db.session.query(User).all()
     for row in result:
@@ -188,6 +199,12 @@ def check_results():
 
 
 def seed_db():
+    """
+    A function that seeds the database by:
+        dropping everything,
+        creating the tables,
+        and then seeding each table
+    """
     db.drop_all()
     db.create_all()
 
@@ -216,30 +233,7 @@ def seed_db():
 if __name__ == "__main__":
     app = create_app()
     with app.app_context():
-        # Reset database
-        db.drop_all()
-        db.create_all()
-
-        # Add temperament
-        seed_db_temperaments()
-
-        # Add breeds
-        seed_db_breeds()
-
-        # Add Sizes
-        seed_db_sizes()
-
-        # Seed user table
-        seed_db_user()
-
-        # Add dogs + augie to dog table
-        seed_db_dog()
-
-        # Add stuff for the dogs to do
-        seed_db_activities()
-
-        # Add swipes
-        seed_db_swipes()
+        seed_db()
 
         # Check results
         check_results()

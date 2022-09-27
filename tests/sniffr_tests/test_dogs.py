@@ -146,5 +146,4 @@ def test_delete_new_dog(test_existing_user_fixture, test_client):
     response = test_client.delete(f"/dog/{str(content['dog_id'])}", headers=headers)
     content = response.json
 
-    assert response.status_code == 410
-    assert content['message'] == 'Success!'
+    assert response.status_code == 200
