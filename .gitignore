@@ -136,3 +136,4 @@ sniffr/helper_notebook.ipynb
 
 .DS_Store
 .vscode/settings.json
+sniffr/sniffrdb.db-journal
