@@ -68,33 +68,9 @@ def get_swipes(current_user):
 
     response = []
     if possible_dogs:
-        for row in possible_dogs:
-            dog = {
-                "owner_id": row.owner.user_id,
-                "dog_id": row.dog_id,
-                "dog_name": row.dog_name,
-                "age": row.age,
-                "sex": row.sex,
-                "is_vaccinated": row.is_vaccinated,
-                "is_fixed": row.is_fixed,
-                "dog_bio": row.dog_bio,
-                "dog_pic": row.dog_bio,
-                "creation_time": row.creation_time,
-                "last_updated": row.last_updated,
-                "breed_id": row.breed.breed_id,
-                "breed": row.breed.breed_name,
-                "temperament_id": row.temperament.temperament_id,
-                "temperament_type": row.temperament.temperament_type,
-                "size_id": row.size.size_id,
-                "size": row.size.size,
-            }
-
-            response.append(dog)
-
-        return jsonify(response)
+        return jsonify(process_records(possible_dogs))
     else:
-        return {'message': 'no potential found'}
-
+        return jsonify(response)
 
 
 # Add swipe
@@ -102,7 +78,7 @@ def get_swipes(current_user):
 @token_required
 def swipe_dog(current_user):
     # Accept token and get user id
-    user_id = current_user.user_id
+    user_id = int(current_user.user_id)
 
     # Read post request containing information on which dog and swipe-type
     content = request.json
@@ -114,6 +90,9 @@ def swipe_dog(current_user):
         .filter(Dog.owner_id == user_id)
         .first()
     )
+    if not users_dog:
+        return jsonify({"message": 'User has no dogs'})
+    
     users_dog = users_dog.dog_id
     
     # Log Swipe
@@ -140,7 +119,7 @@ def swipe_dog(current_user):
 @token_required
 def delete_activity(current_user):
     # Accept token and get user id
-    user_id = current_user.user_id
+    user_id = int(current_user.user_id)
 
     # Read post request containing information on which swipe
     content = request.json
@@ -149,9 +128,10 @@ def delete_activity(current_user):
     queried_swipe = (
         db.session.query(Swipe).filter_by(swipe_id=swipe_id).first()
     )
+    
     if queried_swipe:
         db.session.delete(queried_swipe)
         db.session.commit()
-        return jsonify({"message": "Swipe deleted"})
+        return {}, 200
     else:
-        return {"message": "Swipe not found"}
+        return {}, 204
