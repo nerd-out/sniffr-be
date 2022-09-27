@@ -88,6 +88,5 @@ def test_delete_new_user(new_user_fixture, test_client):
     response = test_client.delete("/user", headers=headers)
 
     # Assert
-    assert response.status_code == 410
-    assert b"Successfully deleted user" in response.data
+    assert response.status_code == 200
 
