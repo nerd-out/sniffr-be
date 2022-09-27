@@ -105,8 +105,21 @@ def swipe_dog(current_user):
     try:
         db.session.add(new_swipe)
         db.session.commit()
-        return_json = process_record(new_swipe)
-        return return_json
+
+        # If successful, search for corresponding swipe
+        matching_like = (
+            db.session.query(Swipe)
+            .join(Dog, Swipe.swiped_dog_id == new_swipe.dog_id)
+            .first()
+        )
+
+        # If is_interested matching swipe found
+        if matching_like.is_interested == True:
+            # then create match
+
+            # Return swipe to front end
+            return_json = process_record(new_swipe)
+            return return_json
 
     except:
         db.session.rollback()
