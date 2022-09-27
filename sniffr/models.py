@@ -26,6 +26,7 @@ class User(db.Model):
     gender = db.Column(db.Text())
     user_pic = db.Column(db.Text())
     user_bio = db.Column(db.Text())
+    role = db.Column(db.Text())
     max_distance = db.Column(db.Integer)
     zipcode = db.Column(db.Text())
     creation_time = db.Column(db.DateTime, default=datetime.datetime.now())
@@ -47,7 +48,7 @@ class User(db.Model):
         self.password = password
 
     def __repr__(self):
-        return f"#{self.user_id} {self.email} | {self.creation_time.strftime('%D %T')} "
+        return f"#{self.user_id} {self.email} ({self.role}) | {self.creation_time.strftime('%D %T')} "
 
 class Swipe(db.Model):
     __tablename__ = "swipes"
