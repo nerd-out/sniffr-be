@@ -102,24 +102,27 @@ def swipe_dog(current_user):
             is_interested=content["is_interested"],
         )
     
+
     try:
         db.session.add(new_swipe)
         db.session.commit()
 
         # If successful, search for corresponding swipe
-        matching_like = (
-            db.session.query(Swipe)
-            .join(Dog, Swipe.swiped_dog_id == new_swipe.dog_id)
-            .first()
-        )
-
+        matching_like = ( db.session.query(Swipe) .join(Dog, Swipe.swiped_dog_id == new_swipe.dog_id) .first() )
+        
         # If is_interested matching swipe found
         if matching_like.is_interested == True:
             # then create match
-            new_match = Match(
-                dog_id_one=Swipe.swiped_dog_id,
-                dog_id_two=matching_like.
-            )
+            new_match = Match( dog_id_one=new_swipe.dog_id, dog_id_two=matching_like.dog_id )
+            
+            try:
+                # breakpoint()
+                db.session.add(new_match)
+                db.session.commit()
+            
+            except:
+                db.session.rollback()
+                return {'message': 'Unable to add match'}
 
         # Return swipe to front end
         return_json = process_record(new_swipe)

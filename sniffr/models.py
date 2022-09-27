@@ -161,6 +161,7 @@ class Activity(db.Model):
     def __repr__(self):
         return f"Description: {self.activity_description}"
 
+
 class DogActivity(db.Model):
     __tablename__ = "dog_activities"
 
@@ -191,8 +192,7 @@ class Match(db.Model):
     dog_id_two = db.Column(db.Integer)
     creation_time = db.Column(db.DateTime)
 
-    def __init__(self, match_id, dog_id_one, dog_id_two):
-        self.match_id = match_id
+    def __init__(self, dog_id_one, dog_id_two):
         self.dog_id_one = dog_id_one
         self.dog_id_two = dog_id_two
         self.creation_time = datetime.datetime.now()
