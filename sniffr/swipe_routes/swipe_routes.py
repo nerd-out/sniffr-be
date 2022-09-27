@@ -124,7 +124,23 @@ def swipe_dog(current_user):
                 try:
                     db.session.add(new_match)
                     db.session.commit()
-                    return jsonify(process_record(new_match))
+
+                    # Get matched dog info
+                    # Query and get dogs given a user id
+                    matched_dog = (
+                        db.session.query(Dog)
+                        .join(User, Dog.owner_id == User.user_id)
+                        .filter(Dog.dog_id == matching_like.dog_id)
+                        .first()
+                    )
+
+                    # Return response
+                    response = []
+                    if matched_dog:
+                        return jsonify(process_record(matched_dog))
+
+                    else:
+                        return jsonify(response), 200
                 
                 except:
                     db.session.rollback()
