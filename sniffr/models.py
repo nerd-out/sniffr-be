@@ -191,6 +191,7 @@ class Match(db.Model):
     dog_id_one = db.Column(db.Integer)
     dog_id_two = db.Column(db.Integer)
     creation_time = db.Column(db.DateTime)
+    __table_args__ = (db.UniqueConstraint(dog_id_one, dog_id_two),)
 
     def __init__(self, dog_id_one, dog_id_two):
         self.dog_id_one = dog_id_one

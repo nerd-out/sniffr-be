@@ -105,46 +105,54 @@ def swipe_dog(current_user):
         db.session.add(new_swipe)
         db.session.commit()
 
-        # If successful, search for corresponding swipe
-        matching_like = (
-            db.session.query(Swipe)
-            .join(Dog, Swipe.swiped_dog_id == Dog.dog_id)
-            .filter(Dog.dog_id == users_dog)
-            .filter(Swipe.dog_id == int(content["swiped_dog_id"]))
-            .first()
+    except:
+        db.session.rollback()
+        return {'message': 'Unable to add swipe'}
+
+    # If successful, search for corresponding swipe
+    matching_like = (
+        db.session.query(Swipe)
+        .join(Dog, Swipe.swiped_dog_id == Dog.dog_id)
+        .filter(Dog.dog_id == users_dog)
+        .filter(Swipe.dog_id == int(content["swiped_dog_id"]))
+        .first()
+        )
+
+    # If is_interested matching swipe found
+    if matching_like:
+        if matching_like.is_interested == True:
+            # then create match if not one already
+            # check for previous match
+            new_match = Match(dog_id_one=new_swipe.dog_id, dog_id_two=matching_like.dog_id)
+
+            try:
+                db.session.add(new_match)
+                db.session.commit()
+
+            except:
+                db.session.rollback()
+                return {'message': 'Unable to add match'}
+            
+            # Get matched dog info
+            matched_dog = (
+                db.session.query(Dog)
+                .join(User, Dog.owner_id == User.user_id)
+                .join(Match, Dog.dog_id == Match.dog_id_two)
+                .filter(Dog.dog_id == matching_like.dog_id)
+                .first()
             )
-    
-        # If is_interested matching swipe found
-        if matching_like:
 
-            if matching_like.is_interested == True:
-                # then create match
-                new_match = Match(dog_id_one=new_swipe.dog_id, dog_id_two=matching_like.dog_id )
-                
-                try:
-                    db.session.add(new_match)
-                    db.session.commit()
+            # Return response
+            response = []
+            if matched_dog:
+                response = process_record(matched_dog)
+                response['match'] = True
 
-                    # Get matched dog info
-                    # Query and get dogs given a user id
-                    matched_dog = (
-                        db.session.query(Dog)
-                        .join(User, Dog.owner_id == User.user_id)
-                        .filter(Dog.dog_id == matching_like.dog_id)
-                        .first()
-                    )
+                return response
 
-                    # Return response
-                    response = []
-                    if matched_dog:
-                        return jsonify(process_record(matched_dog))
-
-                    else:
-                        return jsonify(response), 200
-                
-                except:
-                    db.session.rollback()
-                    return {'message': 'Unable to add match'}
+            else:
+                return jsonify(response), 200
+    else:
 
         # Return next swipe to front end
         past_swipes = (
@@ -164,17 +172,13 @@ def swipe_dog(current_user):
             .first()
             )
         
-
         if possible_dog:
-            return jsonify(process_record(possible_dog))
+            response = process_record(possible_dog)
+            response['match'] = False
+            return response
         else:
             return jsonify([])
-
-    except:
-        db.session.rollback()
-        return {'message': 'Unable to add swipe'}
     
-
 
 # Delete Swipe
 @swipe_bp.route("/swipe", methods=["DELETE"])

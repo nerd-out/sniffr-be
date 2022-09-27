@@ -14,15 +14,13 @@ def get_matches(current_user):
     # THEN return up to 3 potential dogs that can be swiped
     # Query and get dogs given a user id
 
-    user_id = current_user.user_id
+    user_id = int(current_user.user_id)
 
     past_matches = (
         db.session.query(Match)
-        .filter((Match.dog_id_one == )|(Match.dog_id_two == False))
+        .join(Dog, Match.dog_id_one == Dog.dog_id)  
         .filter(Dog.owner_id == user_id)
         .all()
     )
 
-    past_swipes = process_records(past_matches)
-
-    return jsonify(past_swipes)
+    return jsonify(process_records(past_matches))

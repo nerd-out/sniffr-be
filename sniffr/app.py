@@ -8,6 +8,7 @@ from sniffr.temperament_routes.temperament_routes import temperament_bp
 from sniffr.size_routes.size_routes import size_bp
 from sniffr.user_routes.user_routes import user_bp
 from sniffr.swipe_routes.swipe_routes import swipe_bp
+from sniffr.match_routes.match_routes import match_bp
 from sniffr.models import db, migrate
 from flask_cors import CORS
 
@@ -79,6 +80,9 @@ def create_app(settings_override=None):
 
     # Swipe Routes
     app.register_blueprint(swipe_bp)
+
+    # Match Routes
+    app.register_blueprint(match_bp)
 
     return app
 
