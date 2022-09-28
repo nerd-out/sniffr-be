@@ -45,7 +45,7 @@ def seed_db_dog():
         Dog(
             dog_name="Max",
             age="15",
-            owner_id=4,
+            owner_id=3,
             breed_id=137,
             sex="Male",
             is_vaccinated=True,
