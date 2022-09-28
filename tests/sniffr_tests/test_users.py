@@ -1,3 +1,5 @@
+import datetime
+
 def test_new_user_register(test_client):
     """
     GIVEN a Flask application
@@ -47,7 +49,7 @@ def test_edit_new_user(new_user_fixture, test_client):
     # Create edit json
     edit_json = {
         "email": "danimal@d300.org",
-        "birthday": "30",
+        "birthday": datetime.date(2022, 1, 1),
         "gender": "Dude",
         "max_distance": 10,
         "name": "Dan Finger",
@@ -56,14 +58,14 @@ def test_edit_new_user(new_user_fixture, test_client):
         "user_pic": "^_^",
     }
 
-    # Delete user
+    # Edit user
     response = test_client.post("/user/edit", headers=headers, json=edit_json)
     content = response.json
 
     # Check status code & that contents updated
     assert response.status_code == 200
     assert content["email"] == edit_json["email"]
-    assert content["birthday"] == edit_json["birthday"]
+    assert content["birthday"] == 'Sat, 01 Jan 2022 00:00:00 GMT'
     assert content["gender"] == edit_json["gender"]
     assert content["max_distance"] == edit_json["max_distance"]
     assert content["name"] == edit_json["name"]
@@ -75,7 +77,7 @@ def test_delete_new_user(new_user_fixture, test_client):
     """
     GIVEN a Flask application
     WHEN the '/delete' page is sent a (DELETE)ed
-    THEN check that a '410' status code is returned
+    THEN check that a '200' status code is returned
     THEN check that the correct message is returned
     """
     # Format json post

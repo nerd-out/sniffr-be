@@ -22,7 +22,7 @@ class User(db.Model):
     email = db.Column(db.Text(), unique=True, nullable=False)
     password_hash = db.Column(db.String(128))
     name = db.Column(db.Text())
-    birthday = db.Column(db.Text())
+    birthday = db.Column(db.Date)
     gender = db.Column(db.Text())
     user_pic = db.Column(db.Text())
     user_bio = db.Column(db.Text())

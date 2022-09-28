@@ -1,5 +1,6 @@
 from flask import Blueprint, request
 from sniffr.models import User, db, token_required, process_record
+import datetime
 
 user_bp = Blueprint("user_bp", __name__)
 
@@ -31,8 +32,10 @@ def edit_user(current_user):
     queried_user = db.session.query(User).filter(User.user_id == user_id).first()
 
     if queried_user:
+        edit_birthday = content["birthday"].split(', ')[1]
+        edit_birthday = datetime.datetime.strptime(edit_birthday, '%d %b %Y %H:%M:%S %Z')     
         queried_user.email = content["email"]
-        queried_user.birthday = content["birthday"]
+        queried_user.birthday = edit_birthday
         queried_user.gender = content["gender"]
         queried_user.max_distance = content["max_distance"]
         queried_user.name = content["name"]
