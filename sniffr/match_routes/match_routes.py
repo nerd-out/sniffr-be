@@ -11,8 +11,7 @@ match_bp = Blueprint("match_bp", __name__)
 @token_required
 def get_matches(current_user):
     # Accept user token
-    # THEN return up to 3 potential dogs that can be swiped
-    # Query and get dogs given a user id
+    # THEN return all dogs that are matches
 
     user_id = int(current_user.user_id)
 
