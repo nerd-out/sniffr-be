@@ -36,10 +36,10 @@ def login():
             return make_response(jsonify({"token": token}), 201)
 
         else:
-            return {"message": "fail"}, 400
+            return {}, 200
 
     else:
-        return {"message": "fail"}, 400
+        return {}, 200
 
 
 # Create user route

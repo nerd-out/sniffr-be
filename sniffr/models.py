@@ -4,7 +4,6 @@ from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy import inspect
 import jwt
-import datetime
 from functools import wraps
 from flask import request
 import os
@@ -15,6 +14,7 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 db = SQLAlchemy()
 migrate = Migrate()
 
+
 class User(db.Model):
     __tablename__ = "users"
 
@@ -22,10 +22,11 @@ class User(db.Model):
     email = db.Column(db.Text(), unique=True, nullable=False)
     password_hash = db.Column(db.String(128))
     name = db.Column(db.Text())
-    age = db.Column(db.Integer)
+    birthday = db.Column(db.Date)
     gender = db.Column(db.Text())
     user_pic = db.Column(db.Text())
     user_bio = db.Column(db.Text())
+    role = db.Column(db.Text())
     max_distance = db.Column(db.Integer)
     zipcode = db.Column(db.Text())
     creation_time = db.Column(db.DateTime, default=datetime.datetime.now())
@@ -47,7 +48,8 @@ class User(db.Model):
         self.password = password
 
     def __repr__(self):
-        return f"#{self.user_id} {self.email} | {self.creation_time.strftime('%D %T')} "
+        return f"#{self.user_id} {self.email} ({self.role}) | {self.creation_time.strftime('%D %T')} "
+
 
 class Swipe(db.Model):
     __tablename__ = "swipes"
@@ -67,6 +69,7 @@ class Swipe(db.Model):
     def __repr__(self):
         return f"Dog {self.dog_id} swiped on dog {self.swiped_dog_id} and is {'' if self.is_interested else 'not'} interested in playing."
 
+
 class Breed(db.Model):
     __tablename__ = "breeds"
 
@@ -75,12 +78,13 @@ class Breed(db.Model):
 
     def __init__(
         self,
-        breed_name      
+        breed_name    
     ):
         self.breed_name = breed_name
 
     def __repr__(self):
         return f"Breed #{self.breed_id} {self.breed_name}"
+
 
 class Dog(db.Model):
     __tablename__ = "dogs"
@@ -112,6 +116,7 @@ class Dog(db.Model):
     def __repr__(self):
         return f"Dog ({self.dog_id}): {self.dog_name} | Breed: {self.breed.breed_name} | Size: {self.size.size} | Temperament: {self.temperament.temperament_type} | Age: {self.age} | Sex: {self.sex} | Fixed: {self.is_fixed} | Vx: {self.is_vaccinated} | Pic: {self.dog_pic} | Bio: {self.dog_bio} | Created: {self.creation_time:%Y-%m-%d}"
 
+
 class Size(db.Model):
     __tablename__ = "sizes"
 
@@ -126,6 +131,7 @@ class Size(db.Model):
 
     def __repr__(self):
         return f"Size #{self.size_id} {self.size}"
+
 
 class Temperament(db.Model):
     __tablename__ = "temperaments"
@@ -142,6 +148,7 @@ class Temperament(db.Model):
     def __repr__(self):
         return f"Temperament ID #{self.temperament_id}: {self.temperament_type}"
 
+
 class Activity(db.Model):
     __tablename__ = "activities"
 
@@ -153,6 +160,7 @@ class Activity(db.Model):
         
     def __repr__(self):
         return f"Description: {self.activity_description}"
+
 
 class DogActivity(db.Model):
     __tablename__ = "dog_activities"
@@ -175,6 +183,25 @@ class DogActivity(db.Model):
     def __repr__(self):
         return f"Dog {self.dog_id}'s #{self.activity_rank} preference is activity #{self.activity_id}"
 
+
+class Match(db.Model):
+    __tablename__ = "matches"
+
+    match_id = db.Column(db.Integer, primary_key=True)
+    dog_id_one = db.Column(db.Integer)
+    dog_id_two = db.Column(db.Integer)
+    creation_time = db.Column(db.DateTime)
+    __table_args__ = (db.UniqueConstraint(dog_id_one, dog_id_two),)
+
+    def __init__(self, dog_id_one, dog_id_two):
+        self.dog_id_one = dog_id_one
+        self.dog_id_two = dog_id_two
+        self.creation_time = datetime.datetime.now()
+
+    def __repr__(self):
+        return f"Match # {self.match_id}: Dog {self.dog_id_one} & Dog{self.dog_id_two} on {self.creation_time}"
+
+
 def process_records(sqlalchemy_records):
     """
     A helper method for converting a list of database record objects into a list of dictionaries, so they can be returned as JSON
@@ -189,9 +216,11 @@ def process_records(sqlalchemy_records):
         records.append(processed_record)
     return records
 
+
 def process_record(obj):
     return {c.key: getattr(obj, c.key)
             for c in inspect(obj).mapper.column_attrs}
+
 
 # decorator for verifying the JWT
 def token_required(f):
@@ -201,9 +230,10 @@ def token_required(f):
         # jwt is passed in the request header
         if 'x-access-token' in request.headers:
             token = request.headers['x-access-token']
+            
         # return 401 if token is not passed
         if not token:
-            return {'message' : 'Token is missing !!'}, 401
+            return {'message' : 'Token is missing'}, 401
 
         try:
             # decoding the payload to fetch the stored details

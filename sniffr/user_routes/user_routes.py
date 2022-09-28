@@ -1,5 +1,6 @@
 from flask import Blueprint, request
 from sniffr.models import User, db, token_required, process_record
+import datetime
 
 user_bp = Blueprint("user_bp", __name__)
 
@@ -14,11 +15,11 @@ def delete_user(current_user):
         db.session.delete(queried_user)
         db.session.commit()
 
-        return {"message": f"Successfully deleted user"}, 410
+        return {}, 200
 
     else:
-        response = {"message": "User Not Found"}
-        return response, 404
+        response = {}
+        return response, 204
 
 
 @user_bp.route("/user/edit", methods=["POST"])
@@ -31,8 +32,10 @@ def edit_user(current_user):
     queried_user = db.session.query(User).filter(User.user_id == user_id).first()
 
     if queried_user:
+        edit_birthday = content["birthday"].split(', ')[1]
+        edit_birthday = datetime.datetime.strptime(edit_birthday, '%d %b %Y %H:%M:%S %Z')     
         queried_user.email = content["email"]
-        queried_user.age = content["age"]
+        queried_user.birthday = edit_birthday
         queried_user.gender = content["gender"]
         queried_user.max_distance = content["max_distance"]
         queried_user.name = content["name"]
@@ -46,5 +49,5 @@ def edit_user(current_user):
         return response
 
     else:
-        response = {"message": "User Not Found"}
-        return response, 404
+        response = []
+        return response

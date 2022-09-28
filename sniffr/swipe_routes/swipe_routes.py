@@ -1,6 +1,6 @@
 from lib2to3.pgen2 import token
 from flask import Blueprint, jsonify, request
-from sniffr.models import db, Swipe, process_records, token_required, Dog, User, process_record
+from sniffr.models import db, Swipe, process_records, token_required, Dog, User, process_record, Match
 
 
 # Blueprint Configuration
@@ -62,39 +62,14 @@ def get_swipes(current_user):
         .join(User, Dog.owner_id == User.user_id)
         .filter(Dog.owner_id != user_id)
         .filter(Dog.dog_id.not_in(swiped_dogs))
-        .limit(3)
-        .all()
+        .first()
     )
 
     response = []
     if possible_dogs:
-        for row in possible_dogs:
-            dog = {
-                "owner_id": row.owner.user_id,
-                "dog_id": row.dog_id,
-                "dog_name": row.dog_name,
-                "age": row.age,
-                "sex": row.sex,
-                "is_vaccinated": row.is_vaccinated,
-                "is_fixed": row.is_fixed,
-                "dog_bio": row.dog_bio,
-                "dog_pic": row.dog_bio,
-                "creation_time": row.creation_time,
-                "last_updated": row.last_updated,
-                "breed_id": row.breed.breed_id,
-                "breed": row.breed.breed_name,
-                "temperament_id": row.temperament.temperament_id,
-                "temperament_type": row.temperament.temperament_type,
-                "size_id": row.size.size_id,
-                "size": row.size.size,
-            }
-
-            response.append(dog)
-
-        return jsonify(response)
+        return jsonify(process_record(possible_dogs))
     else:
-        return {'message': 'no potential found'}
-
+        return jsonify(response)
 
 
 # Add swipe
@@ -102,7 +77,7 @@ def get_swipes(current_user):
 @token_required
 def swipe_dog(current_user):
     # Accept token and get user id
-    user_id = current_user.user_id
+    user_id = int(current_user.user_id)
 
     # Read post request containing information on which dog and swipe-type
     content = request.json
@@ -114,33 +89,103 @@ def swipe_dog(current_user):
         .filter(Dog.owner_id == user_id)
         .first()
     )
+    if not users_dog:
+        return jsonify({"message": 'User has no dogs'})
+    
     users_dog = users_dog.dog_id
     
     # Log Swipe
     new_swipe = Swipe(
             dog_id=users_dog,
-            swiped_dog_id=content["swiped_dog_id"],
+            swiped_dog_id=int(content["swiped_dog_id"]),
             is_interested=content["is_interested"],
         )
-    
+
     try:
         db.session.add(new_swipe)
         db.session.commit()
-        return_json = process_record(new_swipe)
-        return return_json
 
     except:
         db.session.rollback()
         return {'message': 'Unable to add swipe'}
-    
 
+    # If successful, search for corresponding swipe
+    matching_like = (
+        db.session.query(Swipe)
+        .join(Dog, Swipe.swiped_dog_id == Dog.dog_id)
+        .filter(Dog.dog_id == users_dog)
+        .filter(Swipe.dog_id == int(content["swiped_dog_id"]))
+        .first()
+        )
+
+    # If is_interested matching swipe found
+    if matching_like:
+        if matching_like.is_interested == True:
+            # then create match if not one already
+            # check for previous match
+            new_match = Match(dog_id_one=new_swipe.dog_id, dog_id_two=matching_like.dog_id)
+
+            try:
+                db.session.add(new_match)
+                db.session.commit()
+
+            except:
+                db.session.rollback()
+                return {'message': 'Unable to add match'}
+            
+            # Get matched dog info
+            matched_dog = (
+                db.session.query(Dog)
+                .join(User, Dog.owner_id == User.user_id)
+                .join(Match, Dog.dog_id == Match.dog_id_two)
+                .filter(Dog.dog_id == matching_like.dog_id)
+                .first()
+            )
+
+            # Return response
+            response = []
+            if matched_dog:
+                response = process_record(matched_dog)
+                response['match'] = True
+
+                return response
+
+            else:
+                return jsonify(response), 200
+    else:
+
+        # Return next swipe to front end
+        past_swipes = (
+            db.session.query(Swipe)
+            .join(Dog, Dog.dog_id == Swipe.dog_id)
+            .filter((Swipe.is_interested == True)|(Swipe.is_interested == False))
+            .filter(Dog.owner_id == user_id)
+            .all()
+        )
+        swiped_dogs = [dog.swiped_dog_id for dog in past_swipes]
+
+        possible_dog = (
+            db.session.query(Dog)
+            .join(User, Dog.owner_id == User.user_id)
+            .filter(Dog.owner_id != user_id)
+            .filter(Dog.dog_id.not_in(swiped_dogs))
+            .first()
+            )
+        
+        if possible_dog:
+            response = process_record(possible_dog)
+            response['match'] = False
+            return response
+        else:
+            return jsonify([])
+    
 
 # Delete Swipe
 @swipe_bp.route("/swipe", methods=["DELETE"])
 @token_required
 def delete_activity(current_user):
     # Accept token and get user id
-    user_id = current_user.user_id
+    user_id = int(current_user.user_id)
 
     # Read post request containing information on which swipe
     content = request.json
@@ -149,9 +194,10 @@ def delete_activity(current_user):
     queried_swipe = (
         db.session.query(Swipe).filter_by(swipe_id=swipe_id).first()
     )
+    
     if queried_swipe:
         db.session.delete(queried_swipe)
         db.session.commit()
-        return jsonify({"message": "Swipe deleted"})
+        return {}, 200
     else:
-        return {"message": "Swipe not found"}
+        return {}, 204
