@@ -120,10 +120,10 @@ def post_dog(current_user):
             response["size"] = queried_dog.size.size
             response["temperament_type"] = queried_dog.temperament.temperament_type
 
-            return response
+            return jsonify(response)
 
         else:
-            return {}, 200
+            return jsonify({}), 200
 
     else:
         # create dog
@@ -157,7 +157,7 @@ def post_dog(current_user):
         response["size"] = queried_dog.size.size
         response["temperament_type"] = queried_dog.temperament.temperament_type
 
-        return response, 201
+        return jsonify(response), 201
 
 
 # Delete Dog
@@ -177,7 +177,7 @@ def delete_dog(current_user, dog_id):
             db.session.delete(queried_dog)
             db.session.commit()
 
-            return {}, 200
+            return jsonify({}), 200
 
     else:
-        return {}, 204
+        return jsonify({}), 204
