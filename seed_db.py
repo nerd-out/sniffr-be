@@ -150,8 +150,7 @@ def seed_db_swipes():
     # Siri doesn't like Augie
     db.session.add(Swipe(dog_id=3, swiped_dog_id=1, is_interested=False))
 
-    # Augie likes Siri & Cerberus
-    db.session.add(Swipe(dog_id=1, swiped_dog_id=2, is_interested=True))
+    # Augie likes Cerberus
     db.session.add(Swipe(dog_id=1, swiped_dog_id=4, is_interested=True))
 
     db.session.commit()
