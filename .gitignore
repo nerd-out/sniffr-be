@@ -130,7 +130,6 @@ dmypy.json
 scratchpad.ipynb
 postgres.py
 
-migrations/
 *.db
 sniffr/helper_notebook.ipynb
 
