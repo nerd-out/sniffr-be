@@ -1,6 +1,6 @@
 from lib2to3.pgen2 import token
 from flask import Blueprint, jsonify, request
-from sniffr.models import db, Swipe, process_records, token_required, Dog, User, process_record, Match
+from sniffr.models import db, Swipe, process_records, Breed, token_required, process_dog, Dog, User, process_record, Match
 
 
 # Blueprint Configuration
@@ -57,17 +57,19 @@ def get_swipes(current_user):
     )
     swiped_dogs = [dog.swiped_dog_id for dog in past_swipes]
 
-    possible_dogs = (
+    possible_dog = (
         db.session.query(Dog)
         .join(User, Dog.owner_id == User.user_id)
+        .join(Breed, Dog.breed_id == Breed.breed_id)
         .filter(Dog.owner_id != user_id)
         .filter(Dog.dog_id.not_in(swiped_dogs))
         .first()
     )
 
-    response = []
-    if possible_dogs:
-        return jsonify(process_record(possible_dogs))
+    response = {}
+    if possible_dog:
+        response = process_dog(possible_dog)
+        return jsonify(response)
     else:
         return jsonify(response)
 
@@ -143,12 +145,11 @@ def swipe_dog(current_user):
             )
 
             # Return response
-            response = []
+            response = {}
             if matched_dog:
-                response = process_record(matched_dog)
-                response['match'] = True
-
-                return response
+                response = process_dog(matched_dog)
+                response[0]["match"] = True
+                return jsonify(response)
 
             else:
                 return jsonify(response), 200
@@ -173,11 +174,12 @@ def swipe_dog(current_user):
             )
         
         if possible_dog:
-            response = process_record(possible_dog)
-            response['match'] = False
-            return response
+            response = process_dog(possible_dog)
+            response[0]["match"] = False
+            return jsonify(response)
+            
         else:
-            return jsonify([])
+            return jsonify({})
     
 
 # Delete Swipe
@@ -198,6 +200,6 @@ def delete_activity(current_user):
     if queried_swipe:
         db.session.delete(queried_swipe)
         db.session.commit()
-        return {}, 200
+        return jsonify({}), 200
     else:
-        return {}, 204
+        return jsonify({}), 204

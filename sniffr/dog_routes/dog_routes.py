@@ -2,13 +2,12 @@ from concurrent.futures import process
 from datetime import datetime
 from lib2to3.pgen2 import token
 from flask import Blueprint, request, jsonify, make_response
-from sniffr.models import Dog, db, User, process_record, Breed, token_required, process_records
+from sniffr.models import Dog, db, User, Breed, token_required, process_dogs, process_dog
 import os
 
 SECRET_KEY = os.getenv("SECRET_KEY")
 
 # Blueprint Configuration
-
 dog_bp = Blueprint("dog_bp", __name__)
 
 # Get a dog's info
@@ -19,10 +18,7 @@ def get_dog(dog_id):
     """Get dog info"""
     queried_dog = db.session.query(Dog).join(User).filter(Dog.dog_id == dog_id).first()
     if queried_dog:
-        response = process_record(queried_dog)
-        response["breed"] = queried_dog.breed.breed_name
-        response["size"] = queried_dog.size.size
-        response["temperament_type"] = queried_dog.temperament.temperament_type
+        response = process_dog(queried_dog)
 
         return response
 
@@ -44,7 +40,8 @@ def get_dogs():
     )
 
     if queried_dogs:
-        return jsonify(process_records(queried_dogs))
+        response = process_dogs(queried_dogs)
+        return jsonify(response)
 
     else:
         response = []
@@ -73,7 +70,8 @@ def get_users_dogs(current_user):
     # Return response
     response = []
     if queried_dogs:
-        return jsonify(process_records(queried_dogs))
+        response = process_dogs(queried_dogs)
+        return jsonify(response)
 
     else:
         return jsonify(response), 200
@@ -115,10 +113,7 @@ def post_dog(current_user):
 
             db.session.commit()
 
-            response = process_record(queried_dog)
-            response["breed"] = queried_dog.breed.breed_name
-            response["size"] = queried_dog.size.size
-            response["temperament_type"] = queried_dog.temperament.temperament_type
+            response = process_dog(queried_dog)
 
             return jsonify(response)
 
@@ -152,10 +147,7 @@ def post_dog(current_user):
             .filter(Dog.dog_id == new_dog.dog_id)
             .first()
         )
-        response = process_record(queried_dog)
-        response["breed"] = queried_dog.breed.breed_name
-        response["size"] = queried_dog.size.size
-        response["temperament_type"] = queried_dog.temperament.temperament_type
+        response = process_dog(queried_dog)
 
         return jsonify(response), 201
 
