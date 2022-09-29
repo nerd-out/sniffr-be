@@ -11,6 +11,7 @@ def test_get_all_dogs(test_client):
     response = test_client.get("/dogs")
     content = response.json
 
+
     # Assert
     assert response.status_code == 200
     assert len(content) == 4 # number of dogs in database at time of writing
@@ -25,6 +26,7 @@ def test_get_one_dog(test_client):
     # Register user using post request
     response = test_client.get("/dog/1")
     content = response.json
+
 
     # Assert
     assert response.status_code == 200

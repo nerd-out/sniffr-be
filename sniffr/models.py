@@ -270,7 +270,6 @@ def process_dogs(sqlalchemy_records):
     return records
 
 def process_dog(sqlalchemy_record):
-    records = []
     processed_record = sqlalchemy_record.__dict__
 
     # Add extra info
@@ -285,8 +284,6 @@ def process_dog(sqlalchemy_record):
     del processed_record["breed"]
     del processed_record["temperament"]
     del processed_record['owner']
-    
-    records.append(processed_record)
 
 
-    return records
+    return processed_record
