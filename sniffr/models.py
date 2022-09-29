@@ -5,7 +5,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy import inspect
 import jwt
 from functools import wraps
-from flask import request
+from flask import request, jsonify
 import os
 
 SECRET_KEY = os.getenv("SECRET_KEY")
@@ -247,3 +247,43 @@ def token_required(f):
         return  f(current_user, *args, **kwargs)
 
     return decorated
+
+def process_dogs(sqlalchemy_records):
+    records = []
+    for record in sqlalchemy_records:
+        processed_record = record.__dict__
+
+        # Add extra info
+        processed_record['breed_name'] = record.breed.breed_name
+        processed_record['temperament_type'] = record.temperament.temperament_type
+        processed_record['size'] = record.size.size
+        processed_record['owner_email'] = record.owner.email
+        processed_record['owner_name'] = record.owner.name
+
+        # Remove long annoying text
+        del processed_record["_sa_instance_state"]
+        del processed_record["breed"]
+        del processed_record["temperament"]
+        del processed_record['owner']
+
+        records.append(processed_record)
+    return records
+
+def process_dog(sqlalchemy_record):
+    processed_record = sqlalchemy_record.__dict__
+
+    # Add extra info
+    processed_record['breed_name'] = sqlalchemy_record.breed.breed_name
+    processed_record['temperament_type'] = sqlalchemy_record.temperament.temperament_type
+    processed_record['size'] = sqlalchemy_record.size.size
+    processed_record['owner_email'] = sqlalchemy_record.owner.email
+    processed_record['owner_name'] = sqlalchemy_record.owner.name
+
+    # Remove long annoying text
+    del processed_record["_sa_instance_state"]
+    del processed_record["breed"]
+    del processed_record["temperament"]
+    del processed_record['owner']
+
+
+    return processed_record
