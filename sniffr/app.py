@@ -40,10 +40,6 @@ def create_app(settings_override=None):
         app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + os.path.join(
             basedir, "sniffrdb.db"
         )
-        print(
-            f'Using development set up for \
-                SQLALCHEMY_DATABASE_URI: {app.config["SQLALCHEMY_DATABASE_URI"]}'
-        )
 
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
@@ -51,10 +47,6 @@ def create_app(settings_override=None):
 
     db.init_app(app)
     migrate.init_app(app, db)
-
-    @app.route("/")
-    def home_route():
-        return "<h3>Welcome to Sniffr's Backend! Feel free to take a whiff!</h3>"
 
     # Register Blueprints
     # Auth routes

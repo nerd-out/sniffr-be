@@ -148,7 +148,7 @@ def swipe_dog(current_user):
             response = {}
             if matched_dog:
                 response = process_dog(matched_dog)
-                response[0]["match"] = True
+                response["match"] = True
                 return jsonify(response)
 
             else:
@@ -175,7 +175,7 @@ def swipe_dog(current_user):
         
         if possible_dog:
             response = process_dog(possible_dog)
-            response[0]["match"] = False
+            response["match"] = False
             return jsonify(response)
             
         else:
