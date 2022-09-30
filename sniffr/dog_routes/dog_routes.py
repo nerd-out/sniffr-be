@@ -60,17 +60,17 @@ def get_users_dogs(current_user):
 
     # Query and get dogs given a user id
     user_id = current_user.user_id
-    queried_dogs = (
+    queried_dog = (
         db.session.query(Dog)
         .join(User, Dog.owner_id == User.user_id)
         .filter(Dog.owner_id == user_id)
-        .all()
+        .first()
     )
 
     # Return response
-    response = []
-    if queried_dogs:
-        response = process_dogs(queried_dogs)
+    response = {}
+    if queried_dog:
+        response = process_dog(queried_dog)
         return jsonify(response)
 
     else:

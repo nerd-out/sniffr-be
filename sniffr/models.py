@@ -287,3 +287,15 @@ def process_dog(sqlalchemy_record):
 
 
     return processed_record
+
+
+def get_users_dogs_id(user_id):
+    queried_dog = (
+        db.session.query(Dog)
+        .join(User, Dog.owner_id == User.user_id)
+        .filter(Dog.owner_id == user_id)
+        .first()
+    )
+
+    # Return id
+    return int(queried_dog.dog_id)
