@@ -92,6 +92,8 @@ def post_dog(current_user):
     if "dog_id" in content.keys():
         queried_dog = (
             db.session.query(Dog)
+            .join(DogActivity)
+            .join(Activity)
             .filter(Dog.dog_id == int(content["dog_id"]))
             .filter(Dog.owner_id == user_id)
             .first()
@@ -113,8 +115,23 @@ def post_dog(current_user):
 
             db.session.commit()
 
-            # TODO: Add dog's activities
-            
+            # TODO: Delete dog's old activities
+            old_activities = (
+                db.session.query(DogActivity)
+                    .filter(DogActivity.dog_id == int(content["dog_id"]))
+                    .all()
+                )
+            for each in old_activities:
+                db.session.delete(each)
+                db.session.commit()
+
+            # Add dog's activities
+            for activity_id in content['activities']:
+                dogs_activity = DogActivity(dog_id=queried_dog.dog_id, activity_id=activity_id)
+
+                db.session.add(dogs_activity)
+                db.session.commit()
+
 
             response = process_dog(queried_dog)
 
@@ -143,7 +160,6 @@ def post_dog(current_user):
         db.session.add(new_dog)
         db.session.commit()
 
-        # TODO: Add dog's activities
         for activity_id in content['activities']:
             dogs_activity = DogActivity(dog_id=new_dog.dog_id, activity_id=activity_id)
             db.session.add(dogs_activity)

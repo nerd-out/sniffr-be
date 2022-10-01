@@ -3,7 +3,7 @@ from xml.dom.expatbuilder import TEXT_NODE
 from dotenv import load_dotenv
 import os
 from sniffr.app import create_app
-from sniffr.models import Activity, Breed, db, Dog, Temperament, User, Size, Swipe
+from sniffr.models import Activity, Breed, db, Dog, Temperament, User, Size, DogActivity, Swipe
 
 load_dotenv()
 
@@ -84,6 +84,19 @@ def seed_db_dog():
             dog_bio="Cerberus, often referred to as the hound of Hades, is a multi-headed dog that guards the gates of the Underworld to prevent the dead from leaving.",
         )
     )
+    db.session.add(DogActivity(dog_id=1, activity_id=2))
+    db.session.add(DogActivity(dog_id=1, activity_id=3))
+
+    db.session.add(DogActivity(dog_id=2, activity_id=2))
+    db.session.add(DogActivity(dog_id=2, activity_id=1))
+    db.session.add(DogActivity(dog_id=2, activity_id=4))
+
+    db.session.add(DogActivity(dog_id=3, activity_id=3))
+
+    db.session.add(DogActivity(dog_id=4, activity_id=4))
+    db.session.add(DogActivity(dog_id=4, activity_id=3))
+    db.session.add(DogActivity(dog_id=4, activity_id=2))
+    db.session.add(DogActivity(dog_id=4, activity_id=1))
     db.session.commit()
 
 
