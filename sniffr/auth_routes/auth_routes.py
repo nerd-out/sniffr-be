@@ -1,8 +1,11 @@
+from sqlite3 import IntegrityError
+from traitlets import Integer
 from flask import Blueprint, request, make_response, jsonify
 from sniffr.models import User, db
 import jwt
 from datetime import datetime, timedelta
 import os
+from sqlalchemy.exc import IntegrityError
 
 SECRET_KEY = os.getenv("SECRET_KEY")
 
@@ -54,10 +57,14 @@ def register():
 
     # Create user
     new_user = User(password=passwd, email=email)
-    db.session.add(new_user)
-    db.session.commit()
 
-    return {
-        "user_id": new_user.user_id,
-        "email": new_user.email,
-    }
+    try:
+        db.session.add(new_user)
+        db.session.commit()
+        return {
+            "user_id": new_user.user_id,
+            "email": new_user.email,
+            }
+
+    except IntegrityError:
+        return jsonify({'message': 'Email already exists in database'})

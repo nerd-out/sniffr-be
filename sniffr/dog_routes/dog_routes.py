@@ -113,6 +113,8 @@ def post_dog(current_user):
 
             db.session.commit()
 
+            # TODO: Add dog's activities
+
             response = process_dog(queried_dog)
 
             return jsonify(response)
