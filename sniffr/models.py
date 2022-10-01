@@ -104,8 +104,7 @@ class Dog(db.Model):
     temperament_id = db.Column(db.Integer, db.ForeignKey("temperaments.temperament_id"), nullable=False)
     temperament = db.relationship("Temperament", backref=db.backref("dogs"))
 
-    activity_id = db.Column(db.Integer, db.ForeignKey("activities.activity_id"), nullable=False)
-    activities = db.relationship("Activity", backref=db.backref("dogs"))
+    dog_activities = db.relationship("DogActivity", backref=db.backref("dogs"))
 
     age = db.Column(db.Text(), nullable=False)
     sex = db.Column(db.Text(), nullable=False)
@@ -158,6 +157,7 @@ class Activity(db.Model):
     activity_id = db.Column(db.Integer, primary_key=True)
     activity_description = db.Column(db.Text(), nullable=False)
 
+
     def __init__(self, activity_description):
         self.activity_description = activity_description
         
@@ -172,6 +172,7 @@ class DogActivity(db.Model):
     dog_id = db.Column(db.Integer, db.ForeignKey("dogs.dog_id"))
     activity_id = db.Column(db.Integer, db.ForeignKey("activities.activity_id"))
 
+
     def __init__(
         self,
         dog_id,
@@ -181,7 +182,7 @@ class DogActivity(db.Model):
         self.activity_id = activity_id
 
     def __repr__(self):
-        return f"Dog {self.dog_id}'s activitity: {self.dog.dog_name} #{self.activity_id}"
+        return f"Dog #{self.dog_id} | Activitity #{self.dog_activity_id}"
 
 
 class Match(db.Model):
@@ -191,7 +192,6 @@ class Match(db.Model):
     dog_id_one = db.Column(db.Integer)
     dog_id_two = db.Column(db.Integer)
     creation_time = db.Column(db.DateTime)
-    __table_args__ = (db.UniqueConstraint(dog_id_one, dog_id_two),)
 
     def __init__(self, dog_id_one, dog_id_two):
         self.dog_id_one = dog_id_one

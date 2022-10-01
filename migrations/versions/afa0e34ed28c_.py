@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: c03220d18fbb
+Revision ID: afa0e34ed28c
 Revises: 
-Create Date: 2022-09-28 00:58:47.231324
+Create Date: 2022-10-01 13:52:08.446644
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'c03220d18fbb'
+revision = 'afa0e34ed28c'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -33,8 +33,7 @@ def upgrade():
     sa.Column('dog_id_one', sa.Integer(), nullable=True),
     sa.Column('dog_id_two', sa.Integer(), nullable=True),
     sa.Column('creation_time', sa.DateTime(), nullable=True),
-    sa.PrimaryKeyConstraint('match_id'),
-    sa.UniqueConstraint('dog_id_one', 'dog_id_two')
+    sa.PrimaryKeyConstraint('match_id')
     )
     op.create_table('sizes',
     sa.Column('size_id', sa.Integer(), nullable=False),
@@ -88,7 +87,6 @@ def upgrade():
     sa.Column('dog_activity_id', sa.Integer(), nullable=False),
     sa.Column('dog_id', sa.Integer(), nullable=True),
     sa.Column('activity_id', sa.Integer(), nullable=True),
-    sa.Column('activity_rank', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['activity_id'], ['activities.activity_id'], ),
     sa.ForeignKeyConstraint(['dog_id'], ['dogs.dog_id'], ),
     sa.PrimaryKeyConstraint('dog_activity_id')
