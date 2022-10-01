@@ -87,7 +87,6 @@ def post_dog(current_user):
     content = request.json
     user_id = int(current_user.user_id)
 
-
     # If dog_id not in body then they are trying to create
     # If dog_id in body then updating content
     if "dog_id" in content.keys():
@@ -114,6 +113,7 @@ def post_dog(current_user):
             db.session.commit()
 
             # TODO: Add dog's activities
+            breakpoint()
 
             response = process_dog(queried_dog)
 

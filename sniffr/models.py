@@ -102,7 +102,10 @@ class Dog(db.Model):
     size = db.relationship("Size")
 
     temperament_id = db.Column(db.Integer, db.ForeignKey("temperaments.temperament_id"), nullable=False)
-    temperament = db.relationship("Temperament", backref=db.backref("dogs", lazy=True))
+    temperament = db.relationship("Temperament", backref=db.backref("dogs"))
+
+    activity_id = db.Column(db.Integer, db.ForeignKey("activities.activity_id"), nullable=False)
+    activities = db.relationship("Activity", backref=db.backref("dogs"))
 
     age = db.Column(db.Text(), nullable=False)
     sex = db.Column(db.Text(), nullable=False)
@@ -168,20 +171,17 @@ class DogActivity(db.Model):
     dog_activity_id = db.Column(db.Integer, primary_key=True)
     dog_id = db.Column(db.Integer, db.ForeignKey("dogs.dog_id"))
     activity_id = db.Column(db.Integer, db.ForeignKey("activities.activity_id"))
-    activity_rank = db.Column(db.Integer(), nullable=False)
 
     def __init__(
         self,
         dog_id,
-        activity_id,
-        activity_rank        
+        activity_id
     ):
         self.dog_id = dog_id
         self.activity_id = activity_id
-        self.activity_rank = activity_rank
 
     def __repr__(self):
-        return f"Dog {self.dog_id}'s #{self.activity_rank} preference is activity #{self.activity_id}"
+        return f"Dog {self.dog_id}'s activitity: {self.dog.dog_name} #{self.activity_id}"
 
 
 class Match(db.Model):
