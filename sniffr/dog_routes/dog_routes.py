@@ -140,6 +140,8 @@ def post_dog(current_user):
         db.session.add(new_dog)
         db.session.commit()
 
+        # TODO: Add dog's activities
+
         queried_dog = (
             db.session.query(Dog)
             .join(Breed)

@@ -121,7 +121,7 @@ German Pinscher,16,19,25,35
 Glen Imaal Terrier,14,14,34,36
 Lakeland Terrier,13,14,15,17
 Manchester Terrier (Standard),15,16,17,18
-Poodle Miniature,10,15,20,20
+Miniature Poodle,10,15,20,20
 Pug,10,11,14,22
 Puli,16,17,29,33
 Schipperke,10,13,12,18
@@ -149,4 +149,5 @@ Pomeranian,12,12,3,7
 Poodle Toy,10,10,10,10
 Toy Fox Terrier,10,10,4,7
 Yorkshire Terrier,8,8,3,7
-Hellhound,6,6,6,
+Hellhound,6,6,6
+Pembroke Welsh Corgi,0,0,0
