@@ -133,7 +133,7 @@ def swipe_dog(current_user):
 
             except:
                 db.session.rollback()
-                return jsonify({'error': 'Unable to add match'})
+                return jsonify({'error': 'Unable to add match'}), 400
             
             # Get matched dog info
             matched_dog = (
