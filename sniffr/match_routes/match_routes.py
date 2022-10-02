@@ -1,5 +1,5 @@
 from lib2to3.pgen2 import token
-from flask import jsonify, make_response
+from flask import jsonify
 from psutil import users
 from flask import Blueprint, jsonify, request
 from sniffr.models import db, get_users_dogs_id, token_required, Match, Dog, User, process_dogs

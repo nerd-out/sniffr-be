@@ -92,7 +92,7 @@ def swipe_dog(current_user):
         .first()
     )
     if not users_dog:
-        return jsonify({"message": 'User has no dogs'})
+        return jsonify({"message": 'User has no dogs'}), 400
     
     users_dog = users_dog.dog_id
     

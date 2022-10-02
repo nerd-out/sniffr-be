@@ -1,6 +1,6 @@
 from sqlite3 import IntegrityError
 from traitlets import Integer
-from flask import Blueprint, request, make_response, jsonify
+from flask import Blueprint, request, jsonify
 from sniffr.models import User, db
 import jwt
 from datetime import datetime, timedelta
@@ -36,13 +36,13 @@ def login():
                 SECRET_KEY,
             )
 
-            return make_response(jsonify({"token": token}), 201)
+            return jsonify({"token": token}), 201
 
         else:
-            return make_response('Invalid login', 400)
+            return jsonify({'error': 'Invalid login'}), 400
 
     else:
-        return make_response('Email or password missing', 400)
+        return jsonify({'error': 'Email or password missing'}), 400
 
 
 # Create user route
@@ -67,4 +67,4 @@ def register():
             }
 
     except IntegrityError:
-        return make_response('Email already exists in database', 400)
+        return jsonify({'error': 'Email already exists in database'}), 400
