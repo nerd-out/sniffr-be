@@ -172,7 +172,7 @@ class DogActivity(db.Model):
         self.activity_id = activity_id
 
     def __repr__(self):
-        return f"{self.dog_activity_id}"
+        return f"{self.activity_id}"
 
 
 class Match(db.Model):
@@ -261,7 +261,7 @@ def process_dogs(sqlalchemy_records):
 def process_dog(sqlalchemy_record):
     processed_record = sqlalchemy_record.__dict__
     dog_act_ids_list = [
-        each.dog_activity_id for each in sqlalchemy_record.dog_activities
+        each.activity_id for each in sqlalchemy_record.dog_activities
     ]
     dog_activities_list = [each.activity.activity_description for each in sqlalchemy_record.dog_activities]
 
