@@ -63,7 +63,7 @@ def test_new_dog_register(test_existing_user_fixture, test_client):
     content = response.json
 
     # Check status code & that contents updated
-    assert response.status_code == 201
+    assert response.status_code == 200
     assert content["dog_name"] == create_json["dog_name"]
     assert content["breed_id"] == create_json["breed_id"]
     assert content["size_id"] == create_json["size_id"]
@@ -106,7 +106,7 @@ def test_edit_new_dog(test_existing_user_fixture, test_client):
     content = response.json
 
     # Check status code & that contents updated
-    assert response.status_code == 201
+    assert response.status_code == 200
     assert content["dog_name"] == create_json["dog_name"]
     assert content["breed_id"] == create_json["breed_id"]
     assert content["size_id"] == create_json["size_id"]
