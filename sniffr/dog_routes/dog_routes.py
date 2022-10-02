@@ -2,7 +2,7 @@ from concurrent.futures import process
 from datetime import datetime
 from lib2to3.pgen2 import token
 from flask import Blueprint, request, jsonify, make_response
-from sniffr.models import Dog, db, User, Breed, token_required, process_dogs, process_dog
+from sniffr.models import Activity, Dog, db, User, Breed, token_required, process_dogs, process_dog, DogActivity
 import os
 
 SECRET_KEY = os.getenv("SECRET_KEY")
@@ -24,7 +24,7 @@ def get_dog(dog_id):
 
     else:
         response = {}
-        return jsonify(response)
+        return make_response("Dog not found", 400)
 
 
 # Get All Dogs
@@ -87,7 +87,10 @@ def post_dog(current_user):
     content = request.json
     user_id = int(current_user.user_id)
 
-
+    # Kick back if actvities list is > 3
+    if len(content['activities']) > 3:
+        return make_response("Dogs are limited to 3 activities", 400)
+    
     # If dog_id not in body then they are trying to create
     # If dog_id in body then updating content
     if "dog_id" in content.keys():
@@ -97,6 +100,7 @@ def post_dog(current_user):
             .filter(Dog.owner_id == user_id)
             .first()
         )
+        
         if queried_dog:
             # Update properties
             queried_dog.dog_name = content["dog_name"]
@@ -113,12 +117,30 @@ def post_dog(current_user):
 
             db.session.commit()
 
+            # Delete dog's old activities
+            old_activities = (
+                db.session.query(DogActivity)
+                    .filter(DogActivity.dog_id == int(content["dog_id"]))
+                    .all()
+                )
+            if old_activities:
+                for each in old_activities:
+                    db.session.delete(each)
+                    db.session.commit()
+
+            # Add dog's activities
+            for activity_id in content['activities']:
+                dogs_activity = DogActivity(dog_id=queried_dog.dog_id, activity_id=activity_id)
+
+                db.session.add(dogs_activity)
+                db.session.commit()
+
             response = process_dog(queried_dog)
 
             return jsonify(response)
 
         else:
-            return jsonify({}), 200
+            return make_response("Dog not found", 400)
 
     else:
         # create dog
@@ -140,16 +162,15 @@ def post_dog(current_user):
         db.session.add(new_dog)
         db.session.commit()
 
-        queried_dog = (
-            db.session.query(Dog)
-            .join(Breed)
-            .join(User)
-            .filter(Dog.dog_id == new_dog.dog_id)
-            .first()
-        )
-        response = process_dog(queried_dog)
+        if content['activities']:
+            for activity_id in content['activities']:
+                dogs_activity = DogActivity(dog_id=new_dog.dog_id, activity_id=activity_id)
+                db.session.add(dogs_activity)
+                db.session.commit()
 
-        return jsonify(response), 201
+        response = process_dog(new_dog)
+
+        return make_response(jsonify(response), 200)
 
 
 # Delete Dog
@@ -169,7 +190,7 @@ def delete_dog(current_user, dog_id):
             db.session.delete(queried_dog)
             db.session.commit()
 
-            return jsonify({}), 200
+            return make_response(jsonify({}), 200)
 
     else:
-        return jsonify({}), 204
+        return make_response("Dog not found", 400)

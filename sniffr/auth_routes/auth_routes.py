@@ -1,8 +1,11 @@
+from sqlite3 import IntegrityError
+from traitlets import Integer
 from flask import Blueprint, request, make_response, jsonify
 from sniffr.models import User, db
 import jwt
 from datetime import datetime, timedelta
 import os
+from sqlalchemy.exc import IntegrityError
 
 SECRET_KEY = os.getenv("SECRET_KEY")
 
@@ -36,10 +39,10 @@ def login():
             return make_response(jsonify({"token": token}), 201)
 
         else:
-            return {}, 200
+            return make_response('Invalid login', 400)
 
     else:
-        return {}, 200
+        return make_response('Email or password missing', 400)
 
 
 # Create user route
@@ -54,10 +57,14 @@ def register():
 
     # Create user
     new_user = User(password=passwd, email=email)
-    db.session.add(new_user)
-    db.session.commit()
 
-    return {
-        "user_id": new_user.user_id,
-        "email": new_user.email,
-    }
+    try:
+        db.session.add(new_user)
+        db.session.commit()
+        return {
+            "user_id": new_user.user_id,
+            "email": new_user.email,
+            }
+
+    except IntegrityError:
+        return make_response('Email already exists in database', 400)

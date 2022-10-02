@@ -3,7 +3,7 @@ from xml.dom.expatbuilder import TEXT_NODE
 from dotenv import load_dotenv
 import os
 from sniffr.app import create_app
-from sniffr.models import Activity, Breed, db, Dog, Temperament, User, Size, Swipe
+from sniffr.models import Activity, Breed, db, Dog, Temperament, User, Size, DogActivity, Swipe
 
 load_dotenv()
 
@@ -17,7 +17,9 @@ def seed_db_user():
     db.session.add(User(email="josh@sniffr.be", password=os.getenv("JOSH_PASS")))
     db.session.add(User(email="allie@sniffr.be", password=os.getenv("ALLIE_PASS")))
     db.session.add(User(email="mashima@sniffr.be", password=os.getenv("MASHIMA_PASS")))
-    db.session.add(User(email="benedict@sniffr.be", password=os.getenv("BENEDICT_PASS")))
+    db.session.add(
+        User(email="benedict@sniffr.be", password=os.getenv("BENEDICT_PASS"))
+    )
     db.session.add(User(email="demo@sniffr.be", password=os.getenv("DEMO_USER_PASS")))
     db.session.commit()
 
@@ -37,8 +39,7 @@ def seed_db_dog():
             is_fixed=False,
             size_id=4,
             temperament_id=2,
-            dog_bio="A poof of a dog who enjoys playing fetch."
-
+            dog_bio="A poof of a dog who enjoys playing fetch.",
         )
     )
     db.session.add(
@@ -52,7 +53,7 @@ def seed_db_dog():
             is_fixed=False,
             size_id=3,
             temperament_id=2,
-            dog_bio="Max loves running around the yard, playing chase with other dogs, and finding the local vermin. He's not too good at fetch, but he'll always want to be your friend!"
+            dog_bio="Max loves running around the yard, playing chase with other dogs, and finding the local vermin. He's not too good at fetch, but he'll always want to be your friend!",
         )
     )
     db.session.add(
@@ -66,7 +67,7 @@ def seed_db_dog():
             is_fixed=True,
             size_id=5,
             temperament_id=3,
-            dog_bio="A former frisbee dog who loves playing in the back yard or going swimming!"
+            dog_bio="A former frisbee dog who loves playing in the back yard or going swimming!",
         )
     )
     db.session.add(
@@ -80,7 +81,7 @@ def seed_db_dog():
             is_fixed=False,
             size_id=6,
             temperament_id=1,
-            dog_bio="Cerberus, often referred to as the hound of Hades, is a multi-headed dog that guards the gates of the Underworld to prevent the dead from leaving."
+            dog_bio="Cerberus, often referred to as the hound of Hades, is a multi-headed dog that guards the gates of the Underworld to prevent the dead from leaving.",
         )
     )
     db.session.commit()
@@ -105,13 +106,15 @@ def seed_db_activities():
     """
     This function seeds the datbase with activities.
     """
-    db.session.add(Activity(activity_description="Walking"))
-    db.session.add(Activity(activity_description="Fetching"))
+    db.session.add(Activity(activity_description="Walks"))
+    db.session.add(Activity(activity_description="Fetch"))
+    db.session.add(Activity(activity_description="Tricks"))
+    db.session.add(Activity(activity_description="Agility"))
+    db.session.add(Activity(activity_description="Swimming"))
+    db.session.add(Activity(activity_description="Car Rides"))
     db.session.add(Activity(activity_description="Frisbee"))
-    db.session.add(Activity(activity_description="Sniffing"))
-    db.session.add(Activity(activity_description="Chasing Squirrels"))
-    db.session.add(Activity(activity_description="Staring at a blank wall"))
-    db.session.add(Activity(activity_description="Drinking from the toilet"))
+    db.session.add(Activity(activity_description="Dog Parks"))
+    db.session.add(Activity(activity_description="Cuddles"))
     db.session.commit()
 
 

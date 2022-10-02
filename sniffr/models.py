@@ -5,7 +5,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy import inspect
 import jwt
 from functools import wraps
-from flask import request, jsonify
+from flask import request, jsonify, make_response
 import os
 
 SECRET_KEY = os.getenv("SECRET_KEY")
@@ -32,9 +32,10 @@ class User(db.Model):
     creation_time = db.Column(db.DateTime, default=datetime.datetime.now())
     last_update = db.Column(db.DateTime)
 
+
     @property
     def password(self):
-        raise AttributeError('password is not a readable attribute!')
+        raise AttributeError("password is not a readable attribute!")
 
     @password.setter
     def password(self, password):
@@ -76,10 +77,7 @@ class Breed(db.Model):
     breed_id = db.Column(db.Integer, primary_key=True)
     breed_name = db.Column(db.Text(), nullable=False)
 
-    def __init__(
-        self,
-        breed_name    
-    ):
+    def __init__(self, breed_name):
         self.breed_name = breed_name
 
     def __repr__(self):
@@ -101,8 +99,12 @@ class Dog(db.Model):
     size_id = db.Column(db.Integer, db.ForeignKey("sizes.size_id"), nullable=False)
     size = db.relationship("Size")
 
-    temperament_id = db.Column(db.Integer, db.ForeignKey("temperaments.temperament_id"), nullable=False)
-    temperament = db.relationship("Temperament", backref=db.backref("dogs", lazy=True))
+    temperament_id = db.Column(
+        db.Integer, db.ForeignKey("temperaments.temperament_id"), nullable=False
+    )
+    temperament = db.relationship("Temperament", backref=db.backref("dogs"))
+
+    dog_activities = db.relationship("DogActivity", backref=db.backref("dogs"))
 
     age = db.Column(db.Text(), nullable=False)
     sex = db.Column(db.Text(), nullable=False)
@@ -112,6 +114,7 @@ class Dog(db.Model):
     dog_pic = db.Column(db.Text())
     creation_time = db.Column(db.DateTime, default=datetime.datetime.now())
     last_updated = db.Column(db.DateTime)
+    __table_args__ = (db.UniqueConstraint('dog_id', 'owner_id', name='unique_dog_const'),)
 
     def __repr__(self):
         return f"Dog ({self.dog_id}): {self.dog_name} | Breed: {self.breed.breed_name} | Size: {self.size.size} | Temperament: {self.temperament.temperament_type} | Age: {self.age} | Sex: {self.sex} | Fixed: {self.is_fixed} | Vx: {self.is_vaccinated} | Pic: {self.dog_pic} | Bio: {self.dog_bio} | Created: {self.creation_time:%Y-%m-%d}"
@@ -123,10 +126,7 @@ class Size(db.Model):
     size_id = db.Column(db.Integer, primary_key=True)
     size = db.Column(db.Text(), nullable=False)
 
-    def __init__(
-        self,
-        size      
-    ):
+    def __init__(self, size):
         self.size = size
 
     def __repr__(self):
@@ -139,11 +139,8 @@ class Temperament(db.Model):
     temperament_id = db.Column(db.Integer, primary_key=True)
     temperament_type = db.Column(db.Text(), nullable=False)
 
-    def __init__(
-        self,
-        temperament_type
-    ):
-        self.temperament_type  = temperament_type
+    def __init__(self, temperament_type):
+        self.temperament_type = temperament_type
 
     def __repr__(self):
         return f"Temperament ID #{self.temperament_id}: {self.temperament_type}"
@@ -157,7 +154,7 @@ class Activity(db.Model):
 
     def __init__(self, activity_description):
         self.activity_description = activity_description
-        
+
     def __repr__(self):
         return f"Description: {self.activity_description}"
 
@@ -168,20 +165,14 @@ class DogActivity(db.Model):
     dog_activity_id = db.Column(db.Integer, primary_key=True)
     dog_id = db.Column(db.Integer, db.ForeignKey("dogs.dog_id"))
     activity_id = db.Column(db.Integer, db.ForeignKey("activities.activity_id"))
-    activity_rank = db.Column(db.Integer(), nullable=False)
+    activity = db.relationship("Activity", backref=db.backref("dog_activities"))
 
-    def __init__(
-        self,
-        dog_id,
-        activity_id,
-        activity_rank        
-    ):
+    def __init__(self, dog_id, activity_id):
         self.dog_id = dog_id
         self.activity_id = activity_id
-        self.activity_rank = activity_rank
 
     def __repr__(self):
-        return f"Dog {self.dog_id}'s #{self.activity_rank} preference is activity #{self.activity_id}"
+        return f"{self.activity_id}"
 
 
 class Match(db.Model):
@@ -191,7 +182,6 @@ class Match(db.Model):
     dog_id_one = db.Column(db.Integer)
     dog_id_two = db.Column(db.Integer)
     creation_time = db.Column(db.DateTime)
-    __table_args__ = (db.UniqueConstraint(dog_id_one, dog_id_two),)
 
     def __init__(self, dog_id_one, dog_id_two):
         self.dog_id_one = dog_id_one
@@ -218,8 +208,7 @@ def process_records(sqlalchemy_records):
 
 
 def process_record(obj):
-    return {c.key: getattr(obj, c.key)
-            for c in inspect(obj).mapper.column_attrs}
+    return {c.key: getattr(obj, c.key) for c in inspect(obj).mapper.column_attrs}
 
 
 # decorator for verifying the JWT
@@ -228,25 +217,24 @@ def token_required(f):
     def decorated(*args, **kwargs):
         token = None
         # jwt is passed in the request header
-        if 'x-access-token' in request.headers:
-            token = request.headers['x-access-token']
-            
+        if "x-access-token" in request.headers:
+            token = request.headers["x-access-token"]
+
         # return 401 if token is not passed
         if not token:
-            return {'message' : 'Token is missing'}, 401
+            return {"message": "Token is missing"}, 401
 
         try:
             # decoding the payload to fetch the stored details
             data = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
-            current_user = User.query\
-                .filter_by(user_id = data['user_id'])\
-                .first()
+            current_user = User.query.filter_by(user_id=data["user_id"]).first()
         except:
-            return {'message' : 'Token is invalid !!'}, 401
+            return {"message": "Token is invalid !!"}, 401
         # returns the current logged in users contex to the routes
-        return  f(current_user, *args, **kwargs)
+        return f(current_user, *args, **kwargs)
 
     return decorated
+
 
 def process_dogs(sqlalchemy_records):
     records = []
@@ -254,37 +242,46 @@ def process_dogs(sqlalchemy_records):
         processed_record = record.__dict__
 
         # Add extra info
-        processed_record['breed_name'] = record.breed.breed_name
-        processed_record['temperament_type'] = record.temperament.temperament_type
-        processed_record['size'] = record.size.size
-        processed_record['owner_email'] = record.owner.email
-        processed_record['owner_name'] = record.owner.name
+        processed_record["breed_name"] = record.breed.breed_name
+        processed_record["temperament_type"] = record.temperament.temperament_type
+        processed_record["size"] = record.size.size
+        processed_record["owner_email"] = record.owner.email
+        processed_record["owner_name"] = record.owner.name
 
         # Remove long annoying text
         del processed_record["_sa_instance_state"]
         del processed_record["breed"]
         del processed_record["temperament"]
-        del processed_record['owner']
+        del processed_record["owner"]
 
         records.append(processed_record)
     return records
 
+
 def process_dog(sqlalchemy_record):
     processed_record = sqlalchemy_record.__dict__
+    dog_act_ids_list = [
+        each.activity_id for each in sqlalchemy_record.dog_activities
+    ]
+    dog_activities_list = [each.activity.activity_description for each in sqlalchemy_record.dog_activities]
 
     # Add extra info
-    processed_record['breed_name'] = sqlalchemy_record.breed.breed_name
-    processed_record['temperament_type'] = sqlalchemy_record.temperament.temperament_type
-    processed_record['size'] = sqlalchemy_record.size.size
-    processed_record['owner_email'] = sqlalchemy_record.owner.email
-    processed_record['owner_name'] = sqlalchemy_record.owner.name
+    processed_record["activity_ids"] = dog_act_ids_list
+    processed_record["activities"] = dog_activities_list
+    processed_record["breed_name"] = sqlalchemy_record.breed.breed_name
+    processed_record[
+        "temperament_type"
+    ] = sqlalchemy_record.temperament.temperament_type
+    processed_record["size"] = sqlalchemy_record.size.size
+    processed_record["owner_email"] = sqlalchemy_record.owner.email
+    processed_record["owner_name"] = sqlalchemy_record.owner.name
 
     # Remove long annoying text
     del processed_record["_sa_instance_state"]
     del processed_record["breed"]
     del processed_record["temperament"]
-    del processed_record['owner']
-
+    del processed_record["owner"]
+    del processed_record["dog_activities"]
 
     return processed_record
 
@@ -298,4 +295,7 @@ def get_users_dogs_id(user_id):
     )
 
     # Return id
-    return int(queried_dog.dog_id)
+    if queried_dog:
+        return int(queried_dog.dog_id)
+    else:
+        return make_response('No dog found', 400)

@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: c03220d18fbb
+Revision ID: d0cd0f5df1c8
 Revises: 
-Create Date: 2022-09-28 00:58:47.231324
+Create Date: 2022-10-02 08:18:02.040452
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'c03220d18fbb'
+revision = 'd0cd0f5df1c8'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -33,8 +33,7 @@ def upgrade():
     sa.Column('dog_id_one', sa.Integer(), nullable=True),
     sa.Column('dog_id_two', sa.Integer(), nullable=True),
     sa.Column('creation_time', sa.DateTime(), nullable=True),
-    sa.PrimaryKeyConstraint('match_id'),
-    sa.UniqueConstraint('dog_id_one', 'dog_id_two')
+    sa.PrimaryKeyConstraint('match_id')
     )
     op.create_table('sizes',
     sa.Column('size_id', sa.Integer(), nullable=False),
@@ -82,13 +81,13 @@ def upgrade():
     sa.ForeignKeyConstraint(['owner_id'], ['users.user_id'], ),
     sa.ForeignKeyConstraint(['size_id'], ['sizes.size_id'], ),
     sa.ForeignKeyConstraint(['temperament_id'], ['temperaments.temperament_id'], ),
-    sa.PrimaryKeyConstraint('dog_id')
+    sa.PrimaryKeyConstraint('dog_id'),
+    sa.UniqueConstraint('dog_id', 'owner_id', name='unique_dog_const')
     )
     op.create_table('dog_activities',
     sa.Column('dog_activity_id', sa.Integer(), nullable=False),
     sa.Column('dog_id', sa.Integer(), nullable=True),
     sa.Column('activity_id', sa.Integer(), nullable=True),
-    sa.Column('activity_rank', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['activity_id'], ['activities.activity_id'], ),
     sa.ForeignKeyConstraint(['dog_id'], ['dogs.dog_id'], ),
     sa.PrimaryKeyConstraint('dog_activity_id')
