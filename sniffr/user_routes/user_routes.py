@@ -49,5 +49,4 @@ def edit_user(current_user):
         return response
 
     else:
-        response = []
-        return jsonify(response)
+        return jsonify({'error': 'User not found'}), 400
