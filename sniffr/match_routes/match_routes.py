@@ -26,7 +26,7 @@ def get_matches(current_user):
     )
 
     except:
-        return jsonify({})
+        return jsonify([])
 
     
 
@@ -46,4 +46,4 @@ def get_matches(current_user):
         response = process_dogs(matched_dogs)
         return jsonify(response)
     else:
-        jsonify({})
+        return jsonify([])

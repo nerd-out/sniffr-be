@@ -193,13 +193,23 @@ def delete_activity(current_user):
     content = request.json
     swipe_id = int(content['swipe_id'])
 
-    queried_swipe = (
-        db.session.query(Swipe).filter_by(swipe_id=swipe_id).first()
-    )
+    queried_swipe = (db.session.query(Swipe).filter_by(swipe_id=swipe_id).first())
     
     if queried_swipe:
         db.session.delete(queried_swipe)
         db.session.commit()
+
+        # find match if there is one
+        dog1_id = queried_swipe.dog_id
+        dog2_id = queried_swipe.swiped_dog_id
+        queried_match = (
+            db.session.query(Match)
+            .filter_by(dog_id_one=dog1_id, dog_id_two=dog2_id)
+            .first())
+        if queried_match:
+            db.session.delete(queried_match)
+            db.session.commit()
+
         return jsonify({}), 200
     else:
         return jsonify({}), 204
