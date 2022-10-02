@@ -86,6 +86,10 @@ def post_dog(current_user):
     """Create or edit dog info"""
     content = request.json
     user_id = int(current_user.user_id)
+
+    # Kick back if actvities list is > 3
+    if len(content['activities']) > 3:
+        return jsonify({'message': "Dogs are limited to 3 activities"}, 400)
     
     # If dog_id not in body then they are trying to create
     # If dog_id in body then updating content

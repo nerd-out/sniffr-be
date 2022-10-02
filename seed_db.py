@@ -110,7 +110,7 @@ def seed_db_activities():
     db.session.add(Activity(activity_description="Fetch"))
     db.session.add(Activity(activity_description="Tricks"))
     db.session.add(Activity(activity_description="Agility"))
-    db.session.add(Activity(activity_description="Hikes"))
+    db.session.add(Activity(activity_description="Swimming"))
     db.session.add(Activity(activity_description="Car Rides"))
     db.session.add(Activity(activity_description="Frisbee"))
     db.session.add(Activity(activity_description="Dog Parks"))
