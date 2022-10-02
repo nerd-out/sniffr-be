@@ -39,10 +39,10 @@ def login():
             return make_response(jsonify({"token": token}), 201)
 
         else:
-            return {}, 200
+            return make_response('Invalid login', 400)
 
     else:
-        return {}, 200
+        return make_response('Email or password missing', 400)
 
 
 # Create user route
@@ -67,4 +67,4 @@ def register():
             }
 
     except IntegrityError:
-        return jsonify({'message': 'Email already exists in database'})
+        return make_response('Email already exists in database', 400)
