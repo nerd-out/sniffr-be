@@ -92,7 +92,7 @@ def swipe_dog(current_user):
         .first()
     )
     if not users_dog:
-        return jsonify({"message": 'User has no dogs'}), 400
+        return jsonify({"error": 'User has no dogs'}), 400
     
     users_dog = users_dog.dog_id
     
@@ -109,7 +109,7 @@ def swipe_dog(current_user):
 
     except:
         db.session.rollback()
-        return {'message': 'Unable to add swipe'}
+        return {'error': 'Unable to add swipe'}, 400
 
     # If successful, search for corresponding swipe
     matching_like = (
@@ -133,7 +133,7 @@ def swipe_dog(current_user):
 
             except:
                 db.session.rollback()
-                return {'message': 'Unable to add match'}
+                return {'error': 'Unable to add match'}
             
             # Get matched dog info
             matched_dog = (

@@ -50,4 +50,4 @@ def edit_user(current_user):
 
     else:
         response = []
-        return response
+        return jsonify(response)
