@@ -84,19 +84,6 @@ def seed_db_dog():
             dog_bio="Cerberus, often referred to as the hound of Hades, is a multi-headed dog that guards the gates of the Underworld to prevent the dead from leaving.",
         )
     )
-    db.session.add(DogActivity(dog_id=1, activity_id=2))
-    db.session.add(DogActivity(dog_id=1, activity_id=3))
-
-    db.session.add(DogActivity(dog_id=2, activity_id=2))
-    db.session.add(DogActivity(dog_id=2, activity_id=1))
-    db.session.add(DogActivity(dog_id=2, activity_id=4))
-
-    db.session.add(DogActivity(dog_id=3, activity_id=3))
-
-    db.session.add(DogActivity(dog_id=4, activity_id=4))
-    db.session.add(DogActivity(dog_id=4, activity_id=3))
-    db.session.add(DogActivity(dog_id=4, activity_id=2))
-    db.session.add(DogActivity(dog_id=4, activity_id=1))
     db.session.commit()
 
 
@@ -121,7 +108,10 @@ def seed_db_activities():
     """
     db.session.add(Activity(activity_description="Walks"))
     db.session.add(Activity(activity_description="Fetch"))
-    db.session.add(Activity(activity_description="Tricks or Obedience"))
+    db.session.add(Activity(activity_description="Tricks"))
+    db.session.add(Activity(activity_description="Agility"))
+    db.session.add(Activity(activity_description="Hikes"))
+    db.session.add(Activity(activity_description="Car Rides"))
     db.session.add(Activity(activity_description="Frisbee"))
     db.session.add(Activity(activity_description="Dog Parks"))
     db.session.add(Activity(activity_description="Cuddles"))
