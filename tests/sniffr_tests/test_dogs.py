@@ -56,7 +56,8 @@ def test_new_dog_register(test_existing_user_fixture, test_client):
         "is_vaccinated": False,
         "is_fixed": False,
         "dog_bio": """Ein (アイン Ain?) is a Pembroke Welsh Corgi and "data dog," meaning that his intelligence was greatly enhanced by a research facility. What exactly was done to him was not widely known. Ein became part of the Bebop crew and was a good friend of Edward.""",
-        "dog_pic": "Ein driving a car pic"}
+        "dog_pic": "Ein driving a car pic",
+        "activities": [3]}
 
     response = test_client.post("/dog", json=create_json, headers=headers)
     content = response.json
@@ -98,7 +99,8 @@ def test_edit_new_dog(test_existing_user_fixture, test_client):
         "is_vaccinated": False,
         "is_fixed": False,
         "dog_bio": """Ein is a Pembroke Welsh Corgi and "data dog," meaning his intelligence was greatly enhanced by a research facility.""",
-        "dog_pic": "Ein driving a car pic"}
+        "dog_pic": "Ein driving a car pic",
+        "activities": [1, 2]}
 
     response = test_client.post("/dog", json=create_json, headers=headers)
     content = response.json
@@ -140,7 +142,8 @@ def test_delete_new_dog(test_existing_user_fixture, test_client):
         "is_vaccinated": False,
         "is_fixed": False,
         "dog_bio": """Ein is a Pembroke Welsh Corgi and "data dog," meaning his intelligence was greatly enhanced by a research facility.""",
-        "dog_pic": "Ein driving a car pic"}
+        "dog_pic": "Ein driving a car pic",
+        "activities": [3, 4]}
     response = test_client.post("/dog", json=create_json, headers=headers)
     content = response.json
 
