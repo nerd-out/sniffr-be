@@ -5,7 +5,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy import inspect
 import jwt
 from functools import wraps
-from flask import request, jsonify, make_response
+from flask import request, jsonify
 import os
 
 SECRET_KEY = os.getenv("SECRET_KEY")
@@ -298,4 +298,4 @@ def get_users_dogs_id(user_id):
     if queried_dog:
         return int(queried_dog.dog_id)
     else:
-        return make_response('No dog found', 400)
+        return jsonify({'error': 'No dog found'}), 400

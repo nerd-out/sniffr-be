@@ -1,7 +1,7 @@
 from concurrent.futures import process
 from datetime import datetime
 from lib2to3.pgen2 import token
-from flask import Blueprint, request, jsonify, make_response
+from flask import Blueprint, request, jsonify
 from sniffr.models import Activity, Dog, db, User, Breed, token_required, process_dogs, process_dog, DogActivity
 import os
 
@@ -24,7 +24,7 @@ def get_dog(dog_id):
 
     else:
         response = {}
-        return make_response("Dog not found", 400)
+        return jsonify({'error': "Dog not found"}), 400
 
 
 # Get All Dogs
@@ -89,7 +89,7 @@ def post_dog(current_user):
 
     # Kick back if actvities list is > 3
     if len(content['activities']) > 3:
-        return make_response("Dogs are limited to 3 activities", 400)
+        return jsonify({'error': "Dogs are limited to 3 activities"}), 400
     
     # If dog_id not in body then they are trying to create
     # If dog_id in body then updating content
@@ -140,7 +140,7 @@ def post_dog(current_user):
             return jsonify(response)
 
         else:
-            return make_response("Dog not found", 400)
+            return jsonify({'error': "Dog not found"}), 400
 
     else:
         # create dog
@@ -170,7 +170,7 @@ def post_dog(current_user):
 
         response = process_dog(new_dog)
 
-        return make_response(jsonify(response), 200)
+        return jsonify(response), 200
 
 
 # Delete Dog
@@ -190,7 +190,7 @@ def delete_dog(current_user, dog_id):
             db.session.delete(queried_dog)
             db.session.commit()
 
-            return make_response(jsonify({}), 200)
+            return jsonify({}), 200
 
     else:
-        return make_response("Dog not found", 400)
+        return jsonify({'error': "Dog not found"}), 400
