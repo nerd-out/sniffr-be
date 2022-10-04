@@ -55,7 +55,7 @@ def delete_match(current_user):
     """Deletes a match and they constituant swipes"""
     user_id = int(current_user.user_id)
     content = request.json
-    matched_dog_id = int(content['matched_dog_id'])
+    matched_dog_id = int(content['dog_id'])
 
     queried_match = db.session.query(Match).filter(
         (Match.dog_id_two == matched_dog_id) &
