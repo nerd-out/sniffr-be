@@ -25,7 +25,6 @@ def seed_db_user():
 
     # Add Jon
     jon = User(email="jon@sniffr.be", password=os.getenv("JON_PASS"))
-    db.session.add(jon)
     jon.name = "Jon"
     jon.birthday = datetime.datetime(2000, 1, 1)
     jon.gender = "Male"
@@ -34,6 +33,7 @@ def seed_db_user():
     jon.role = "Developer"
     jon.max_distance = 5
     jon.zipcode = "00000"
+    db.session.add(jon)
 
     # Add Dan
     dan = User(email="dan@sniffr.be", password=os.getenv("DAN_PASS"))
@@ -45,6 +45,7 @@ def seed_db_user():
     dan.role = "Developer"
     dan.max_distance = 5
     dan.zipcode = "00000"
+    db.session.add(dan)
 
     # Add Josh
     josh = User(email="josh@sniffr.be", password=os.getenv("JOSH_PASS"))
@@ -58,6 +59,7 @@ def seed_db_user():
     josh.role = "Developer"
     josh.max_distance = 5
     josh.zipcode = "00000"
+    db.session.add(josh)
 
     # Add Allie
     allie = User(email="allie@sniffr.be", password=os.getenv("ALLIE_PASS"))
@@ -69,6 +71,7 @@ def seed_db_user():
     allie.role = "Developer"
     allie.max_distance = 5
     allie.zipcode = "00000"
+    db.session.add(allie)
 
     # Add Mashima
     mashima = User(email="mashima@sniffr.be", password=os.getenv("MASHIMA_PASS"))
@@ -80,6 +83,7 @@ def seed_db_user():
     mashima.role = "Developer"
     mashima.max_distance = 5
     mashima.zipcode = "00000"
+    db.session.add(mashima)
 
     # Add Benedict
     benedict = User(email="benedict@sniffr.be", password=os.getenv("BENEDICT_PASS"))
@@ -91,17 +95,19 @@ def seed_db_user():
     benedict.role = "Developer"
     benedict.max_distance = 5
     benedict.zipcode = "00000"
+    db.session.add(benedict)
 
     # Add Demo
     demo = User(email="demo@sniffr.be", password=os.getenv("DEMO_USER_PASS"))
     demo.name = "Demo"
-    demo.birthday = (datetime.datetime(2000, 1, 1),)
-    demo.gender = ("Demo",)
-    demo.user_pic = ("demo_pic.jpg",)
-    demo.user_bio = ("Sniffr Demo",)
-    demo.role = ("Demo",)
-    demo.max_distance = (5,)
+    demo.birthday = datetime.datetime(2000, 1, 1)
+    demo.gender = "Demo"
+    demo.user_pic = "demo_pic.jpg"
+    demo.user_bio = "Sniffr Demo"
+    demo.role = "Demo"
+    demo.max_distance = 5
     demo.zipcode = "00000"
+    db.session.add(demo)
 
     db.session.commit()
 
