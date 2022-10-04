@@ -3,7 +3,17 @@ from xml.dom.expatbuilder import TEXT_NODE
 from dotenv import load_dotenv
 import os
 from sniffr.app import create_app
-from sniffr.models import Activity, Breed, db, Dog, Temperament, User, Size, DogActivity, Swipe
+from sniffr.models import (
+    Activity,
+    Breed,
+    db,
+    Dog,
+    Temperament,
+    User,
+    Size,
+    Swipe,
+)
+import datetime
 
 load_dotenv()
 
@@ -12,15 +22,87 @@ def seed_db_user():
     """
     This function seeds the datbase with users.
     """
-    db.session.add(User(email="jon@sniffr.be", password=os.getenv("JON_PASS")))
-    db.session.add(User(email="dan@sniffr.be", password=os.getenv("DAN_PASS")))
-    db.session.add(User(email="josh@sniffr.be", password=os.getenv("JOSH_PASS")))
-    db.session.add(User(email="allie@sniffr.be", password=os.getenv("ALLIE_PASS")))
-    db.session.add(User(email="mashima@sniffr.be", password=os.getenv("MASHIMA_PASS")))
-    db.session.add(
-        User(email="benedict@sniffr.be", password=os.getenv("BENEDICT_PASS"))
-    )
-    db.session.add(User(email="demo@sniffr.be", password=os.getenv("DEMO_USER_PASS")))
+
+    # Add Jon
+    jon = User(email="jon@sniffr.be", password=os.getenv("JON_PASS"))
+    db.session.add(jon)
+    jon.name = "Jon"
+    jon.birthday = datetime.datetime(2000, 1, 1)
+    jon.gender = "Male"
+    jon.user_pic = "jon_pic.jpg"
+    jon.user_bio = "Sniffr developer"
+    jon.role = "Developer"
+    jon.max_distance = 5
+    jon.zipcode = "00000"
+
+    # Add Dan
+    dan = User(email="dan@sniffr.be", password=os.getenv("DAN_PASS"))
+    dan.name = "Dan"
+    dan.birthday = datetime.datetime(2000, 1, 1)
+    dan.gender = "Male"
+    dan.user_pic = "dan_pic.jpg"
+    dan.user_bio = "Sniffr developer"
+    dan.role = "Developer"
+    dan.max_distance = 5
+    dan.zipcode = "00000"
+
+    # Add Josh
+    josh = User(email="josh@sniffr.be", password=os.getenv("JOSH_PASS"))
+    josh.email = "josh@sniffr.be"
+    josh.password = os.getenv("JOSH_PASS")
+    josh.name = "Josh"
+    josh.birthday = datetime.datetime(2000, 1, 1)
+    josh.gender = "Male"
+    josh.user_pic = "josh_pic.jpg"
+    josh.user_bio = "Sniffr developer"
+    josh.role = "Developer"
+    josh.max_distance = 5
+    josh.zipcode = "00000"
+
+    # Add Allie
+    allie = User(email="allie@sniffr.be", password=os.getenv("ALLIE_PASS"))
+    allie.name = "Allie"
+    allie.birthday = datetime.datetime(2000, 1, 1)
+    allie.gender = "Female"
+    allie.user_pic = "allie_pic.jpg"
+    allie.user_bio = "Sniffr developer"
+    allie.role = "Developer"
+    allie.max_distance = 5
+    allie.zipcode = "00000"
+
+    # Add Mashima
+    mashima = User(email="mashima@sniffr.be", password=os.getenv("MASHIMA_PASS"))
+    mashima.name = "Mashima"
+    mashima.birthday = datetime.datetime(2000, 1, 1)
+    mashima.gender = "Female"
+    mashima.user_pic = "mashime_pic.jpg"
+    mashima.user_bio = "Sniffr developer"
+    mashima.role = "Developer"
+    mashima.max_distance = 5
+    mashima.zipcode = "00000"
+
+    # Add Benedict
+    benedict = User(email="benedict@sniffr.be", password=os.getenv("BENEDICT_PASS"))
+    benedict.name = "Benedict"
+    benedict.birthday = datetime.datetime(2000, 1, 1)
+    benedict.gender = "Male"
+    benedict.user_pic = "benedict_pic.jpg"
+    benedict.user_bio = "Sniffr developer"
+    benedict.role = "Developer"
+    benedict.max_distance = 5
+    benedict.zipcode = "00000"
+
+    # Add Demo
+    demo = User(email="demo@sniffr.be", password=os.getenv("DEMO_USER_PASS"))
+    demo.name = "Demo"
+    demo.birthday = (datetime.datetime(2000, 1, 1),)
+    demo.gender = ("Demo",)
+    demo.user_pic = ("demo_pic.jpg",)
+    demo.user_bio = ("Sniffr Demo",)
+    demo.role = ("Demo",)
+    demo.max_distance = (5,)
+    demo.zipcode = "00000"
+
     db.session.commit()
 
 
