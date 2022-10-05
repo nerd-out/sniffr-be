@@ -172,6 +172,34 @@ def seed_db_dog():
             dog_bio="Cerberus, often referred to as the hound of Hades, is a multi-headed dog that guards the gates of the Underworld to prevent the dead from leaving.",
         )
     )
+    db.session.add(
+        Dog(
+            dog_name="Slink",
+            age="27",
+            owner_id=2,
+            breed_id=153,
+            sex="Slinky",
+            is_vaccinated=True,
+            is_fixed=True,
+            size_id=1,
+            temperament_id=2,
+            dog_bio="Now Slinky here is as loyal as any dog you could want.",
+        )
+    )
+    db.session.add(
+        Dog(
+            dog_name="Astro",
+            age="",
+            owner_id=6,
+            breed_id=7,
+            sex="Male",
+            is_vaccinated=True,
+            is_fixed=True,
+            size_id=5,
+            temperament_id=3,
+            dog_bio="Elroy Jeston found a dog and brought him home, even though his father George Jetson is against having a dog - Episode aired Oct 21, 1962.",
+        )
+    )
     db.session.commit()
 
 
