@@ -65,8 +65,8 @@ def delete_match(current_user):
         matched_dog_one = queried_match.dog_id_one
         matched_dog_two = queried_match.dog_id_two
 
-        swipe_one = db.session.query(Swipe).filter(Swipe.swiped_dog_id == matched_dog_one).first()
-        swipe_two = db.session.query(Swipe).filter(Swipe.swiped_dog_id == matched_dog_two).first()
+        swipe_one = db.session.query(Swipe).filter((Swipe.swiped_dog_id == matched_dog_one)&(Swipe.dog_id == matched_dog_two)).first()
+        swipe_two = db.session.query(Swipe).filter((Swipe.swiped_dog_id == matched_dog_two)&(Swipe.dog_id == matched_dog_one)).first()
     
         db.session.delete(queried_match)
         db.session.delete(swipe_one)
