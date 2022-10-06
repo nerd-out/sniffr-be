@@ -257,6 +257,29 @@ def process_dogs(sqlalchemy_records):
         records.append(processed_record)
     return records
 
+def process_matches(sqlalchemy_records):
+    records = []
+    for record in sqlalchemy_records:
+        processed_record = record.__dict__
+
+        # Add extra info
+        processed_record["breed_name"] = record.breed.breed_name
+        processed_record["temperament_type"] = record.temperament.temperament_type
+        processed_record["size"] = record.size.size
+        processed_record["owner_email"] = record.owner.email
+        processed_record["owner_name"] = record.owner.name
+        processed_record["match_id"] = match.match_id
+
+        # Remove long annoying text
+        del processed_record["_sa_instance_state"]
+        del processed_record["breed"]
+        del processed_record["temperament"]
+        del processed_record["owner"]
+        del processed_record["match"]
+
+        records.append(processed_record)
+    return records
+
 
 def process_dog(sqlalchemy_record):
     processed_record = sqlalchemy_record.__dict__
