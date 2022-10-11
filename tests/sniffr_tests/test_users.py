@@ -64,7 +64,7 @@ def test_edit_new_user(new_user_fixture, test_client):
 
     # Check status code & that contents updated
     assert response.status_code == 200
-    assert content["email"] == edit_json["email"]
+    assert content["email"].lower() == edit_json["email"].lower()
     assert content["birthday"] == 'Sat, 01 Jan 2022 00:00:00 GMT'
     assert content["gender"] == edit_json["gender"]
     assert content["max_distance"] == edit_json["max_distance"]

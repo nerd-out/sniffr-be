@@ -17,7 +17,7 @@ auth_bp = Blueprint("auth_bp", __name__)
 def login():
     """When a correct email and password is given, provide a success prompt"""
     content = request.json
-    email = content["email"]
+    email = content["email"].lower()
     passwd = content["password"]
 
     # Make sure email and password are provided
@@ -52,7 +52,7 @@ def register():
 
     # Grab json content
     content = request.json
-    email = content["email"]
+    email = content["email"].lower()
     passwd = content["password"]
 
     # Create user
