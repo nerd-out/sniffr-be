@@ -49,13 +49,12 @@ def get_matches(current_user):
         return jsonify([])
 
 
-@match_bp.route("/matches", methods=["DELETE"])
+@match_bp.route("/matches/<dog_id>", methods=["DELETE"])
 @token_required
-def delete_match(current_user):
+def delete_match(current_user, dog_id):
     """Deletes a match and they constituant swipes"""
     user_id = int(current_user.user_id)
-    content = request.json
-    matched_dog_id = int(content['dog_id'])
+    matched_dog_id = int(dog_id)
 
     queried_match = db.session.query(Match).filter(
         (Match.dog_id_two == matched_dog_id) &

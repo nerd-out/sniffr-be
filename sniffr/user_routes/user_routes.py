@@ -34,7 +34,7 @@ def edit_user(current_user):
     if queried_user:
         edit_birthday = content["birthday"].split(', ')[1]
         edit_birthday = datetime.datetime.strptime(edit_birthday, '%d %b %Y %H:%M:%S %Z')     
-        queried_user.email = content["email"]
+        queried_user.email = content["email"].lower()
         queried_user.birthday = edit_birthday
         queried_user.gender = content["gender"]
         queried_user.max_distance = content["max_distance"]

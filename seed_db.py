@@ -133,7 +133,7 @@ def seed_db_dog():
     db.session.add(
         Dog(
             dog_name="Max",
-            age="15",
+            age="5",
             owner_id=3,
             breed_id=137,
             sex="Male",
@@ -147,7 +147,7 @@ def seed_db_dog():
     db.session.add(
         Dog(
             dog_name="Siri",
-            age="10",
+            age="8",
             owner_id=1,
             breed_id=61,
             sex="Female",
@@ -161,7 +161,7 @@ def seed_db_dog():
     db.session.add(
         Dog(
             dog_name="Cerberus",
-            age="10",
+            age="1000",
             owner_id=7,
             breed_id=151,
             sex="Demon",
@@ -175,10 +175,10 @@ def seed_db_dog():
     db.session.add(
         Dog(
             dog_name="Slink",
-            age="27",
+            age="17",
             owner_id=2,
             breed_id=153,
-            sex="Slinky",
+            sex="Male",
             is_vaccinated=True,
             is_fixed=True,
             size_id=1,
@@ -189,7 +189,7 @@ def seed_db_dog():
     db.session.add(
         Dog(
             dog_name="Astro",
-            age="",
+            age="6",
             owner_id=6,
             breed_id=7,
             sex="Male",
