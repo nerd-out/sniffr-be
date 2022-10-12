@@ -133,7 +133,7 @@ def seed_db_dog():
     db.session.add(
         Dog(
             dog_name="Max",
-            age="5",
+            age="15",
             owner_id=3,
             breed_id=137,
             sex="Male",
@@ -147,7 +147,7 @@ def seed_db_dog():
     db.session.add(
         Dog(
             dog_name="Siri",
-            age="8",
+            age="10",
             owner_id=1,
             breed_id=61,
             sex="Female",
