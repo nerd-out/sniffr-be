@@ -52,7 +52,7 @@ def get_matches(current_user):
 @match_bp.route("/matches/<dog_id>", methods=["DELETE"])
 @token_required
 def delete_match(current_user, dog_id):
-    """Deletes a match and they constituant swipes"""
+    """Deletes a match and the constituant swipes"""
     user_id = int(current_user.user_id)
     matched_dog_id = int(dog_id)
 
@@ -64,12 +64,10 @@ def delete_match(current_user, dog_id):
         matched_dog_one = queried_match.dog_id_one
         matched_dog_two = queried_match.dog_id_two
 
-        swipe_one = db.session.query(Swipe).filter((Swipe.swiped_dog_id == matched_dog_one)&(Swipe.dog_id == matched_dog_two)).first()
-        swipe_two = db.session.query(Swipe).filter((Swipe.swiped_dog_id == matched_dog_two)&(Swipe.dog_id == matched_dog_one)).first()
+        swipe = db.session.query(Swipe).filter((Swipe.swiped_dog_id == matched_dog_two)&(Swipe.dog_id == matched_dog_one)).first()
     
         db.session.delete(queried_match)
-        db.session.delete(swipe_one)
-        db.session.delete(swipe_two)
+        db.session.delete(swipe)
 
         db.session.commit()
 
