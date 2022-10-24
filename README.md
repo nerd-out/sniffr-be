@@ -1,5 +1,5 @@
 # sniffr-be
-The backend of sniffr! an application for finding play dates for your dog!
+The backend of sniffr, an application for finding play dates for your dog. 🐕
 
 #  Project Stack
 A python flask app, which is dockerizerd
