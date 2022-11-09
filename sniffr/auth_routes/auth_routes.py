@@ -26,6 +26,8 @@ def login():
 
         # Check that there is a valid result and a correct password
         if result and result.verify_password(password=passwd):
+
+            # generates the JWT Token
             session['id'] = result.user_id
             token = jwt.encode(
                 {
