@@ -1,6 +1,6 @@
 from sqlite3 import IntegrityError
 from traitlets import Integer
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, session
 from sniffr.models import User, db
 import jwt
 from datetime import datetime, timedelta
@@ -28,6 +28,7 @@ def login():
         if result and result.verify_password(password=passwd):
 
             # generates the JWT Token
+            session['id'] = result.user_id
             token = jwt.encode(
                 {
                     "user_id": result.user_id,
@@ -35,7 +36,6 @@ def login():
                 },
                 SECRET_KEY,
             )
-
             return jsonify({"token": token}), 201
 
         else:

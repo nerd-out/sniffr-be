@@ -1,4 +1,4 @@
-from flask import Blueprint, request
+from flask import Blueprint, request, session, jsonify
 from sniffr.models import User, db, token_required, process_record
 import datetime
 
@@ -14,7 +14,7 @@ def delete_user(current_user):
     if queried_user:
         db.session.delete(queried_user)
         db.session.commit()
-
+        session['id'] = None
         return {}, 200
 
     else:
@@ -33,7 +33,7 @@ def edit_user(current_user):
 
     if queried_user:
         edit_birthday = content["birthday"].split(', ')[1]
-        edit_birthday = datetime.datetime.strptime(edit_birthday, '%d %b %Y %H:%M:%S %Z')     
+        edit_birthday = datetime.datetime.strptime(edit_birthday, '%d %b %Y %H:%M:%S %Z')
         queried_user.email = content["email"].lower()
         queried_user.birthday = edit_birthday
         queried_user.gender = content["gender"]
@@ -50,3 +50,16 @@ def edit_user(current_user):
 
     else:
         return jsonify({'error': 'User not found'}), 400
+
+
+@user_bp.route("/user", methods=["GET"])
+def get_user():
+    user_id = session.get('id', None)
+    if(user_id is None):
+        return jsonify({'error': 'No current user logged in'}), 403
+    current_user = db.session.query(User).filter(User.user_id == user_id).first()
+    current_user = process_record(current_user)
+
+    return jsonify({"current_user": current_user}), 200
+
+# TODO - when create logout endpoint always clear: session['id'] = None
