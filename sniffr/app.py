@@ -11,6 +11,7 @@ from sniffr.swipe_routes.swipe_routes import swipe_bp
 from sniffr.match_routes.match_routes import match_bp
 from sniffr.models import db, migrate
 from flask_cors import CORS
+from flask_session import Session
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -23,6 +24,11 @@ def create_app(settings_override=None):
     app = Flask(__name__)
     app.config["SECRET_KEY"] = SECRET_KEY
     CORS(app)
+
+    #Setup flask session
+    app.config['SESSION_TYPE'] = 'filesystem'
+    app.config.from_object(__name__)
+    Session(app)
 
     # settings_override helps with testing
     if settings_override:
