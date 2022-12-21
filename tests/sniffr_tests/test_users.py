@@ -91,3 +91,24 @@ def test_delete_new_user(new_user_fixture, test_client):
 
     # Assert
     assert response.status_code == 200
+
+def test_get_user_info(test_client):
+    # Register new user
+    register = test_client.post(
+        "/register", json={"password": "ess_test", "email": "ess@tuke.gov"}
+    )
+    user_id = int(register.json["user_id"])
+
+    # Login new user
+    login = test_client.post(
+        "/login", json={"password": "ess_test", "email": "ess@tuke.gov"}
+    )
+
+    # Get current user
+    response = test_client.get("/user")
+    content = response.json
+
+    # Assert
+    assert response.status_code == 200
+    assert response.json["current_user"]["email"] == "ess@tuke.gov"
+    assert response.json["current_user"]["user_id"] == user_id
